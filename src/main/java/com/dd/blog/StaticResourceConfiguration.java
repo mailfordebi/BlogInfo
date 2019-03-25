@@ -11,9 +11,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class StaticResourceConfiguration implements WebMvcConfigurer {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	    String myExternalFilePath = "/resources/**";
+		String myExternalFilePath = "/resources/**";
 
-	    registry.addResourceHandler("/resources/**").addResourceLocations(myExternalFilePath);
-
+		registry.addResourceHandler("/resources/**").addResourceLocations(myExternalFilePath);
 	}
 }

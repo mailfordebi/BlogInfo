@@ -95,7 +95,7 @@
                                 </ul>
                             </div>
                     </nav>
-                    <div class="container-fluid" style="width: 80%; float: left; border-style: outset; border-width: initial; background-color: white;height: 1000px;">
+                    <div class="container-fluid" style="width: 80%; float: left; border-style: outset; border-width: initial; background-color: white;/* height: 1000px; */">
                         <%-- ${blogInfo.subMenuId} --%>
                             <c:if test="${settings}">
                                 <form action="/addmenu" id="menuForm" method="post" name="menuForm">
@@ -116,6 +116,7 @@
 
                                         <label for="menuName"><b>Menu Name:</b></label>
                                         <input type="text" placeholder="Menu Name" name="menuName"><br>
+                                        
                                         </span>
                                         <span id="submenuspan" style="display: none;">
                                         <label for="submenuid"><b>Sub Menu Id:</b></label>
@@ -130,9 +131,14 @@
 										   	 <c:forEach var="menu" items="${blogInfo.menuList}">
                                            		 <option value="${menu.menu_id}">${menu.menu_name}</option>
                                    			 </c:forEach>
-  										</select>
-
+  										</select><br>
+  										
   										</span>
+  										<span id="sortSpan" style="display: none;">
+  										<label for="sortOrder"><b>Sort:</b></label>
+                                        <input type="text" placeholder="Sort" name="sortOrder"><br>
+  										</span>
+  										
                                         <hr style="border: 1px solid #272525;">
                                         <button type="submit" class="addbtn">Add</button>
                                     </div>
@@ -140,7 +146,7 @@
                                 </form>
                             </c:if>
                             <c:if test="${editMode && !settings}">
-                                <form action="/saveContent" method="post" id="saveContent">
+                                <form action="/saveContent" method="post" id="saveContent" enctype="multipart/form-data">
                                     <textarea rows="20" cols="100" name="updateContent">
                                         <c:forEach var="con" items="${blogInfo.subMenuContents}">
                                             ${con.content}
@@ -148,7 +154,8 @@
                                     </textarea>
                                     <input type="hidden" value="${blogInfo.content_id}" name="content_id">
                                     <input type="hidden" value="${blogInfo.subMenuId}" name="subMenuId">
-                                    <input type="hidden" value="${blogInfo.menuId}" name="menuId">
+                                    <input type="hidden" value="${blogInfo.menuId}" name="menuId"><br>
+                                    Image: <input type="file" name="image" id="image"><br>
                                     <button type="submit" form="saveContent" value="Save">Save</button>
                                 </form>
                             </c:if>
@@ -190,12 +197,15 @@
                     if (name == 'Menu') {
                         document.getElementById('menuspan').style.display = "block";
                         document.getElementById('submenuspan').style.display = "none";
+                        document.getElementById('sortSpan').style.display = "block";
                     } else if (name == 'Sub Menu') {
                         document.getElementById('menuspan').style.display = "none";
                         document.getElementById('submenuspan').style.display = "block";
+                        document.getElementById('sortSpan').style.display = "block";
                     } else {
                         document.getElementById('menuspan').style.display = "none";
                         document.getElementById('submenuspan').style.display = "none";
+                        document.getElementById('sortSpan').style.display = "none";
                     }
                 }
             </script>

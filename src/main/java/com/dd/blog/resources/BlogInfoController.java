@@ -1,5 +1,9 @@
 package com.dd.blog.resources;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,15 +14,20 @@ import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @SessionAttributes("logedIn")
 public class BlogInfoController {
+
+	String UPLOADED_FOLDER = System.getProperty("user.home") + "\\blog\\images";
 
 	@Autowired
 	private BlogInfoDAO blogInfoDAO;
@@ -61,16 +70,15 @@ public class BlogInfoController {
 
 	@RequestMapping("/settings")
 	public ModelAndView settings(HttpServletRequest request) {
-		String logedIn=(String) request.getSession().getAttribute("logedIn");
-		ModelAndView modelAndView=null;
-		if("true".equalsIgnoreCase(logedIn)) {
+		String logedIn = (String) request.getSession().getAttribute("logedIn");
+		ModelAndView modelAndView = null;
+		if ("true".equalsIgnoreCase(logedIn)) {
 			modelAndView = getModelAndView("", "");
 			modelAndView.addObject("settings", "true");
-		}else {
+		} else {
 			modelAndView = new ModelAndView();
 			modelAndView.setViewName("login");
 		}
-		
 		return modelAndView;
 	}
 
@@ -83,7 +91,8 @@ public class BlogInfoController {
 	public ModelAndView addMenu(@ModelAttribute("selectType") String selectType,
 			@ModelAttribute("menuid") String menuId, @ModelAttribute("menuName") String menuName,
 			@ModelAttribute("submenuid") String subMenuId, @ModelAttribute("submenuName") String subMenuName,
-			@ModelAttribute("menuselect") String menuRef) throws Exception {
+			@ModelAttribute("menuselect") String menuRef, @ModelAttribute("sortOrder") String sortOrder)
+			throws Exception {
 
 		BlogInfoVO blogInfoVO = new BlogInfoVO();
 		if ("Menu".equalsIgnoreCase(selectType)) {
@@ -91,17 +100,19 @@ public class BlogInfoController {
 			Menu menu = new Menu();
 			menu.setMenu_id(menuId);
 			menu.setMenu_name(menuName);
+			menu.setSortOrder(sortOrder);
 			menus.add(menu);
 			blogInfoVO.setMenuList(menus);
 			blogInfoVO.setMenuId(menuId);
 		}
 		if ("Sub Menu".equalsIgnoreCase(selectType)) {
 			List<SubMenu> menus = new ArrayList<SubMenu>();
-			SubMenu menu = new SubMenu();
-			menu.setSubmenu_id(subMenuId);
-			menu.setSubmenu_name(subMenuName);
-			menu.setMenu_ref(menuRef);
-			menus.add(menu);
+			SubMenu subMenu = new SubMenu();
+			subMenu.setSubmenu_id(subMenuId);
+			subMenu.setSubmenu_name(subMenuName);
+			subMenu.setMenu_ref(menuRef);
+			subMenu.setSortOrder(sortOrder);
+			menus.add(subMenu);
 			blogInfoVO.setSubMenus(menus);
 			blogInfoVO.setSubMenuId(subMenuId);
 		}
@@ -117,31 +128,44 @@ public class BlogInfoController {
 
 	@RequestMapping("/menu")
 	public ModelAndView menu(@RequestParam("menuid") String menuId) {
-		return getModelAndView(menuId, "dashboard");
+		ModelAndView modelAndView = getModelAndView(menuId, "dashboard");
+		// modelAndView.addObject("imagepath", UPLOADED_FOLDER);
+		return modelAndView;
 	}
 
 	@RequestMapping("/dashboard")
 	public ModelAndView dashboard(@RequestParam("menuid") String menuId) {
-		return getModelAndView(menuId, "dashboard");
+		ModelAndView modelAndView = getModelAndView(menuId, "dashboard");
+		// modelAndView.addObject("imagepath", UPLOADED_FOLDER);
+		return modelAndView;
 	}
 
 	@RequestMapping("/submenu")
 	public ModelAndView factoryPattern(@RequestParam("menuid") String menuId,
 			@RequestParam("submenuid") String subMenuId) {
-		return getModelAndView(menuId, subMenuId);
+		ModelAndView modelAndView = getModelAndView(menuId, subMenuId);
+		// modelAndView.addObject("imagepath", UPLOADED_FOLDER);
+		return modelAndView;
 	}
 
 	@RequestMapping("/editInfo")
 	public ModelAndView editInfo(@RequestParam("menuid") String menuId, @RequestParam("subMenuid") String subMenuId) {
 		ModelAndView modelAndView = getModelAndView(menuId, subMenuId);
 		modelAndView.addObject("editMode", true);
+		// modelAndView.addObject("imagepath", UPLOADED_FOLDER);
 		return modelAndView;
 	}
 
 	@RequestMapping(value = "/saveContent", method = RequestMethod.POST)
 	public ModelAndView saveContent(@ModelAttribute("updateContent") String content,
 			@ModelAttribute("content_id") String content_id, @ModelAttribute("subMenuId") String subMenuId,
-			@ModelAttribute("menuId") String menuId) throws Exception {
+			@ModelAttribute("menuId") String menuId, @RequestParam("image") MultipartFile file) throws Exception {
+		if (!file.isEmpty()) {
+			byte[] bytes = file.getBytes();
+			Path path = Paths.get(UPLOADED_FOLDER + "\\" + file.getOriginalFilename());
+			Files.write(path, bytes);
+		}
+
 		BlogInfoVO blogInfoVO = new BlogInfoVO();
 		List<SubMenuContent> subMenuContents = new ArrayList<SubMenuContent>();
 		SubMenuContent subMenuContent = new SubMenuContent();
@@ -157,6 +181,17 @@ public class BlogInfoController {
 			throw new Exception("Unable to save");
 		}
 
+	}
+
+	@RequestMapping(value = "/image/{imageId}")
+	@ResponseBody
+	public byte[] getImage(@PathVariable String imageId) {
+		try {
+			return Files.readAllBytes(Paths.get(UPLOADED_FOLDER + "\\" + imageId));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public ModelAndView getModelAndView(String menuId, String submenuId) {

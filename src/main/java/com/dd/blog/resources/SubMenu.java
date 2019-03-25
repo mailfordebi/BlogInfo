@@ -4,6 +4,7 @@ public class SubMenu {
 	private String submenu_id;
 	private String submenu_name;
 	private String menu_ref;
+	private String sortOrder;
 
 	public String getSubmenu_id() {
 		return submenu_id;
@@ -27,6 +28,14 @@ public class SubMenu {
 
 	public void setMenu_ref(String menu_ref) {
 		this.menu_ref = menu_ref;
+	}
+
+	public String getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 
 }
