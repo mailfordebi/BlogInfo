@@ -160,10 +160,15 @@ public class BlogInfoController {
 	public ModelAndView saveContent(@ModelAttribute("updateContent") String content,
 			@ModelAttribute("content_id") String content_id, @ModelAttribute("subMenuId") String subMenuId,
 			@ModelAttribute("menuId") String menuId, @RequestParam("image") MultipartFile file) throws Exception {
+		/*
+		 * if (!file.isEmpty()) { byte[] bytes = file.getBytes(); Path path =
+		 * Paths.get(UPLOADED_FOLDER + "\\" + file.getOriginalFilename());
+		 * Files.write(path, bytes); }
+		 */
 		if (!file.isEmpty()) {
-			byte[] bytes = file.getBytes();
-			Path path = Paths.get(UPLOADED_FOLDER + "\\" + file.getOriginalFilename());
-			Files.write(path, bytes);
+			byte[] imageContent = file.getBytes();
+			String imageName= file.getOriginalFilename();
+			blogInfoDAO.saveImage(imageContent, imageName);
 		}
 
 		BlogInfoVO blogInfoVO = new BlogInfoVO();
@@ -237,7 +242,8 @@ public class BlogInfoController {
 						&& menuId.equalsIgnoreCase(document.getString("menu_ref"))) {
 					SubMenuContent content = new SubMenuContent();
 					content.setConetent_id((String) document.get("conetent_id"));
-					content.setContent((String) document.get("content"));
+					String cont=(String) document.get("content");
+					content.setContent(cont.trim());
 					menuContentsList.add(content);
 					blogInfoVO.setSubMenuId((String) document.get("submenu_ref"));
 					blogInfoVO.setMenuId(document.getString("menu_ref"));

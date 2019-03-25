@@ -50,7 +50,7 @@ public class BlogInfoDAO {
 				basicDBObject.put("menu_id", menus.get(0).getMenu_id());
 				basicDBObject.put("menu_name", menus.get(0).getMenu_name());
 				basicDBObject.put("sort", "1");
-				//update(menus.get(0).getSortOrder(), "menu", null);
+				// update(menus.get(0).getSortOrder(), "menu", null);
 				mongoOperations.save(basicDBObject, "menu");
 			}
 			if ("Sub Menu".equalsIgnoreCase(selectType)) {
@@ -72,6 +72,31 @@ public class BlogInfoDAO {
 			return true;
 		} catch (Exception e) {
 			System.out.println(e);
+			return false;
+		}
+	}
+
+	public boolean saveImage(byte[] imageContent, String imageName) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("imageName").is(imageName));
+		List<Document> docs = mongoOperations.find(query, Document.class, "images");
+		if (docs != null && !docs.isEmpty()) {
+			System.out.println("Error Error Error Error Error Error Error.......... Duplicate key for the image");
+			return false;
+		}
+
+		if (imageContent != null && !StringUtils.isEmpty(imageName)) {
+			try {
+				BasicDBObject basicDBObject = new BasicDBObject();
+				basicDBObject.put("imageName", imageName);
+				basicDBObject.put("imagecontent", imageContent);
+				mongoOperations.save(basicDBObject, "images");
+			} catch (Exception e) {
+				System.out.println(e);
+				return false;
+			}
+			return true;
+		} else {
 			return false;
 		}
 	}
