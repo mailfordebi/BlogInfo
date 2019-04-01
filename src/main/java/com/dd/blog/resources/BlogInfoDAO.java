@@ -1,10 +1,12 @@
 package com.dd.blog.resources;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.bson.Document;
+import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -34,6 +36,9 @@ public class BlogInfoDAO {
 			documentMap.put("submenu", submenus);
 		}
 
+		query = new Query();
+		query.with(new Sort(Sort.Direction.DESC, "created_date"));
+		query.limit(10);
 		List<Document> submenucontents = mongoOperations.find(query, Document.class, "submenucontent");
 		if (submenucontents != null && !submenucontents.isEmpty()) {
 			documentMap.put("content", submenucontents);
@@ -67,6 +72,16 @@ public class BlogInfoDAO {
 				basicDBObject.put("content", menus.get(0).getSubmenu_name());
 				basicDBObject.put("submenu_ref", menus.get(0).getSubmenu_id());
 				basicDBObject.put("menu_ref", menus.get(0).getMenu_ref());
+				mongoOperations.save(basicDBObject, "submenucontent");
+			}
+			if ("Misc".equalsIgnoreCase(selectType)) {
+				List<SubMenuContent> subMenuContents = blogInfoVO.getSubMenuContents();
+				basicDBObject.put("conetent_id", subMenuContents.get(0).getConetent_id());
+				basicDBObject.put("content", subMenuContents.get(0).getContent());
+				basicDBObject.put("content_header", subMenuContents.get(0).getContent_header());
+				basicDBObject.put("created_date", subMenuContents.get(0).getCreated_date());
+				basicDBObject.put("submenu_ref", subMenuContents.get(0).getSubmenu_ref());
+				basicDBObject.put("menu_ref", subMenuContents.get(0).getMenu_ref());
 				mongoOperations.save(basicDBObject, "submenucontent");
 			}
 			return true;
@@ -112,9 +127,16 @@ public class BlogInfoDAO {
 				Document doc = mongoOperations.findOne(query, Document.class, "submenucontent");
 				if (doc != null) {
 					for (String key : doc.keySet()) {
-						if ((!"_id".equalsIgnoreCase(key))
-								&& subMenuContents.get(0).getConetent_id().equalsIgnoreCase(doc.getString(key))) {
-							doc.put("content", subMenuContents.get(0).getContent());
+						/*
+						 * if ((!"_id".equalsIgnoreCase(key)) && (!"_id".equalsIgnoreCase(key)) &&
+						 * subMenuContents.get(0).getConetent_id().equalsIgnoreCase(doc.getString(key)))
+						 * { doc.put("content", subMenuContents.get(0).getContent()); }
+						 */
+						if ((!"_id".equalsIgnoreCase(key)) && (!"created_date".equalsIgnoreCase(key))
+								&& "content".equalsIgnoreCase(key)) {
+							if (!StringUtils.isEmpty(subMenuContents.get(0).getContent())) {
+								doc.put("content", subMenuContents.get(0).getContent().trim());
+							}
 						}
 					}
 					for (String key : doc.keySet()) {
@@ -176,5 +198,22 @@ public class BlogInfoDAO {
 				}
 			}
 		}
+	}
+
+	public String replaceImageContent(String content) {
+		Query query = new Query();
+		List<Document> docs = mongoOperations.find(query, Document.class, "images");
+
+		if (docs != null && !docs.isEmpty()) {
+			for (Document document : docs) {
+				if (content.contains(document.getString("imageName"))) {
+					Binary imageData = document.get("imagecontent", Binary.class);
+					byte[] imageByteData = imageData.getData();
+					String base64Image = Base64.getEncoder().encodeToString(imageByteData);
+					content = content.replace(document.getString("imageName"), "data:image/jpg;base64," + base64Image);
+				}
+			}
+		}
+		return content;
 	}
 }

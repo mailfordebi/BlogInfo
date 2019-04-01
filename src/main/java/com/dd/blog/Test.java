@@ -1,34 +1,30 @@
 package com.dd.blog;
 
+import java.io.FileNotFoundException;
+
 public class Test {
 
-	public static void main(String[] args) {
-		/*
-		 * String unformattedXml = "<html><body><p>debi</p></body></html>";
-		 * 
-		 * System.out.println(new Test().format(unformattedXml));
-		 */
-	}
-
 	/*
-	 * public String format(String unformattedXml) { try { final Document document =
-	 * parseXmlFile(unformattedXml);
-	 * 
-	 * OutputFormat format = new OutputFormat(document); format.setLineWidth(65);
-	 * format.setIndenting(true); format.setIndent(2); Writer out = new
-	 * StringWriter(); XMLSerializer serializer = new XMLSerializer(out, format);
-	 * serializer.serialize(document);
-	 * 
-	 * return out.toString(); } catch (IOException e) { throw new
-	 * RuntimeException(e); } }
-	 * 
-	 * private Document parseXmlFile(String in) { try { DocumentBuilderFactory dbf =
-	 * DocumentBuilderFactory.newInstance(); DocumentBuilder db =
-	 * dbf.newDocumentBuilder(); InputSource is = new InputSource(new
-	 * StringReader(in)); return db.parse(is); } catch (ParserConfigurationException
-	 * e) { throw new RuntimeException(e); } catch (SAXException e) { throw new
-	 * RuntimeException(e); } catch (IOException e) { throw new RuntimeException(e);
-	 * } }
+	 * public static void main(String[] args) { String text =
+	 * "0123hello9012hello8901hello7890"; String match = "hello"; int index =
+	 * text.indexOf(match); int matchLength = match.length(); while (index >= 0) {
+	 * // indexOf returns -1 if no match found System.out.println(index); index =
+	 * text.indexOf(match, index + matchLength); } }
 	 */
 
+	public void test() throws ArithmeticException {
+		int c = 1 + 2;
+		System.out.println("ArithmeticException Hello");
+	}
+
+	public void test1() throws FileNotFoundException {
+		int c = 1 + 2;
+		System.out.println("FileNotFoundException Hello");
+	}
+	
+	public static void main(String[] args) {
+		Test t=new Test();
+		t.test();
+		//t.test1();
+	}
 }
