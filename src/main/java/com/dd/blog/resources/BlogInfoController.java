@@ -29,7 +29,7 @@ public class BlogInfoController {
 	@Autowired
 	private BlogInfoDAO blogInfoDAO;
 
-	@RequestMapping("/")
+	@RequestMapping("/index")
 	public ModelAndView index() {
 		return getModelAndView("miscellaneous", null, false);
 	}
