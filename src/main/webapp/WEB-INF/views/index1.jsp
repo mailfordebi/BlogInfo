@@ -36,7 +36,7 @@
                 <div class="bg-light border-right" id="sidebar-wrapper">
                     <div class="sidebar-heading">
                         <h2>
-					<a href="/home"><img src="img/logo.JPG" id="logo" height="28px" />
+					<a href="${pageContext.request.contextPath}/home"><img src="img/logo.JPG" id="logo" height="28px" />
 					</a>
 				</h2>
 
@@ -44,9 +44,9 @@
 
                     <ul style="padding-left: 0">
                         <div class="list-group list-group-flush" style="width: 14rem;">
-                            <a href="/dashboard?menuid=${blogInfo.menuId}" class="list-group-item list-group-item-action bg-light" id="${blogInfo.menuId}" style="padding-left: 10px; padding-top: 5px; padding-bottom: 5px; font-size: 16px; font-weight: 500;">Dashboard</a>
+                            <a href="${pageContext.request.contextPath}/dashboard?menuid=${blogInfo.menuId}" class="list-group-item list-group-item-action bg-light" id="${blogInfo.menuId}" style="padding-left: 10px; padding-top: 5px; padding-bottom: 5px; font-size: 16px; font-weight: 500;">Dashboard</a>
                             <c:forEach var="sm" items="${blogInfo.subMenus}">
-                                <a href="/submenu?menuid=${sm.menu_ref}&submenuid=${sm.submenu_id}" class="list-group-item list-group-item-action bg-light" style="padding-left: 10px; padding-top: 5px; padding-bottom: 5px; font-size: 16px; font-weight: 500;">${sm.submenu_name}</a>
+                                <a href="${pageContext.request.contextPath}/submenu?menuid=${sm.menu_ref}&submenuid=${sm.submenu_id}" class="list-group-item list-group-item-action bg-light" style="padding-left: 10px; padding-top: 5px; padding-bottom: 5px; font-size: 16px; font-weight: 500;">${sm.submenu_name}</a>
                             </c:forEach>
                         </div>
                     </ul>
@@ -70,10 +70,10 @@
                             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                                     <c:if test="${logedIn}">
-                                        <li class="nav-item active"><a class="nav-link" href="/settings" style="font-weight: 600;">Settings</a></li>
+                                        <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/settings" style="font-weight: 600;">Settings</a></li>
                                     </c:if>
                                     <c:forEach var="menu" items="${blogInfo.menuList}">
-                                        <li class="nav-item active"><a class="nav-link" href="/menu?menuid=${menu.menu_id}" style="font-weight: 600;">${menu.menu_name}</a>
+                                        <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/menu?menuid=${menu.menu_id}" style="font-weight: 600;">${menu.menu_name}</a>
 
                                         </li>
                                     </c:forEach>
@@ -85,10 +85,10 @@
                                         </div>
                                     </li> -->
                                     <c:if test="${!logedIn}">
-                                        <li class="nav-item active"><a class="nav-link" href="/login" style="font-weight: 600;">Login</a></li>
+                                        <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/login" style="font-weight: 600;">Login</a></li>
                                     </c:if>
                                     <c:if test="${logedIn}">
-                                        <li class="nav-item active"><a class="nav-link" href="/logout" style="font-weight: 600;">Logout</a></li>
+                                        <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/logout" style="font-weight: 600;">Logout</a></li>
                                     </c:if>
 
                                 </ul>
@@ -97,7 +97,7 @@
                     <div class="container-fluid" style="width: 80%; float: left; border-style: outset; border-width: initial; background-color: white;">
                         <%-- ${blogInfo.subMenuId} --%>
                             <c:if test="${settings}">
-                                <form action="/addmenu" id="menuForm" method="post" name="menuForm">
+                                <form action="addmenu" id="menuForm" method="post" name="menuForm">
                                     <div class="container" style="float: left; background-color: antiquewhite;">
                                         <h3>Add Menu or SubMenu</h3>
                                         <hr style="border: 1px solid #272525;">
@@ -164,7 +164,7 @@
                                 </form>
                             </c:if>
                             <c:if test="${editMode && !settings}">
-                                <form action="/saveContent" method="post" id="saveContent" enctype="multipart/form-data">
+                                <form action="saveContent" method="post" id="saveContent" enctype="multipart/form-data">
                                     <textarea rows="30" cols="122" name="updateContent">
                                         <c:forEach var="con" items="${blogInfo.subMenuContents}">
                                             <%-- <c:if test="${!con.content_header eq null}"> --%>
@@ -200,7 +200,7 @@
                                                 </a>
                                             </p>
                                             <c:if test="${logedIn}">
-                                                <a href="/editInfo?menuid=${con.menu_ref}&subMenuid=${con.submenu_ref}">Edit</a>
+                                                <a href="${pageContext.request.contextPath}/editInfo?menuid=${con.menu_ref}&subMenuid=${con.submenu_ref}">Edit</a>
                                             </c:if>
                                         </c:forEach>
                                     </c:when>
@@ -211,7 +211,7 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <c:if test="${logedIn and !(blogInfo.menuId eq 'miscellaneous')}">
-                                    <a href="/editInfo?menuid=${blogInfo.menuId}&subMenuid=${blogInfo.subMenuId}">Edit</a>
+                                    <a href="${pageContext.request.contextPath}/editInfo?menuid=${blogInfo.menuId}&subMenuid=${blogInfo.subMenuId}">Edit</a>
                                 </c:if>
                             </c:if>
 

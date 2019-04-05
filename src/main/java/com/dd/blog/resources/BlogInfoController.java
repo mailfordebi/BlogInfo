@@ -23,9 +23,6 @@ import org.springframework.web.servlet.ModelAndView;
 @SessionAttributes("logedIn")
 public class BlogInfoController {
 
-	// String UPLOADED_FOLDER = System.getProperty("user.home") + "\\blog\\images";
-	// byte[] imageContent = null;;
-
 	@Autowired
 	private BlogInfoDAO blogInfoDAO;
 
@@ -199,7 +196,7 @@ public class BlogInfoController {
 	public ModelAndView getModelAndView(String menuId, String submenuId, boolean isEditMode) {
 		ModelAndView modelAndView = new ModelAndView();
 		Map<String, List<Document>> documentMap = null;
-		documentMap = blogInfoDAO.findIinfo();
+		documentMap = blogInfoDAO.findIinfo(menuId);
 		BlogInfoVO blogInfoVO = new BlogInfoVO();
 
 		if (documentMap != null && !documentMap.isEmpty()) {

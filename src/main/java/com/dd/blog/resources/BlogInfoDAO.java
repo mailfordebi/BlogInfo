@@ -22,7 +22,7 @@ public class BlogInfoDAO {
 	@Autowired
 	private MongoOperations mongoOperations;
 
-	public Map<String, List<Document>> findIinfo() {
+	public Map<String, List<Document>> findIinfo(String subMenu) {
 		Map<String, List<Document>> documentMap = new HashMap<String, List<Document>>();
 		Query query = new Query();
 		query.with(new Sort(Sort.Direction.ASC, "sort"));
@@ -38,7 +38,9 @@ public class BlogInfoDAO {
 
 		query = new Query();
 		query.with(new Sort(Sort.Direction.DESC, "created_date"));
-		query.limit(10);
+		if ("miscellaneous".equalsIgnoreCase(subMenu)) {
+			query.limit(10);
+		}
 		List<Document> submenucontents = mongoOperations.find(query, Document.class, "submenucontent");
 		if (submenucontents != null && !submenucontents.isEmpty()) {
 			documentMap.put("content", submenucontents);
