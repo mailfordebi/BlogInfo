@@ -9,6 +9,9 @@ public class BlogInfoVO {
 	String subMenuId;
 	String menuId;
 	String content_id;
+	boolean isHidden;
+	private Menu menu;
+	private SubMenu subMenu;
 
 	public String getContent_id() {
 		return content_id;
@@ -56,6 +59,30 @@ public class BlogInfoVO {
 
 	public void setSubMenuId(String subMenuId) {
 		this.subMenuId = subMenuId;
+	}
+
+	public Menu getMenu() {
+		return menu;
+	}
+
+	public void setMenu(Menu menu) {
+		this.menu = menu;
+	}
+
+	public SubMenu getSubMenu() {
+		return subMenu;
+	}
+
+	public void setSubMenu(SubMenu subMenu) {
+		this.subMenu = subMenu;
+	}
+
+	public boolean isHidden() {
+		return isHidden;
+	}
+
+	public void setHidden(boolean isHidden) {
+		this.isHidden = isHidden;
 	}
 
 }

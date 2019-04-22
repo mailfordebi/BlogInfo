@@ -93,6 +93,23 @@ public class BlogInfoDAO {
 		}
 	}
 
+	public boolean updateHideOrShow(BlogInfoVO blogInfoVO, String selectType) {
+		BasicDBObject basicDBObject = new BasicDBObject();
+		if ("Hide Menu".equalsIgnoreCase(selectType)) {
+			basicDBObject.put("menu_id", blogInfoVO.getMenuId());
+			basicDBObject.put("hidden", blogInfoVO.isHidden());
+			mongoOperations.save(basicDBObject, "menu");
+			return true;
+		} else if ("Hide Sub Menu".equalsIgnoreCase(selectType)) {
+			basicDBObject.put("submenu_id", blogInfoVO.getSubMenuId());
+			basicDBObject.put("hidden", blogInfoVO.isHidden());
+			mongoOperations.save(basicDBObject, "submenu");
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public boolean saveImage(byte[] imageContent, String imageName) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("imageName").is(imageName));

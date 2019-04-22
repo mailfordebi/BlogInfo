@@ -4,6 +4,7 @@ public class Menu {
 	private String menu_id;
 	private String menu_name;
 	private String sortOrder;
+	private boolean hidden;
 
 	public String getMenu_id() {
 		return menu_id;
@@ -28,6 +29,15 @@ public class Menu {
 	public void setSortOrder(String sortOrder) {
 		this.sortOrder = sortOrder;
 	}
+
+	public boolean isHidden() {
+		return hidden;
+	}
+
+	public void setHidden(boolean hidden) {
+		this.hidden = hidden;
+	}
+	
 	
 	
 

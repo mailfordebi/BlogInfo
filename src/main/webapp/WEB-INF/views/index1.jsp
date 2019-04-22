@@ -104,9 +104,11 @@
                                         <label for="menuid"><b>Select Type: </b></label>
                                         <select name="selectType" id="selectType" onchange="showfield(this.options[this.selectedIndex].value)">
                                             <option selected="selected">Select</option>
-                                            <option value="Menu">Menu</option>
-                                            <option value="Sub Menu">Sub Menu</option>
-                                            <option value="Misc">Misc</option>
+                                            <option value="Menu">Add Menu</option>
+                                            <option value="Sub Menu">Add Sub Menu</option>
+                                            <option value="Misc">Add Misc</option>
+                                            <option value="Hide Menu">Hide/Show Menu</option>
+                                            <option value="Hide Sub Menu">Hide/Show Sub Menu</option>
                                         </select>
                                         <br> <span id="menuspan" style="display: none;"> <label
 								for="menuid"><b>Menu Id:</b></label> <input type="text"
@@ -114,8 +116,8 @@
 								for="menuName"><b>Menu Name:</b></label> <input type="text"
 								placeholder="Menu Name" name="menuName"><br>
 
-							</span> 
-							<span id="submenuspan" style="display: none;"> <label
+							</span>
+                                        <span id="submenuspan" style="display: none;"> <label
 								for="submenuid"><b>Sub Menu Id:</b></label> <input type="text"
 								placeholder="Sub Menu Id" name="submenuid"><br> <label
 								for="submenuName"><b>Sub Menu Name:</b></label> <input
@@ -128,9 +130,9 @@
 										<option value="${menu.menu_id}">${menu.menu_name}</option>
 									</c:forEach>
 							  </select><br>
-							  </span> 
-							  
-							  <span id="misccontaintspan" style="display: none;"> 
+							  </span>
+
+                                        <span id="misccontaintspan" style="display: none;"> 
 							   <label for="submenuRef"><b>Sub Menu Reference:</b></label> 
 							   <select
 								name="submenuselect" id="submenuselect" style="background: #f1f1f1;">
@@ -143,6 +145,7 @@
 								for="contentid"><b>Content Id:</b></label> <input type="text"
 								placeholder="Content Id" name="contentid"><br>
 								<b>Header:</b>
+								<br>
 								<textarea name="contentHeader" style="background: rgb(241, 241, 241);height: 100px;width: 700px;"></textarea>
 								<br> 
 								<label for="submenuName">
@@ -150,15 +153,31 @@
 								</label> <br>
 								<textarea name="contentBody" style="background: rgb(241, 241, 241);height: 500px;width: 700px;"></textarea>
 								<br>
-							 </span> 
-							 
-							 <span id="sortSpan" style="display: none;"> <label
+							 </span>
+
+                             <span id="hidemenu" style="display: none;"> 
+							    <label for="menuRef"><b>Menu Reference:</b></label> <select
+								name="menuselect" id="menuselect">
+									<option selected="selected">Select</option>
+									<c:forEach var="menu" items="${blogInfo.menuList}">
+										<option value="${menu.menu_id}">${menu.menu_name}</option>
+									</c:forEach>
+							  </select><br>
+							  <label for="menuHidden"><b>Disabled:</b></label> <select
+								name="menuHidden" id="menuHidden">
+										<option selected="selected">Select</option>
+										<option value="true">True</option>
+										<option value="false">False</option>
+							  </select><br>
+							 </span>
+
+                                        <span id="sortSpan" style="display: none;"> <label
 								for="sortOrder"><b>Sort:</b></label> <input type="text"
 								placeholder="Sort" name="sortOrder"><br>
 						  	 </span>
 
                                         <hr style="border: 1px solid #272525;">
-                                        <button type="submit" class="addbtn">Add</button>
+                                        <button type="submit" class="addbtn" id="addbtn" style="display: none;">Save</button>
                                     </div>
 
                                 </form>
@@ -229,9 +248,9 @@
             <!-- Menu Toggle Script -->
             <script>
                 /* $("#menu-toggle").click(function(e) {
-                                		    e.preventDefault();
-                                		    $("#wrapper").toggleClass("toggled");
-                                		}); */
+                                                		    e.preventDefault();
+                                                		    $("#wrapper").toggleClass("toggled");
+                                                		}); */
 
                 function showfield(name) {
                     if (name == 'Menu') {
@@ -239,21 +258,36 @@
                         document.getElementById('submenuspan').style.display = "none";
                         document.getElementById('sortSpan').style.display = "block";
                         document.getElementById('misccontaintspan').style.display = "none";
+                        document.getElementById('hidemenu').style.display = "none";
+                        document.getElementById('addbtn').style.display = "block";
                     } else if (name == 'Sub Menu') {
                         document.getElementById('menuspan').style.display = "none";
                         document.getElementById('submenuspan').style.display = "block";
                         document.getElementById('sortSpan').style.display = "block";
                         document.getElementById('misccontaintspan').style.display = "none";
+                        document.getElementById('hidemenu').style.display = "none";
+                        document.getElementById('addbtn').style.display = "block";
                     } else if (name == 'Misc') {
                         document.getElementById('menuspan').style.display = "none";
                         document.getElementById('submenuspan').style.display = "none";
                         document.getElementById('sortSpan').style.display = "none";
                         document.getElementById('misccontaintspan').style.display = "block";
-                    }else {
+                        document.getElementById('hidemenu').style.display = "none";
+                        document.getElementById('addbtn').style.display = "block";
+                    } else if (name == 'Hide Menu') {
                         document.getElementById('menuspan').style.display = "none";
                         document.getElementById('submenuspan').style.display = "none";
                         document.getElementById('sortSpan').style.display = "none";
                         document.getElementById('misccontaintspan').style.display = "none";
+                        document.getElementById('hidemenu').style.display = "block";
+                        document.getElementById('addbtn').style.display = "block";
+                    } else {
+                        document.getElementById('menuspan').style.display = "none";
+                        document.getElementById('submenuspan').style.display = "none";
+                        document.getElementById('sortSpan').style.display = "none";
+                        document.getElementById('misccontaintspan').style.display = "none";
+                        document.getElementById('hidemenu').style.display = "none";
+                        document.getElementById('addbtn').style.display = "block";
                     }
                 }
 

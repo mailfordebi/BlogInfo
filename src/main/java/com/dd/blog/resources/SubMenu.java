@@ -5,6 +5,7 @@ public class SubMenu {
 	private String submenu_name;
 	private String menu_ref;
 	private String sortOrder;
+	private boolean hidden;
 
 	public String getSubmenu_id() {
 		return submenu_id;
@@ -36,6 +37,14 @@ public class SubMenu {
 
 	public void setSortOrder(String sortOrder) {
 		this.sortOrder = sortOrder;
+	}
+
+	public boolean isHidden() {
+		return hidden;
+	}
+
+	public void setHidden(boolean hidden) {
+		this.hidden = hidden;
 	}
 
 }

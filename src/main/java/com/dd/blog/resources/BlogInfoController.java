@@ -87,10 +87,12 @@ public class BlogInfoController {
 			@ModelAttribute("submenuid") String subMenuId, @ModelAttribute("submenuName") String subMenuName,
 			@ModelAttribute("menuselect") String menuRef, @ModelAttribute("sortOrder") String sortOrder,
 			@ModelAttribute("submenuselect") String subMenuRef, @ModelAttribute("contentHeader") String contentHeader,
-			@ModelAttribute("contentBody") String contentBody, @ModelAttribute("contentid") String contentid)
-			throws Exception {
+			@ModelAttribute("contentBody") String contentBody, @ModelAttribute("contentid") String contentid,
+			@ModelAttribute("menuHidden") String menuHidden, @ModelAttribute("subMenuHidden") String subMenuHidden) throws Exception {
 
 		BlogInfoVO blogInfoVO = new BlogInfoVO();
+		boolean isToInsert = false;
+		boolean isToUpdate = false;
 		if ("Menu".equalsIgnoreCase(selectType)) {
 			List<Menu> menus = new ArrayList<Menu>();
 			Menu menu = new Menu();
@@ -100,6 +102,7 @@ public class BlogInfoController {
 			menus.add(menu);
 			blogInfoVO.setMenuList(menus);
 			blogInfoVO.setMenuId(menuId);
+			isToInsert = true;
 		}
 		if ("Sub Menu".equalsIgnoreCase(selectType)) {
 			List<SubMenu> menus = new ArrayList<SubMenu>();
@@ -111,6 +114,7 @@ public class BlogInfoController {
 			menus.add(subMenu);
 			blogInfoVO.setSubMenus(menus);
 			blogInfoVO.setSubMenuId(subMenuId);
+			isToInsert = true;
 		}
 		if ("Misc".equalsIgnoreCase(selectType)) {
 			List<SubMenuContent> subMenuContents = new ArrayList<SubMenuContent>();
@@ -123,9 +127,31 @@ public class BlogInfoController {
 			subMenuContent.setCreated_date(new Date());
 			subMenuContents.add(subMenuContent);
 			blogInfoVO.setSubMenuContents(subMenuContents);
+			isToInsert = true;
+		}
+		if ("Hide Menu".equalsIgnoreCase(selectType)) {
+			isToUpdate = true;
+			Menu menu = new Menu();
+			menu.setMenu_id(menuRef);
+			if ("true".equalsIgnoreCase(menuHidden)) {
+				menu.setHidden(true);
+			}
+			blogInfoVO.setMenu(menu);
+		}
+		if ("Hide Sub Menu".equalsIgnoreCase(selectType)) {
+			isToUpdate = true;
+			SubMenu subMenu = new SubMenu();
+			subMenu.setSubmenu_id(subMenuRef);
+			if ("true".equalsIgnoreCase(subMenuHidden)) {
+				subMenu.setHidden(true);
+			}
+			blogInfoVO.setSubMenu(subMenu);
 		}
 
-		if (blogInfoDAO.insert(blogInfoVO, selectType)) {
+		if (isToInsert && blogInfoDAO.insert(blogInfoVO, selectType)) {
+			ModelAndView modelAndView = getModelAndView(menuId, "dashboard", false);
+			return modelAndView;
+		} else if (isToUpdate && blogInfoDAO.updateHideOrShow(blogInfoVO, selectType)) {
 			ModelAndView modelAndView = getModelAndView(menuId, "dashboard", false);
 			return modelAndView;
 		} else {
