@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
+
 import org.bson.Document;
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,16 +95,16 @@ public class BlogInfoDAO {
 		}
 	}
 
-	public boolean updateHideOrShow(BlogInfoVO blogInfoVO, String selectType) {
-		BasicDBObject basicDBObject = new BasicDBObject();
+	//TODO Need to implement for sub menu hiding.....
+	public boolean updateHideOrShow(@NotNull BlogInfoVO blogInfoVO, String selectType) {
+		BasicDBObject basicDBObject = null;
 		if ("Hide Menu".equalsIgnoreCase(selectType)) {
-			basicDBObject.put("menu_id", blogInfoVO.getMenuId());
-			basicDBObject.put("hidden", blogInfoVO.isHidden());
+			basicDBObject = findDoc(blogInfoVO.getMenu().getMenu_id(), "menu", blogInfoVO.getMenu().isHidden());
 			mongoOperations.save(basicDBObject, "menu");
 			return true;
 		} else if ("Hide Sub Menu".equalsIgnoreCase(selectType)) {
-			basicDBObject.put("submenu_id", blogInfoVO.getSubMenuId());
-			basicDBObject.put("hidden", blogInfoVO.isHidden());
+			basicDBObject = findDoc(blogInfoVO.getSubMenu().getSubmenu_id(), "submenu",
+					blogInfoVO.getSubMenu().isHidden());
 			mongoOperations.save(basicDBObject, "submenu");
 			return true;
 		} else {
@@ -172,6 +174,31 @@ public class BlogInfoDAO {
 		} else {
 			return false;
 		}
+	}
+
+	public BasicDBObject findDoc(String idValue, String collectionName, boolean isHidden) {
+		BasicDBObject basicDBObject = new BasicDBObject();
+		Query query = new Query();
+		String keyId = "";
+		if ("menu".equalsIgnoreCase(collectionName)) {
+			keyId = "menu_id";
+		} else if ("submenu".equalsIgnoreCase(collectionName)) {
+			keyId = "submenu_id";
+		} else {
+			keyId = "conetent_id";
+		}
+
+		query.addCriteria(Criteria.where(keyId).is(idValue));
+		Document doc = mongoOperations.findOne(query, Document.class, collectionName);
+		doc.put("hidden", isHidden);
+
+		if (doc != null) {
+			for (String key : doc.keySet()) {
+				basicDBObject.put(key, doc.get(key));
+			}
+		}
+
+		return basicDBObject;
 	}
 
 	public boolean validate(String userName, String password) {

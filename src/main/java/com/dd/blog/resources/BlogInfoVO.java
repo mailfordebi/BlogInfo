@@ -9,7 +9,7 @@ public class BlogInfoVO {
 	String subMenuId;
 	String menuId;
 	String content_id;
-	boolean isHidden;
+	//boolean isHidden;
 	private Menu menu;
 	private SubMenu subMenu;
 
@@ -75,14 +75,6 @@ public class BlogInfoVO {
 
 	public void setSubMenu(SubMenu subMenu) {
 		this.subMenu = subMenu;
-	}
-
-	public boolean isHidden() {
-		return isHidden;
-	}
-
-	public void setHidden(boolean isHidden) {
-		this.isHidden = isHidden;
 	}
 
 }

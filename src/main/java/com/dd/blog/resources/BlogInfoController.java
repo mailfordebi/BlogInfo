@@ -88,7 +88,8 @@ public class BlogInfoController {
 			@ModelAttribute("menuselect") String menuRef, @ModelAttribute("sortOrder") String sortOrder,
 			@ModelAttribute("submenuselect") String subMenuRef, @ModelAttribute("contentHeader") String contentHeader,
 			@ModelAttribute("contentBody") String contentBody, @ModelAttribute("contentid") String contentid,
-			@ModelAttribute("menuHidden") String menuHidden, @ModelAttribute("subMenuHidden") String subMenuHidden) throws Exception {
+			@ModelAttribute("menuHidden") String menuHidden, @ModelAttribute("menuRefToHide") String menuRefToHide,
+			@ModelAttribute("subMenuHidden") String subMenuHidden) throws Exception {
 
 		BlogInfoVO blogInfoVO = new BlogInfoVO();
 		boolean isToInsert = false;
@@ -132,12 +133,13 @@ public class BlogInfoController {
 		if ("Hide Menu".equalsIgnoreCase(selectType)) {
 			isToUpdate = true;
 			Menu menu = new Menu();
-			menu.setMenu_id(menuRef);
+			menu.setMenu_id(menuRefToHide);
 			if ("true".equalsIgnoreCase(menuHidden)) {
 				menu.setHidden(true);
 			}
 			blogInfoVO.setMenu(menu);
 		}
+		//TODO Need to implement for Sub menu hiding
 		if ("Hide Sub Menu".equalsIgnoreCase(selectType)) {
 			isToUpdate = true;
 			SubMenu subMenu = new SubMenu();
@@ -237,6 +239,7 @@ public class BlogInfoController {
 				Menu menu = new Menu();
 				menu.setMenu_id((String) document.get("menu_id"));
 				menu.setMenu_name((String) document.get("menu_name"));
+				menu.setHidden((boolean) document.get("hidden"));
 				menuList.add(menu);
 			}
 

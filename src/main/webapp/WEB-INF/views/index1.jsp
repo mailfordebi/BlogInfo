@@ -73,9 +73,10 @@
                                         <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/settings" style="font-weight: 600;">Settings</a></li>
                                     </c:if>
                                     <c:forEach var="menu" items="${blogInfo.menuList}">
-                                        <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/menu?menuid=${menu.menu_id}" style="font-weight: 600;">${menu.menu_name}</a>
-
-                                        </li>
+                                    	<c:if test="${!menu.hidden}">
+                                       		 <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/menu?menuid=${menu.menu_id}" style="font-weight: 600;">${menu.menu_name}</a>
+                                      		  </li>
+                                      	</c:if>
                                     </c:forEach>
                                     <!--  <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dropdown </a>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -117,7 +118,7 @@
 								placeholder="Menu Name" name="menuName"><br>
 
 							</span>
-                                        <span id="submenuspan" style="display: none;"> <label
+                             <span id="submenuspan" style="display: none;"> <label
 								for="submenuid"><b>Sub Menu Id:</b></label> <input type="text"
 								placeholder="Sub Menu Id" name="submenuid"><br> <label
 								for="submenuName"><b>Sub Menu Name:</b></label> <input
@@ -132,7 +133,7 @@
 							  </select><br>
 							  </span>
 
-                                        <span id="misccontaintspan" style="display: none;"> 
+                              <span id="misccontaintspan" style="display: none;"> 
 							   <label for="submenuRef"><b>Sub Menu Reference:</b></label> 
 							   <select
 								name="submenuselect" id="submenuselect" style="background: #f1f1f1;">
@@ -156,11 +157,13 @@
 							 </span>
 
                              <span id="hidemenu" style="display: none;"> 
-							    <label for="menuRef"><b>Menu Reference:</b></label> <select
-								name="menuselect" id="menuselect">
+							    <label for="menuRef1"><b>Menu Reference:</b></label> <select
+								name="menuRefToHide" id="menuRefToHide">
 									<option selected="selected">Select</option>
 									<c:forEach var="menu" items="${blogInfo.menuList}">
-										<option value="${menu.menu_id}">${menu.menu_name}</option>
+										<c:if test="${!(menu.menu_id eq 'miscellaneous')}">
+											<option value="${menu.menu_id}">${menu.menu_name}</option>
+										</c:if>
 									</c:forEach>
 							  </select><br>
 							  <label for="menuHidden"><b>Disabled:</b></label> <select
@@ -170,8 +173,10 @@
 										<option value="false">False</option>
 							  </select><br>
 							 </span>
-
-                                        <span id="sortSpan" style="display: none;"> <label
+							<!-- Need to implement for sub menu -->
+							<!-- TODO -->
+							<!-- Need to implement for sub menu -->
+                            <span id="sortSpan" style="display: none;"> <label
 								for="sortOrder"><b>Sort:</b></label> <input type="text"
 								placeholder="Sort" name="sortOrder"><br>
 						  	 </span>
@@ -287,7 +292,7 @@
                         document.getElementById('sortSpan').style.display = "none";
                         document.getElementById('misccontaintspan').style.display = "none";
                         document.getElementById('hidemenu').style.display = "none";
-                        document.getElementById('addbtn').style.display = "block";
+                        document.getElementById('addbtn').style.display = "none";
                     }
                 }
 
