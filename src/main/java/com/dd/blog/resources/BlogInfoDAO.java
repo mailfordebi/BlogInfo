@@ -24,7 +24,7 @@ public class BlogInfoDAO {
 	@Autowired
 	private MongoOperations mongoOperations;
 
-	public Map<String, List<Document>> findIinfo(String subMenu) {
+	public Map<String, List<Document>> findIinfo(String menu) {
 		Map<String, List<Document>> documentMap = new HashMap<String, List<Document>>();
 		Query query = new Query();
 		query.with(new Sort(Sort.Direction.ASC, "sort"));
@@ -40,7 +40,7 @@ public class BlogInfoDAO {
 
 		query = new Query();
 		query.with(new Sort(Sort.Direction.DESC, "created_date"));
-		if ("miscellaneous".equalsIgnoreCase(subMenu)) {
+		if ("miscellaneous".equalsIgnoreCase(menu)) {
 			query.limit(10);
 		}
 		List<Document> submenucontents = mongoOperations.find(query, Document.class, "submenucontent");
@@ -59,6 +59,7 @@ public class BlogInfoDAO {
 				basicDBObject.put("menu_id", menus.get(0).getMenu_id());
 				basicDBObject.put("menu_name", menus.get(0).getMenu_name());
 				basicDBObject.put("sort", "1");
+				basicDBObject.put("hidden", false);
 				// update(menus.get(0).getSortOrder(), "menu", null);
 				mongoOperations.save(basicDBObject, "menu");
 			}
@@ -68,6 +69,7 @@ public class BlogInfoDAO {
 				basicDBObject.put("submenu_name", menus.get(0).getSubmenu_name());
 				basicDBObject.put("menu_ref", menus.get(0).getMenu_ref());
 				basicDBObject.put("sort", menus.get(0).getSortOrder());
+				basicDBObject.put("hidden", false);
 				update(menus.get(0).getSortOrder(), "submenu", menus.get(0).getMenu_ref());
 				mongoOperations.save(basicDBObject, "submenu");
 
@@ -95,7 +97,7 @@ public class BlogInfoDAO {
 		}
 	}
 
-	//TODO Need to implement for sub menu hiding.....
+	// TODO Need to implement for sub menu hiding.....
 	public boolean updateHideOrShow(@NotNull BlogInfoVO blogInfoVO, String selectType) {
 		BasicDBObject basicDBObject = null;
 		if ("Hide Menu".equalsIgnoreCase(selectType)) {
@@ -261,5 +263,18 @@ public class BlogInfoDAO {
 			}
 		}
 		return content;
+	}
+
+	public String getFirstSubMeny(String menuId) {
+		String subMenuId = "";
+		Query query = new Query();
+		query.addCriteria(Criteria.where("menu_ref").is(menuId));
+		query.with(new Sort(Sort.Direction.ASC, "sort"));
+		List<Document> docs = mongoOperations.find(query, Document.class, "submenu");
+		if (docs != null && !docs.isEmpty()) {
+			Document d = docs.get(0);
+			subMenuId = d.getString("submenu_id");
+		}
+		return subMenuId;
 	}
 }

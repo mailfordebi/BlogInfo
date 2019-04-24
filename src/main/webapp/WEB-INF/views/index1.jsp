@@ -44,7 +44,7 @@
 
                     <ul style="padding-left: 0">
                         <div class="list-group list-group-flush" style="width: 14rem;">
-                            <a href="${pageContext.request.contextPath}/dashboard?menuid=${blogInfo.menuId}" class="list-group-item list-group-item-action bg-light" id="${blogInfo.menuId}" style="padding-left: 10px; padding-top: 5px; padding-bottom: 5px; font-size: 16px; font-weight: 500;">Dashboard</a>
+                            <%-- <a href="${pageContext.request.contextPath}/dashboard?menuid=${blogInfo.menuId}" class="list-group-item list-group-item-action bg-light" id="${blogInfo.menuId}" style="padding-left: 10px; padding-top: 5px; padding-bottom: 5px; font-size: 16px; font-weight: 500;">Dashboard</a> --%>
                             <c:forEach var="sm" items="${blogInfo.subMenus}">
                                 <a href="${pageContext.request.contextPath}/submenu?menuid=${sm.menu_ref}&submenuid=${sm.submenu_id}" class="list-group-item list-group-item-action bg-light" style="padding-left: 10px; padding-top: 5px; padding-bottom: 5px; font-size: 16px; font-weight: 500;">${sm.submenu_name}</a>
                             </c:forEach>
@@ -208,9 +208,9 @@
                             </c:if>
                             <c:if test="${!editMode && !settings}">
                                 <c:choose>
-                                    <c:when test="${blogInfo.subMenuId eq 'dashboard'}">
+                                    <%-- <c:when test="${blogInfo.subMenuId eq 'dashboard'}">
                                         <p>DashBoard static page for all screen Need to update in JSP</p>
-                                    </c:when>
+                                    </c:when> --%>
                                     <c:when test="${blogInfo.menuId eq 'miscellaneous'}">
                                         <c:forEach var="con" items="${blogInfo.subMenuContents}">
                                             <h2>${con.content_header}</h2>

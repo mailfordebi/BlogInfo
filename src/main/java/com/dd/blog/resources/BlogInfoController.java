@@ -46,7 +46,7 @@ public class BlogInfoController {
 	@RequestMapping("/logout")
 	public ModelAndView logout() {
 		ModelAndView modelAndView = null;
-		modelAndView = getModelAndView("home", "dashboard", false);
+		modelAndView = getModelAndView("miscellaneous", null, false);
 		modelAndView.addObject("logedIn", "false");
 		return modelAndView;
 	}
@@ -56,7 +56,7 @@ public class BlogInfoController {
 			@ModelAttribute("password") String password) {
 		ModelAndView modelAndView = null;
 		if (blogInfoDAO.validate(username, password)) {
-			modelAndView = getModelAndView("home", "dashboard", false);
+			modelAndView = getModelAndView("miscellaneous", null, false);
 			modelAndView.addObject("logedIn", "true");
 		} else {
 			modelAndView = new ModelAndView();
@@ -106,14 +106,14 @@ public class BlogInfoController {
 			isToInsert = true;
 		}
 		if ("Sub Menu".equalsIgnoreCase(selectType)) {
-			List<SubMenu> menus = new ArrayList<SubMenu>();
+			List<SubMenu> subMenus = new ArrayList<SubMenu>();
 			SubMenu subMenu = new SubMenu();
 			subMenu.setSubmenu_id(subMenuId);
 			subMenu.setSubmenu_name(subMenuName);
 			subMenu.setMenu_ref(menuRef);
 			subMenu.setSortOrder(sortOrder);
-			menus.add(subMenu);
-			blogInfoVO.setSubMenus(menus);
+			subMenus.add(subMenu);
+			blogInfoVO.setSubMenus(subMenus);
 			blogInfoVO.setSubMenuId(subMenuId);
 			isToInsert = true;
 		}
@@ -151,10 +151,10 @@ public class BlogInfoController {
 		}
 
 		if (isToInsert && blogInfoDAO.insert(blogInfoVO, selectType)) {
-			ModelAndView modelAndView = getModelAndView(menuId, "dashboard", false);
+			ModelAndView modelAndView = getModelAndView("miscellaneous", null, false);
 			return modelAndView;
 		} else if (isToUpdate && blogInfoDAO.updateHideOrShow(blogInfoVO, selectType)) {
-			ModelAndView modelAndView = getModelAndView(menuId, "dashboard", false);
+			ModelAndView modelAndView = getModelAndView("miscellaneous", null, false);
 			return modelAndView;
 		} else {
 			throw new Exception("Unable to save");
@@ -168,16 +168,17 @@ public class BlogInfoController {
 		if ("miscellaneous".equalsIgnoreCase(menuId)) {
 			modelAndView = getModelAndView(menuId, null, false);
 		} else {
-			modelAndView = getModelAndView(menuId, "dashboard", false);
+			String subMenuId=blogInfoDAO.getFirstSubMeny(menuId);
+			modelAndView = getModelAndView(menuId, subMenuId, false);
 		}
 		return modelAndView;
 	}
 
-	@RequestMapping("/dashboard")
-	public ModelAndView dashboard(@RequestParam("menuid") String menuId) {
-		ModelAndView modelAndView = getModelAndView(menuId, "dashboard", false);
-		return modelAndView;
-	}
+	/*
+	 * @RequestMapping("/dashboard") public ModelAndView
+	 * dashboard(@RequestParam("menuid") String menuId) { ModelAndView modelAndView
+	 * = getModelAndView(menuId, "dashboard", false); return modelAndView; }
+	 */
 
 	@RequestMapping("/submenu")
 	public ModelAndView factoryPattern(@RequestParam("menuid") String menuId,
@@ -258,13 +259,12 @@ public class BlogInfoController {
 				}
 			}
 			for (Document document : contents) {
-				if (submenuId != null && submenuId.equalsIgnoreCase("dashboard") && menuId != null
-						&& menuId.equalsIgnoreCase(document.getString("menu_ref"))) {
-					// Set for dashboard page..
-					blogInfoVO.setSubMenuId("dashboard");
-					blogInfoVO.setMenuId(document.getString("menu_ref"));
-					break;
-				}
+				/*
+				 * if (submenuId != null && submenuId.equalsIgnoreCase("dashboard") && menuId !=
+				 * null && menuId.equalsIgnoreCase(document.getString("menu_ref"))) { // Set for
+				 * dashboard page.. blogInfoVO.setSubMenuId("dashboard");
+				 * blogInfoVO.setMenuId(document.getString("menu_ref")); break; }
+				 */
 				if (menuId != null && menuId.equalsIgnoreCase(document.getString("menu_ref"))
 						&& "miscellaneous".equals(menuId)) {
 					if (submenuId == null || submenuId.equalsIgnoreCase(document.getString("submenu_ref"))) {
