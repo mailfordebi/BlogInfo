@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
         <html lang="en">
-
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
         <head>
 
             <meta charset="utf-8">
@@ -10,7 +10,7 @@
             <meta name="description" content="">
             <meta name="author" content="">
 
-            <title>Tech Info Tutorial</title>
+            <title>Tech Overflow: Technologies in your hand</title>
 
             <!-- Bootstrap core CSS -->
             <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -18,6 +18,7 @@
             <!-- Custom styles for this template -->
             <link href="css/simple-sidebar.css" rel="stylesheet">
             <link href="menu_submenu.css" rel="stylesheet">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <style>
                 li:hover {
                     background-color: lightgrey;
@@ -43,7 +44,7 @@
                     </div>
 
                     <ul style="padding-left: 0">
-                        <div class="list-group list-group-flush" style="width: 14rem;">
+                        <div class="list-group list-group-flush" style="width: 14rem; border-style: groove; border-width: thin; border-color: rgba(0,0,0,.125);">
                             <%-- <a href="${pageContext.request.contextPath}/dashboard?menuid=${blogInfo.menuId}" class="list-group-item list-group-item-action bg-light" id="${blogInfo.menuId}" style="padding-left: 10px; padding-top: 5px; padding-bottom: 5px; font-size: 16px; font-weight: 500;">Dashboard</a> --%>
                             <c:forEach var="sm" items="${blogInfo.subMenus}">
                                 <a href="${pageContext.request.contextPath}/submenu?menuid=${sm.menu_ref}&submenuid=${sm.submenu_id}" class="list-group-item list-group-item-action bg-light" style="padding-left: 10px; padding-top: 5px; padding-bottom: 5px; font-size: 16px; font-weight: 500;">${sm.submenu_name}</a>
@@ -60,8 +61,9 @@
                         <!-- <button class="btn" id="menu-toggle">
                             <img src="img/hamburger.png" id="hamburger" height="20px" />
                         </button> -->
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
+                        	<!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedSubMenu" aria-controls="navbarSupportedSubMenu" aria-expanded="false" aria-label="Toggle navigation">
+                         	   <span class="navbar-toggler-icon"></span>
+                            </button> -->
 
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>
