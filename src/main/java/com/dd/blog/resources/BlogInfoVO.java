@@ -9,9 +9,15 @@ public class BlogInfoVO {
 	String subMenuId;
 	String menuId;
 	String content_id;
-	//boolean isHidden;
 	private Menu menu;
 	private SubMenu subMenu;
+
+	private String prevSubMenuId;
+	private String prevSubMenuName;
+	private String nextSubMenuId;
+	private String nextSubMenuName;
+	private String prevMenuId;
+	private String nextMenuId;
 
 	public String getContent_id() {
 		return content_id;
@@ -75,6 +81,54 @@ public class BlogInfoVO {
 
 	public void setSubMenu(SubMenu subMenu) {
 		this.subMenu = subMenu;
+	}
+
+	public String getPrevSubMenuId() {
+		return prevSubMenuId;
+	}
+
+	public void setPrevSubMenuId(String prevSubMenuId) {
+		this.prevSubMenuId = prevSubMenuId;
+	}
+
+	public String getPrevSubMenuName() {
+		return prevSubMenuName;
+	}
+
+	public void setPrevSubMenuName(String prevSubMenuName) {
+		this.prevSubMenuName = prevSubMenuName;
+	}
+
+	public String getNextSubMenuId() {
+		return nextSubMenuId;
+	}
+
+	public void setNextSubMenuId(String nextSubMenuId) {
+		this.nextSubMenuId = nextSubMenuId;
+	}
+
+	public String getNextSubMenuName() {
+		return nextSubMenuName;
+	}
+
+	public void setNextSubMenuName(String nextSubMenuName) {
+		this.nextSubMenuName = nextSubMenuName;
+	}
+
+	public String getPrevMenuId() {
+		return prevMenuId;
+	}
+
+	public void setPrevMenuId(String prevMenuId) {
+		this.prevMenuId = prevMenuId;
+	}
+
+	public String getNextMenuId() {
+		return nextMenuId;
+	}
+
+	public void setNextMenuId(String nextMenuId) {
+		this.nextMenuId = nextMenuId;
 	}
 
 }

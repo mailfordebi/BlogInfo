@@ -46,14 +46,14 @@
  					 text-decoration: none;
 				}
 				.nextprev a:hover {
- 					color: red;
+ 					color: green;
   					background-color: transparent;
   					text-decoration: underline;
 				}
 				.nextprev span {
  					background-color: #e0dcdc;
  					color: black;
- 					padding: 4px 4px;
+ 					padding: 0px 4px;
 				}
             </style>
         </head>
@@ -271,12 +271,21 @@
                             
                      <!--Next Prev Post  --> 
                      <div class="nextprev">
-						<span>Previous</span>
-						<a href="#" target="_blank">Prev</a> 
-						<a href="#" target="_blank">Next</a>
-						<span>Next</span>
+                     <h5>
+                    	 <c:if test="${blogInfo.prevSubMenuId ne ''}">
+							<span style="float: left;">Previous</span>
+							<a style="float: left;padding-left: 7px;" href="${pageContext.request.contextPath}/submenu?menuid=${blogInfo.prevMenuId}&submenuid=${blogInfo.prevSubMenuId}">${blogInfo.prevSubMenuName}</a>
+						</c:if>
+						<c:if test="${blogInfo.nextSubMenuId ne ''}">
+							<span style="float: right;">Next</span>
+							<a style="float: right;padding-right: 7px;" href="${pageContext.request.contextPath}/submenu?menuid=${blogInfo.nextMenuId}&submenuid=${blogInfo.nextSubMenuId}">${blogInfo.nextSubMenuName}</a>
+						</c:if>
+					</h5>
 					</div>			
-                            
+                      
+                      <br>
+                      <br> 
+                      <br>     
                      <!--Recommended Post  -->       
 					 <div class="recommendedPostsDiv">
     					<h2 style="font-size: 20px; color: #838383;">Recommended Posts:</h2>
@@ -284,7 +293,9 @@
         					 <c:forEach var="sm" items="${blogInfo.subMenus}">
         					 	<c:if test="${sm.submenu_id ne blogInfo.subMenuId}">
         					   		 <li>
+        					   		 	<h5>
                               	 		  <a href="${pageContext.request.contextPath}/submenu?menuid=${sm.menu_ref}&submenuid=${sm.submenu_id}">${sm.submenu_name}</a>
+                              	 		</h5>
                                 	</li>
                                 </c:if>
                             </c:forEach>								

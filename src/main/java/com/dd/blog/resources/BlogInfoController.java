@@ -139,7 +139,7 @@ public class BlogInfoController {
 			}
 			blogInfoVO.setMenu(menu);
 		}
-		//TODO Need to implement for Sub menu hiding
+		// TODO Need to implement for Sub menu hiding
 		if ("Hide Sub Menu".equalsIgnoreCase(selectType)) {
 			isToUpdate = true;
 			SubMenu subMenu = new SubMenu();
@@ -168,7 +168,7 @@ public class BlogInfoController {
 		if ("miscellaneous".equalsIgnoreCase(menuId)) {
 			modelAndView = getModelAndView(menuId, null, false);
 		} else {
-			String subMenuId=blogInfoDAO.getFirstSubMeny(menuId);
+			String subMenuId = blogInfoDAO.getFirstSubMeny(menuId);
 			modelAndView = getModelAndView(menuId, subMenuId, false);
 		}
 		return modelAndView;
@@ -316,10 +316,44 @@ public class BlogInfoController {
 			blogInfoVO.setMenuList(menuList);
 			blogInfoVO.setSubMenus(subMenusList);
 			blogInfoVO.setSubMenuContents(menuContentsList);
+			setPrevAndNextSubMenu(blogInfoVO);
 		}
 		modelAndView.setViewName("index1");
 		modelAndView.addObject("blogInfo", blogInfoVO);
 		return modelAndView;
 
+	}
+
+	private void setPrevAndNextSubMenu(BlogInfoVO blogInfoVO) {
+		if (blogInfoVO != null && blogInfoVO.getSubMenus() != null && !blogInfoVO.getSubMenus().isEmpty()) {
+			for (int i = 0; i < blogInfoVO.getSubMenus().size(); i++) {
+				if (blogInfoVO.getSubMenus().get(i).getSubmenu_id().equals(blogInfoVO.getSubMenuId())) {
+					if (i > 0 && i < blogInfoVO.getSubMenus().size() - 1) {
+						SubMenu prev = blogInfoVO.getSubMenus().get(i - 1);
+						blogInfoVO.setPrevSubMenuId(prev.getSubmenu_id());
+						blogInfoVO.setPrevSubMenuName(prev.getSubmenu_name());
+						blogInfoVO.setPrevMenuId(prev.getMenu_ref());
+						SubMenu next = blogInfoVO.getSubMenus().get(i + 1);
+						blogInfoVO.setNextSubMenuId(next.getSubmenu_id());
+						blogInfoVO.setNextSubMenuName(next.getSubmenu_name());
+						blogInfoVO.setNextMenuId(next.getMenu_ref());
+					} else if (i == 0) {
+						SubMenu next = blogInfoVO.getSubMenus().get(i + 1);
+						blogInfoVO.setNextSubMenuId(next.getSubmenu_id());
+						blogInfoVO.setNextSubMenuName(next.getSubmenu_name());
+						blogInfoVO.setNextMenuId(next.getMenu_ref());
+						blogInfoVO.setPrevSubMenuId("");
+						blogInfoVO.setPrevSubMenuName("");
+					} else {
+						SubMenu prev = blogInfoVO.getSubMenus().get(i - 1);
+						blogInfoVO.setPrevSubMenuId(prev.getSubmenu_id());
+						blogInfoVO.setPrevSubMenuName(prev.getSubmenu_name());
+						blogInfoVO.setPrevMenuId(prev.getMenu_ref());
+						blogInfoVO.setNextSubMenuId("");
+						blogInfoVO.setNextSubMenuName("");
+					}
+				}
+			}
+		}
 	}
 }
