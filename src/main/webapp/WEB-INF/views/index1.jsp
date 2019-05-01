@@ -10,7 +10,7 @@
             <meta name="description" content="">
             <meta name="author" content="">
 
-            <title>Tech Overflow: Technologies in your hand</title>
+            <title>Out Of Memory: Solution for your error</title>
 
             <!-- Bootstrap core CSS -->
             <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -27,6 +27,34 @@
                 #more {
                     display: none;
                 }
+                
+                .recommendedPostsDiv li {
+   					list-style: none;
+    				/* margin: 0 -40px!important; */
+  					margin-bottom: 4px!important;
+ 				}
+  				.recommendedPostsDiv li a {
+    				display: block;
+    				padding: 0 40px;
+    				color: #105803;
+    				font-size: 16px;
+    				background-color: white;
+    			}
+    			.nextprev a:link {
+ 					 color: green;
+  					 background-color: transparent;
+ 					 text-decoration: none;
+				}
+				.nextprev a:hover {
+ 					color: red;
+  					background-color: transparent;
+  					text-decoration: underline;
+				}
+				.nextprev span {
+ 					background-color: #e0dcdc;
+ 					color: black;
+ 					padding: 4px 4px;
+				}
             </style>
         </head>
 
@@ -240,11 +268,32 @@
                                     <a href="${pageContext.request.contextPath}/editInfo?menuid=${blogInfo.menuId}&subMenuid=${blogInfo.subMenuId}">Edit</a>
                                 </c:if>
                             </c:if>
-
+                            
+                     <!--Next Prev Post  --> 
+                     <div class="nextprev">
+						<span>Previous</span>
+						<a href="#" target="_blank">Prev</a> 
+						<a href="#" target="_blank">Next</a>
+						<span>Next</span>
+					</div>			
+                            
+                     <!--Recommended Post  -->       
+					 <div class="recommendedPostsDiv">
+    					<h2 style="font-size: 20px; color: #838383;">Recommended Posts:</h2>
+   						 <ul>
+        					 <c:forEach var="sm" items="${blogInfo.subMenus}">
+        					 	<c:if test="${sm.submenu_id ne blogInfo.subMenuId}">
+        					   		 <li>
+                              	 		  <a href="${pageContext.request.contextPath}/submenu?menuid=${sm.menu_ref}&submenuid=${sm.submenu_id}">${sm.submenu_name}</a>
+                                	</li>
+                                </c:if>
+                            </c:forEach>								
+    					</ul>
+					</div>
                     </div>
+                    
                 </div>
                 <!-- /#page-content-wrapper -->
-
             </div>
             <!-- /#wrapper -->
 
@@ -316,5 +365,6 @@
             </script>
 
         </body>
+        
 
         </html>
