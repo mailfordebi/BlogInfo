@@ -24,14 +24,14 @@ public class MyBlogController {
 	@RequestMapping("/blogPost")
 	public ModelAndView blogPost() {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("contact");
+		modelAndView.setViewName("post");
 		return modelAndView;
 	}
 
 	@RequestMapping("/contact")
 	public ModelAndView contact() {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("index");
+		modelAndView.setViewName("contact");
 		return modelAndView;
 	}
 
