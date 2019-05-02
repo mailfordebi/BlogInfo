@@ -328,29 +328,37 @@ public class BlogInfoController {
 		if (blogInfoVO != null && blogInfoVO.getSubMenus() != null && !blogInfoVO.getSubMenus().isEmpty()) {
 			for (int i = 0; i < blogInfoVO.getSubMenus().size(); i++) {
 				if (blogInfoVO.getSubMenus().get(i).getSubmenu_id().equals(blogInfoVO.getSubMenuId())) {
-					if (i > 0 && i < blogInfoVO.getSubMenus().size() - 1) {
-						SubMenu prev = blogInfoVO.getSubMenus().get(i - 1);
-						blogInfoVO.setPrevSubMenuId(prev.getSubmenu_id());
-						blogInfoVO.setPrevSubMenuName(prev.getSubmenu_name());
-						blogInfoVO.setPrevMenuId(prev.getMenu_ref());
-						SubMenu next = blogInfoVO.getSubMenus().get(i + 1);
-						blogInfoVO.setNextSubMenuId(next.getSubmenu_id());
-						blogInfoVO.setNextSubMenuName(next.getSubmenu_name());
-						blogInfoVO.setNextMenuId(next.getMenu_ref());
-					} else if (i == 0) {
-						SubMenu next = blogInfoVO.getSubMenus().get(i + 1);
-						blogInfoVO.setNextSubMenuId(next.getSubmenu_id());
-						blogInfoVO.setNextSubMenuName(next.getSubmenu_name());
-						blogInfoVO.setNextMenuId(next.getMenu_ref());
+					if (blogInfoVO.getSubMenus().size() == 1) {
 						blogInfoVO.setPrevSubMenuId("");
 						blogInfoVO.setPrevSubMenuName("");
-					} else {
-						SubMenu prev = blogInfoVO.getSubMenus().get(i - 1);
-						blogInfoVO.setPrevSubMenuId(prev.getSubmenu_id());
-						blogInfoVO.setPrevSubMenuName(prev.getSubmenu_name());
-						blogInfoVO.setPrevMenuId(prev.getMenu_ref());
+						blogInfoVO.setPrevMenuId("");
 						blogInfoVO.setNextSubMenuId("");
 						blogInfoVO.setNextSubMenuName("");
+					} else {
+						if (i > 0 && i < blogInfoVO.getSubMenus().size() - 1) {
+							SubMenu prev = blogInfoVO.getSubMenus().get(i - 1);
+							blogInfoVO.setPrevSubMenuId(prev.getSubmenu_id());
+							blogInfoVO.setPrevSubMenuName(prev.getSubmenu_name());
+							blogInfoVO.setPrevMenuId(prev.getMenu_ref());
+							SubMenu next = blogInfoVO.getSubMenus().get(i + 1);
+							blogInfoVO.setNextSubMenuId(next.getSubmenu_id());
+							blogInfoVO.setNextSubMenuName(next.getSubmenu_name());
+							blogInfoVO.setNextMenuId(next.getMenu_ref());
+						} else if (i == 0) {
+							SubMenu next = blogInfoVO.getSubMenus().get(i + 1);
+							blogInfoVO.setNextSubMenuId(next.getSubmenu_id());
+							blogInfoVO.setNextSubMenuName(next.getSubmenu_name());
+							blogInfoVO.setNextMenuId(next.getMenu_ref());
+							blogInfoVO.setPrevSubMenuId("");
+							blogInfoVO.setPrevSubMenuName("");
+						} else {
+							SubMenu prev = blogInfoVO.getSubMenus().get(i - 1);
+							blogInfoVO.setPrevSubMenuId(prev.getSubmenu_id());
+							blogInfoVO.setPrevSubMenuName(prev.getSubmenu_name());
+							blogInfoVO.setPrevMenuId(prev.getMenu_ref());
+							blogInfoVO.setNextSubMenuId("");
+							blogInfoVO.setNextSubMenuName("");
+						}
 					}
 				}
 			}

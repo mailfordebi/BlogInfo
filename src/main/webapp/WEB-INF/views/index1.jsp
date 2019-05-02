@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
         <html lang="en">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
         <head>
@@ -13,11 +13,11 @@
             <title>Out Of Memory: Solution for your error</title>
 
             <!-- Bootstrap core CSS -->
-            <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+            <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> 
 
             <!-- Custom styles for this template -->
             <link href="css/simple-sidebar.css" rel="stylesheet">
-            <link href="menu_submenu.css" rel="stylesheet">
+            <!-- <link href="menu_submenu.css" rel="stylesheet"> -->
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <style>
                 li:hover {
@@ -73,7 +73,6 @@
 
                     <ul style="padding-left: 0">
                         <div class="list-group list-group-flush" style="width: 14rem; border-style: groove; border-width: thin; border-color: rgba(0,0,0,.125);">
-                            <%-- <a href="${pageContext.request.contextPath}/dashboard?menuid=${blogInfo.menuId}" class="list-group-item list-group-item-action bg-light" id="${blogInfo.menuId}" style="padding-left: 10px; padding-top: 5px; padding-bottom: 5px; font-size: 16px; font-weight: 500;">Dashboard</a> --%>
                             <c:forEach var="sm" items="${blogInfo.subMenus}">
                                 <a href="${pageContext.request.contextPath}/submenu?menuid=${sm.menu_ref}&submenuid=${sm.submenu_id}" class="list-group-item list-group-item-action bg-light" style="padding-left: 10px; padding-top: 5px; padding-bottom: 5px; font-size: 16px; font-weight: 500;">${sm.submenu_name}</a>
                             </c:forEach>
@@ -86,13 +85,6 @@
                 <div id="page-content-wrapper" style="background: whitesmoke;">
 
                     <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-                        <!-- <button class="btn" id="menu-toggle">
-                            <img src="img/hamburger.png" id="hamburger" height="20px" />
-                        </button> -->
-                        	<!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedSubMenu" aria-controls="navbarSupportedSubMenu" aria-expanded="false" aria-label="Toggle navigation">
-                         	   <span class="navbar-toggler-icon"></span>
-                            </button> -->
-
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
@@ -108,13 +100,6 @@
                                       		  </li>
                                       	</c:if>
                                     </c:forEach>
-                                    <!--  <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Dropdown </a>
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                            <a class="dropdown-item" href="#">Action</a> <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </li> -->
                                     <c:if test="${!logedIn}">
                                         <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/login" style="font-weight: 600;">Login</a></li>
                                     </c:if>
@@ -126,7 +111,6 @@
                             </div>
                     </nav>
                     <div class="container-fluid" style="width: 80%; float: left; border-style: outset; border-width: initial; background-color: white;">
-                        <%-- ${blogInfo.subMenuId} --%>
                             <c:if test="${settings}">
                                 <form action="addmenu" id="menuForm" method="post" name="menuForm">
                                     <div class="container" style="float: left; background-color: antiquewhite;">
@@ -238,9 +222,6 @@
                             </c:if>
                             <c:if test="${!editMode && !settings}">
                                 <c:choose>
-                                    <%-- <c:when test="${blogInfo.subMenuId eq 'dashboard'}">
-                                        <p>DashBoard static page for all screen Need to update in JSP</p>
-                                    </c:when> --%>
                                     <c:when test="${blogInfo.menuId eq 'miscellaneous'}">
                                         <c:forEach var="con" items="${blogInfo.subMenuContents}">
                                             <h2>${con.content_header}</h2>
@@ -262,6 +243,40 @@
                                         <c:forEach var="con" items="${blogInfo.subMenuContents}">
                                             ${con.content}
                                         </c:forEach>
+                                        <!--Next Prev Post  --> 
+                    					 <div class="nextprev">
+                   							<h5>
+                    						 <c:if test="${blogInfo.prevSubMenuId ne ''}">
+												<span style="float: left;">Previous</span>
+												<a style="float: left;padding-left: 7px;" href="${pageContext.request.contextPath}/submenu?menuid=${blogInfo.prevMenuId}&submenuid=${blogInfo.prevSubMenuId}">${blogInfo.prevSubMenuName}</a>
+											</c:if>
+											<c:if test="${blogInfo.nextSubMenuId ne ''}">
+												<span style="float: right;">Next</span>
+												<a style="float: right;padding-right: 7px;" href="${pageContext.request.contextPath}/submenu?menuid=${blogInfo.nextMenuId}&submenuid=${blogInfo.nextSubMenuId}">${blogInfo.nextSubMenuName}</a>
+											</c:if>
+											</h5>
+										</div>			
+                      
+                      					<br>
+                      					<br> 
+                      					<br>     
+                     					<!--Recommended Post  -->
+                     					<c:if test="${fn:length(blogInfo.subMenus) gt 1}">       
+					 					<div class="recommendedPostsDiv">
+    									<h2 style="font-size: 20px; color: #838383;">Recommended Posts:</h2>
+   											 <ul>
+        										 <c:forEach var="sm" items="${blogInfo.subMenus}">
+        										 	<c:if test="${sm.submenu_id ne blogInfo.subMenuId}">
+        					  					 		 <li>
+        					   							 	<h5>
+                              	 							  <a href="${pageContext.request.contextPath}/submenu?menuid=${sm.menu_ref}&submenuid=${sm.submenu_id}">${sm.submenu_name}</a>
+                              	 							</h5>
+                                						</li>
+                               						 </c:if>
+                          						  </c:forEach>								
+    										</ul>
+										</div>
+										</c:if>
                                     </c:otherwise>
                                 </c:choose>
                                 <c:if test="${logedIn and !(blogInfo.menuId eq 'miscellaneous')}">
@@ -269,38 +284,6 @@
                                 </c:if>
                             </c:if>
                             
-                     <!--Next Prev Post  --> 
-                     <div class="nextprev">
-                     <h5>
-                    	 <c:if test="${blogInfo.prevSubMenuId ne ''}">
-							<span style="float: left;">Previous</span>
-							<a style="float: left;padding-left: 7px;" href="${pageContext.request.contextPath}/submenu?menuid=${blogInfo.prevMenuId}&submenuid=${blogInfo.prevSubMenuId}">${blogInfo.prevSubMenuName}</a>
-						</c:if>
-						<c:if test="${blogInfo.nextSubMenuId ne ''}">
-							<span style="float: right;">Next</span>
-							<a style="float: right;padding-right: 7px;" href="${pageContext.request.contextPath}/submenu?menuid=${blogInfo.nextMenuId}&submenuid=${blogInfo.nextSubMenuId}">${blogInfo.nextSubMenuName}</a>
-						</c:if>
-					</h5>
-					</div>			
-                      
-                      <br>
-                      <br> 
-                      <br>     
-                     <!--Recommended Post  -->       
-					 <div class="recommendedPostsDiv">
-    					<h2 style="font-size: 20px; color: #838383;">Recommended Posts:</h2>
-   						 <ul>
-        					 <c:forEach var="sm" items="${blogInfo.subMenus}">
-        					 	<c:if test="${sm.submenu_id ne blogInfo.subMenuId}">
-        					   		 <li>
-        					   		 	<h5>
-                              	 		  <a href="${pageContext.request.contextPath}/submenu?menuid=${sm.menu_ref}&submenuid=${sm.submenu_id}">${sm.submenu_name}</a>
-                              	 		</h5>
-                                	</li>
-                                </c:if>
-                            </c:forEach>								
-    					</ul>
-					</div>
                     </div>
                     
                 </div>
@@ -314,11 +297,6 @@
 
             <!-- Menu Toggle Script -->
             <script>
-                /* $("#menu-toggle").click(function(e) {
-                                                		    e.preventDefault();
-                                                		    $("#wrapper").toggleClass("toggled");
-                                                		}); */
-
                 function showfield(name) {
                     if (name == 'Menu') {
                         document.getElementById('menuspan').style.display = "block";
