@@ -10,7 +10,11 @@ public class SubMenuContent {
 	private String submenu_ref;
 	private String menu_ref;
 	private String content_header;
+	private String contentHeaderTag;
 	private Date created_date;
+	private String postedBy;
+	private String date;
+	
 
 	public String getConetent_id() {
 		return conetent_id;
@@ -74,6 +78,30 @@ public class SubMenuContent {
 
 	public void setMenu_ref(String menu_ref) {
 		this.menu_ref = menu_ref;
+	}
+
+	public String getContentHeaderTag() {
+		return contentHeaderTag;
+	}
+
+	public void setContentHeaderTag(String contentHeaderTag) {
+		this.contentHeaderTag = contentHeaderTag;
+	}
+
+	public String getPostedBy() {
+		return postedBy;
+	}
+
+	public void setPostedBy(String postedBy) {
+		this.postedBy = postedBy;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 }

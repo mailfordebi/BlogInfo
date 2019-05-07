@@ -112,7 +112,7 @@
                     </nav>
                     <div class="container-fluid" style="width: 80%; float: left; border-style: outset; border-width: initial; background-color: white;">
                             <c:if test="${settings}">
-                                <form action="addmenu" id="menuForm" method="post" name="menuForm">
+                                <form action="addmenu" id="menuForm" method="post" name="menuForm" enctype="multipart/form-data">
                                     <div class="container" style="float: left; background-color: antiquewhite;">
                                         <h3>Add Menu or SubMenu</h3>
                                         <hr style="border: 1px solid #272525;">
@@ -121,17 +121,18 @@
                                             <option selected="selected">Select</option>
                                             <option value="Menu">Add Menu</option>
                                             <option value="Sub Menu">Add Sub Menu</option>
-                                            <option value="Misc">Add Misc</option>
+                                            <option value="Misc">Add Blog</option>
                                             <option value="Hide Menu">Hide/Show Menu</option>
                                             <option value="Hide Sub Menu">Hide/Show Sub Menu</option>
                                         </select>
-                                        <br> <span id="menuspan" style="display: none;"> <label
+                                        <br> 
+                              <span id="menuspan" style="display: none;"> <label
 								for="menuid"><b>Menu Id:</b></label> <input type="text"
 								placeholder="Menu Id" name="menuid"><br> <label
 								for="menuName"><b>Menu Name:</b></label> <input type="text"
 								placeholder="Menu Name" name="menuName"><br>
 
-							</span>
+							 </span>
                              <span id="submenuspan" style="display: none;"> <label
 								for="submenuid"><b>Sub Menu Id:</b></label> <input type="text"
 								placeholder="Sub Menu Id" name="submenuid"><br> <label
@@ -148,7 +149,7 @@
 							  </span>
 
                               <span id="misccontaintspan" style="display: none;"> 
-							   <label for="submenuRef"><b>Sub Menu Reference:</b></label> 
+							   <label for="submenuRef"><b>Blog Type:</b></label> 
 							   <select
 								name="submenuselect" id="submenuselect" style="background: #f1f1f1;">
 									<option selected="selected">Select</option>
@@ -157,19 +158,30 @@
 									</c:forEach>
 							   </select><br>
 							   <label
-								for="contentid"><b>Content Id:</b></label> <input type="text"
-								placeholder="Content Id" name="contentid"><br>
+								for="contentid"><b>Blog Id:</b></label> <input type="text"
+								placeholder="Blog Id" name="contentid"><br>
 								<b>Header:</b>
 								<br>
 								<textarea name="contentHeader" style="background: rgb(241, 241, 241);height: 100px;width: 700px;"></textarea>
+								<br>
+								<b>Header Tag:</b>
+								<br>
+								<textarea name="contentHeaderTag" style="background: rgb(241, 241, 241);height: 100px;width: 700px;"></textarea>
 								<br> 
+								<b>Theme Image:</b>
+								<input type="file" name="themeImage" accept="image/*" />
+								<br>
 								<label for="submenuName">
 								<b>Body:</b>
 								</label> <br>
 								<textarea name="contentBody" style="background: rgb(241, 241, 241);height: 500px;width: 700px;"></textarea>
 								<br>
+								<label for="postedBy">
+								<b>Posted By:</b>
+								</label> <br>
+								<textarea name="postedBy" style="background: rgb(241, 241, 241);height: 200px;width: 500px;"></textarea>
+								<br>
 							 </span>
-
                              <span id="hidemenu" style="display: none;"> 
 							    <label for="menuRef1"><b>Menu Reference:</b></label> <select
 								name="menuRefToHide" id="menuRefToHide">
@@ -351,6 +363,7 @@
                         moreText.style.display = "inline";
                     }
                 }
+                
             </script>
 
         </body>

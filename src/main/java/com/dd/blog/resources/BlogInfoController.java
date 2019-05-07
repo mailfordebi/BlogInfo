@@ -86,8 +86,10 @@ public class BlogInfoController {
 			@ModelAttribute("menuid") String menuId, @ModelAttribute("menuName") String menuName,
 			@ModelAttribute("submenuid") String subMenuId, @ModelAttribute("submenuName") String subMenuName,
 			@ModelAttribute("menuselect") String menuRef, @ModelAttribute("sortOrder") String sortOrder,
-			@ModelAttribute("submenuselect") String subMenuRef, @ModelAttribute("contentHeader") String contentHeader,
+			@ModelAttribute("contentHeaderTag") String contentHeaderTag,
+			@ModelAttribute("submenuselect") String blogType, @ModelAttribute("contentHeader") String contentHeader,
 			@ModelAttribute("contentBody") String contentBody, @ModelAttribute("contentid") String contentid,
+			@RequestParam("themeImage") MultipartFile file, @ModelAttribute("postedBy") String postedBy,
 			@ModelAttribute("menuHidden") String menuHidden, @ModelAttribute("menuRefToHide") String menuRefToHide,
 			@ModelAttribute("subMenuHidden") String subMenuHidden) throws Exception {
 
@@ -118,14 +120,21 @@ public class BlogInfoController {
 			isToInsert = true;
 		}
 		if ("Misc".equalsIgnoreCase(selectType)) {
+			if (!file.isEmpty()) {
+				byte[] imageContent = file.getBytes();
+				String imageName = file.getOriginalFilename();
+				blogInfoDAO.saveImage(imageContent, imageName, contentid, true);
+			}
 			List<SubMenuContent> subMenuContents = new ArrayList<SubMenuContent>();
 			SubMenuContent subMenuContent = new SubMenuContent();
 			subMenuContent.setContent_header(contentHeader);
+			subMenuContent.setContentHeaderTag(contentHeaderTag);
 			subMenuContent.setContent(contentBody);
-			subMenuContent.setSubmenu_ref(subMenuRef);
+			subMenuContent.setSubmenu_ref(blogType);
 			subMenuContent.setMenu_ref("miscellaneous");
 			subMenuContent.setConetent_id(contentid);
 			subMenuContent.setCreated_date(new Date());
+			subMenuContent.setPostedBy(postedBy);
 			subMenuContents.add(subMenuContent);
 			blogInfoVO.setSubMenuContents(subMenuContents);
 			isToInsert = true;
@@ -143,7 +152,7 @@ public class BlogInfoController {
 		if ("Hide Sub Menu".equalsIgnoreCase(selectType)) {
 			isToUpdate = true;
 			SubMenu subMenu = new SubMenu();
-			subMenu.setSubmenu_id(subMenuRef);
+			// subMenu.setSubmenu_id(subMenuRef);
 			if ("true".equalsIgnoreCase(subMenuHidden)) {
 				subMenu.setHidden(true);
 			}
@@ -202,7 +211,7 @@ public class BlogInfoController {
 		if (!file.isEmpty()) {
 			byte[] imageContent = file.getBytes();
 			String imageName = file.getOriginalFilename();
-			blogInfoDAO.saveImage(imageContent, imageName);
+			blogInfoDAO.saveImage(imageContent, imageName, content_id, false);
 		}
 
 		BlogInfoVO blogInfoVO = new BlogInfoVO();

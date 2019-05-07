@@ -28,14 +28,14 @@
  <%@include file="header.jsp" %>
  
   <!-- Page Header -->
-  <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+  <header class="masthead">
     <div class="overlay"></div>
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="site-heading">
             <h1>Out Of Memory</h1>
-            <span class="subheading">A Blog by Debi Prasad Pradhan</span>
+            <span class="subheading">by Debi Prasad Pradhan</span>
           </div>
         </div>
       </div>
@@ -152,6 +152,10 @@
 
   <!-- Custom scripts for this template -->
   <script src="js/clean-blog.min.js"></script>
+  <script type="text/javascript">
+  	var img = 'data:image/jpeg;base64,${blogInfo.themeimage}';
+  	document.body.header.style.backgroundImage = 'url(' + img + ')';
+  </script>
 
 </body>
 
