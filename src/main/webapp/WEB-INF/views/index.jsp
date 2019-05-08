@@ -28,7 +28,7 @@
  <%@include file="header.jsp" %>
  
   <!-- Page Header -->
-  <header class="masthead">
+  <header class="masthead" id="header">
     <div class="overlay"></div>
     <div class="container">
       <div class="row">
@@ -154,7 +154,7 @@
   <script src="js/clean-blog.min.js"></script>
   <script type="text/javascript">
   	var img = 'data:image/jpeg;base64,${blogInfo.themeimage}';
-  	document.body.header.style.backgroundImage = 'url(' + img + ')';
+  	document.getElementById("header").style.backgroundImage = 'url(' + img + ')';
   </script>
 
 </body>

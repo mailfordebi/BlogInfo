@@ -293,10 +293,12 @@ public class BlogInfoDAO {
 			List<Document> documents = mongoOperations.find(query, Document.class, "images");
 			if (documents != null && !documents.isEmpty()) {
 				for (Document document : documents) {
-					if (document.getBoolean("isThemeImage")) {
+					if (document.get("isThemeImage")!=null && document.getBoolean("isThemeImage")) {
 						Binary imageData = document.get("imagecontent", Binary.class);
 						byte[] imageByteData = imageData.getData();
-						blogInfoVO.setThemeimage(imageByteData);
+						String base64Image = Base64.getEncoder().encodeToString(imageByteData);
+						blogInfoVO.setThemeimage(base64Image);
+						isThemeFound = true;
 						break;
 					}
 				}
@@ -307,7 +309,7 @@ public class BlogInfoDAO {
 			byte[] fileContent;
 			try {
 				fileContent = Files.readAllBytes(fi.toPath());
-				blogInfoVO.setThemeimage(fileContent);
+				blogInfoVO.setThemeimage(Base64.getEncoder().encodeToString(fileContent));
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.out.println(e.getMessage());

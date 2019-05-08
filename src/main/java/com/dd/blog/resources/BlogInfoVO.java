@@ -11,7 +11,7 @@ public class BlogInfoVO {
 	String content_id;
 	private Menu menu;
 	private SubMenu subMenu;
-	private byte[] themeimage;
+	private String themeimage;
 
 	private String prevSubMenuId;
 	private String prevSubMenuName;
@@ -132,11 +132,11 @@ public class BlogInfoVO {
 		this.nextMenuId = nextMenuId;
 	}
 
-	public byte[] getThemeimage() {
+	public String getThemeimage() {
 		return themeimage;
 	}
 
-	public void setThemeimage(byte[] themeimage) {
+	public void setThemeimage(String themeimage) {
 		this.themeimage = themeimage;
 	}
 
