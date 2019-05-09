@@ -36,7 +36,7 @@
 	<%@include file="header.jsp"%>
 
 	<!-- Page Header -->
-	<header class="masthead" id="header">
+	<header class="masthead" style="background-image: url('data:image/jpeg;base64,${blogInfo.themeimage}')">
 		<div class="overlay"></div>
 		<div class="container">
 			<div class="row">
@@ -56,61 +56,16 @@
 			<div class="col-lg-8 col-md-10 mx-auto">
 				<c:forEach var="con" items="${blogInfo.subMenuContents}">
 					<div class="post-preview">
-						<a href="${pageContext.request.contextPath}/${con.conetent_id}">
+						<a href="${pageContext.request.contextPath}/blogPost?blogId=${con.conetent_id}">
 							<h2 class="post-title">${con.content_header}</h2>
 							<h3 class="post-subtitle">${con.contentHeaderTag}</h3>
 						</a>
 						<p class="post-meta">
-							Posted by <a href="#">${con.postedBy}</a>${con.date}
+							Posted by <a href="${pageContext.request.contextPath}/aboutme">${con.postedBy} </a>${con.date}
 						</p>
 					</div>
 					<hr>
 				</c:forEach>
-				<div class="post-preview">
-					<a href="${pageContext.request.contextPath}/blogPost">
-						<h2 class="post-title">Man must explore, and this is
-							exploration at its greatest</h2>
-						<h3 class="post-subtitle">Problems look mighty small from 150
-							miles up</h3>
-					</a>
-					<p class="post-meta">
-						Posted by <a href="#">Start Bootstrap</a> on September 24, 2019
-					</p>
-				</div>
-				<hr>
-				<div class="post-preview">
-					<a href="${pageContext.request.contextPath}/blogPost">
-						<h2 class="post-title">I believe every human has a finite
-							number of heartbeats. I don't intend to waste any of mine.</h2>
-					</a>
-					<p class="post-meta">
-						Posted by <a href="#">Start Bootstrap</a> on September 18, 2019
-					</p>
-				</div>
-				<hr>
-				<div class="post-preview">
-					<a href="post.html">
-						<h2 class="${pageContext.request.contextPath}/blogPost">
-							Science has not yet mastered prophecy</h2>
-						<h3 class="post-subtitle">We predict too much for the next
-							year and yet far too little for the next ten.</h3>
-					</a>
-					<p class="post-meta">
-						Posted by <a href="#">Start Bootstrap</a> on August 24, 2019
-					</p>
-				</div>
-				<hr>
-				<div class="post-preview">
-					<a href="${pageContext.request.contextPath}/blogPost">
-						<h2 class="post-title">Failure is not an option</h2>
-						<h3 class="post-subtitle">Many say exploration is part of our
-							destiny, but it’s actually our duty to future generations.</h3>
-					</a>
-					<p class="post-meta">
-						Posted by <a href="#">Start Bootstrap</a> on July 8, 2019
-					</p>
-				</div>
-				<hr>
 				<!-- Pager -->
 				<div class="clearfix">
 					<a class="btn btn-primary float-right" href="#">Older Posts
@@ -160,12 +115,6 @@
 
 	<!-- Custom scripts for this template -->
 	<script src="js/clean-blog.min.js"></script>
-	<script type="text/javascript">
-		var img = 'data:image/jpeg;base64,${blogInfo.themeimage}';
-		document.getElementById("header").style.backgroundImage = 'url(' + img
-				+ ')';
-	</script>
-
 </body>
 
 </html>

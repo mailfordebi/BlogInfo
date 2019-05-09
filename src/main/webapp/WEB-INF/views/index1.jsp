@@ -96,8 +96,14 @@
                                     </c:if>
                                     <c:forEach var="menu" items="${blogInfo.menuList}">
                                     	<c:if test="${!menu.hidden}">
-                                       		 <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/menu?menuid=${menu.menu_id}" style="font-weight: 600;">${menu.menu_name}</a>
+                                    		<c:if test="${menu.menu_id ne 'miscellaneous'}">
+                                       		  <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/menu?menuid=${menu.menu_id}" style="font-weight: 600;">${menu.menu_name}</a>
                                       		  </li>
+                                      		</c:if>
+                                      		 <c:if test="${menu.menu_id eq 'miscellaneous'}">
+                                      			 <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/myblogindex" target="_blank" style="font-weight: 600;">${menu.menu_name}</a>
+                                      			 </li>
+                                      		 </c:if>
                                       	</c:if>
                                     </c:forEach>
                                     <c:if test="${!logedIn}">

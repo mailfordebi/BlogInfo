@@ -289,7 +289,7 @@ public class BlogInfoDAO {
 		boolean isThemeFound = false;
 		if (contentId != null) {
 			query = new Query();
-			query.addCriteria(Criteria.where("conetent_id").is(contentId));
+			query.addCriteria(Criteria.where("content_id").is(contentId));
 			List<Document> documents = mongoOperations.find(query, Document.class, "images");
 			if (documents != null && !documents.isEmpty()) {
 				for (Document document : documents) {
