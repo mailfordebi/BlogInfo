@@ -268,19 +268,12 @@ public class BlogInfoController {
 				}
 			}
 			for (Document document : contents) {
-				/*
-				 * if (submenuId != null && submenuId.equalsIgnoreCase("dashboard") && menuId !=
-				 * null && menuId.equalsIgnoreCase(document.getString("menu_ref"))) { // Set for
-				 * dashboard page.. blogInfoVO.setSubMenuId("dashboard");
-				 * blogInfoVO.setMenuId(document.getString("menu_ref")); break; }
-				 */
 				if (menuId != null && menuId.equalsIgnoreCase(document.getString("menu_ref"))
 						&& "miscellaneous".equals(menuId)) {
 					if (submenuId == null || submenuId.equalsIgnoreCase(document.getString("submenu_ref"))) {
 						SubMenuContent content = new SubMenuContent();
 						content.setConetent_id((String) document.get("conetent_id"));
 						content.setContent_header(document.getString("content_header"));
-						// content.setCreated_date(document.getString("created_date"));
 						String cont = (String) document.get("content");
 						if (!isEditMode) {
 							cont = blogInfoDAO.replaceImageContent(cont);
