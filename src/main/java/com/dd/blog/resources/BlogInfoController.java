@@ -28,12 +28,16 @@ public class BlogInfoController {
 
 	@RequestMapping("/index")
 	public ModelAndView index() {
-		return getModelAndView("miscellaneous", null, false);
+		String subMenuId = blogInfoDAO.getFirstSubMeny("design_pattern");
+		ModelAndView modelAndView = getModelAndView("design_pattern", subMenuId, false);
+		return modelAndView;
 	}
 
 	@RequestMapping("/home")
 	public ModelAndView home() {
-		return getModelAndView("miscellaneous", null, false);
+		String subMenuId = blogInfoDAO.getFirstSubMeny("design_pattern");
+		ModelAndView modelAndView = getModelAndView("design_pattern", subMenuId, false);
+		return modelAndView;
 	}
 
 	@RequestMapping("/login")
@@ -46,7 +50,8 @@ public class BlogInfoController {
 	@RequestMapping("/logout")
 	public ModelAndView logout() {
 		ModelAndView modelAndView = null;
-		modelAndView = getModelAndView("miscellaneous", null, false);
+		String subMenuId = blogInfoDAO.getFirstSubMeny("design_pattern");
+		modelAndView = getModelAndView("design_pattern", subMenuId, false);
 		modelAndView.addObject("logedIn", "false");
 		return modelAndView;
 	}
@@ -56,7 +61,8 @@ public class BlogInfoController {
 			@ModelAttribute("password") String password) {
 		ModelAndView modelAndView = null;
 		if (blogInfoDAO.validate(username, password)) {
-			modelAndView = getModelAndView("miscellaneous", null, false);
+			String subMenuId = blogInfoDAO.getFirstSubMeny("design_pattern");
+			modelAndView = getModelAndView("design_pattern", subMenuId, false);
 			modelAndView.addObject("logedIn", "true");
 		} else {
 			modelAndView = new ModelAndView();
@@ -182,12 +188,6 @@ public class BlogInfoController {
 		}
 		return modelAndView;
 	}
-
-	/*
-	 * @RequestMapping("/dashboard") public ModelAndView
-	 * dashboard(@RequestParam("menuid") String menuId) { ModelAndView modelAndView
-	 * = getModelAndView(menuId, "dashboard", false); return modelAndView; }
-	 */
 
 	@RequestMapping("/submenu")
 	public ModelAndView factoryPattern(@RequestParam("menuid") String menuId,
