@@ -41,9 +41,10 @@ public class BlogInfoController {
 	}
 
 	@RequestMapping("/login")
-	public ModelAndView login() {
+	public ModelAndView login(@ModelAttribute("page") String page) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("login");
+		modelAndView.addObject("page", page);
 		return modelAndView;
 	}
 
@@ -55,14 +56,32 @@ public class BlogInfoController {
 		modelAndView.addObject("logedIn", "false");
 		return modelAndView;
 	}
+	
+	@RequestMapping("/logoutblog")
+	public ModelAndView logoutblog() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("logedIn", "false");
+		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null);
+		modelAndView.addObject("blogInfo", blogInfoVO);
+		modelAndView.setViewName("index");
+		return modelAndView;
+	}
 
 	@RequestMapping("/loginSubMit")
 	public ModelAndView loginSubMit(@ModelAttribute("username") String username,
-			@ModelAttribute("password") String password) {
+			@ModelAttribute("password") String password, @ModelAttribute("page") String page) {
 		ModelAndView modelAndView = null;
 		if (blogInfoDAO.validate(username, password)) {
 			String subMenuId = blogInfoDAO.getFirstSubMeny("design_pattern");
+			if("blog".equals(page)) {
+				modelAndView = new ModelAndView();
+				BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null);
+				modelAndView.addObject("blogInfo", blogInfoVO);
+				modelAndView.addObject("loginId", "qazxswedcvfr");
+				modelAndView.setViewName("index");
+			}else {
 			modelAndView = getModelAndView("design_pattern", subMenuId, false);
+			}
 			modelAndView.addObject("logedIn", "true");
 		} else {
 			modelAndView = new ModelAndView();
@@ -84,6 +103,41 @@ public class BlogInfoController {
 			modelAndView = new ModelAndView();
 			modelAndView.setViewName("login");
 		}
+		return modelAndView;
+	}
+
+	@RequestMapping("/myblogindex")
+	public ModelAndView myblogindex() {
+		ModelAndView modelAndView = new ModelAndView();
+		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null);
+		modelAndView.addObject("blogInfo", blogInfoVO);
+		modelAndView.setViewName("index");
+		return modelAndView;
+	}
+
+	@RequestMapping("/aboutme")
+	public ModelAndView about() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("about");
+		return modelAndView;
+	}
+
+	@RequestMapping("/blogPost")
+	public ModelAndView blogPost(@RequestParam("blogId") String blogId, @RequestParam("loginId") String loginId) {
+		ModelAndView modelAndView = new ModelAndView();
+		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(blogId);
+		modelAndView.addObject("blogInfo", blogInfoVO);
+		if("qazxswedcvfr".equals(loginId)) {
+			modelAndView.addObject("editMode", true);
+		}
+		modelAndView.setViewName("post");
+		return modelAndView;
+	}
+
+	@RequestMapping("/contact")
+	public ModelAndView contact() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("contact");
 		return modelAndView;
 	}
 

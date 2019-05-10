@@ -107,7 +107,7 @@
                                       	</c:if>
                                     </c:forEach>
                                     <c:if test="${!logedIn}">
-                                        <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/login" style="font-weight: 600;">Login</a></li>
+                                        <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/login?page=tutorial" style="font-weight: 600;">Login</a></li>
                                     </c:if>
                                     <c:if test="${logedIn}">
                                         <li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/logout" style="font-weight: 600;">Logout</a></li>
@@ -223,10 +223,7 @@
                                 <form action="saveContent" method="post" id="saveContent" enctype="multipart/form-data">
                                     <textarea rows="30" cols="122" name="updateContent">
                                         <c:forEach var="con" items="${blogInfo.subMenuContents}">
-                                            <%-- <c:if test="${!con.content_header eq null}"> --%>
-                                                <%-- ${con.content_header} --%>
-                                                    <%-- </c:if> --%>
-                                                        ${con.content}
+                                             ${con.content}
                                         </c:forEach>
                                     </textarea>
                                     <input type="hidden" value="${blogInfo.content_id}" name="content_id">

@@ -56,13 +56,13 @@
 			<div class="col-lg-8 col-md-10 mx-auto">
 				<c:forEach var="con" items="${blogInfo.subMenuContents}">
 					<div class="post-preview">
-						<a href="${pageContext.request.contextPath}/blogPost?blogId=${con.conetent_id}">
+						<a href="${pageContext.request.contextPath}/blogPost?blogId=${con.conetent_id}&loginId=${loginId}">
 							<h2 class="post-title">${con.content_header}</h2>
 							<h3 class="post-subtitle">${con.contentHeaderTag}</h3>
 						</a>
-						<p class="post-meta">
-							Posted by <a href="${pageContext.request.contextPath}/aboutme">${con.postedBy} </a>${con.date}
-						</p>
+							<p class="post-meta">
+								Posted by <a href="${pageContext.request.contextPath}/aboutme">${con.postedBy} </a>${con.date}
+							</p>
 					</div>
 					<hr>
 				</c:forEach>

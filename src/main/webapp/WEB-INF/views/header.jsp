@@ -46,6 +46,14 @@
 					</li>
 					<li class="nav-item"><a class="nav-link"
 						href="${pageContext.request.contextPath}/contact">Contact</a></li>
+					<c:if test="${!logedIn}">	
+						<li class="nav-item"><a class="nav-link"
+							href="${pageContext.request.contextPath}/login?page=blog">Login</a></li>
+					</c:if>
+					<c:if test="${logedIn}">
+						<li class="nav-item"><a class="nav-link"
+							href="${pageContext.request.contextPath}/logoutblog">Logout</a></li>
+					</c:if>	
 				</ul>
 			</div>
 		</div>
