@@ -158,16 +158,18 @@ public class BlogInfoDAO {
 				query.addCriteria(Criteria.where("conetent_id").is(subMenuContents.get(0).getConetent_id()));
 				Document doc = mongoOperations.findOne(query, Document.class, "submenucontent");
 				if (doc != null) {
+					/*
+					 * for (String key : doc.keySet()) { if ((!"_id".equalsIgnoreCase(key)) &&
+					 * (!"created_date".equalsIgnoreCase(key)) && "content".equalsIgnoreCase(key)) {
+					 * if (!StringUtils.isEmpty(subMenuContents.get(0).getContent())) {
+					 * doc.put("content", subMenuContents.get(0).getContent().trim()); } } }
+					 */
 					for (String key : doc.keySet()) {
-						if ((!"_id".equalsIgnoreCase(key)) && (!"created_date".equalsIgnoreCase(key))
-								&& "content".equalsIgnoreCase(key)) {
-							if (!StringUtils.isEmpty(subMenuContents.get(0).getContent())) {
-								doc.put("content", subMenuContents.get(0).getContent().trim());
-							}
+						if ("content".equalsIgnoreCase(key) && !StringUtils.isEmpty(subMenuContents.get(0).getContent())) {
+							basicDBObject.put(key, subMenuContents.get(0).getContent().trim());
+						}else {
+							basicDBObject.put(key, doc.get(key));
 						}
-					}
-					for (String key : doc.keySet()) {
-						basicDBObject.put(key, doc.get(key));
 					}
 					mongoOperations.save(basicDBObject, "submenucontent");
 				} else {
@@ -282,7 +284,7 @@ public class BlogInfoDAO {
 		return subMenuId;
 	}
 
-	public BlogInfoVO getBlogInfo(String contentId) {
+	public BlogInfoVO getBlogInfo(String contentId, boolean isEditable) {
 		BlogInfoVO blogInfoVO = new BlogInfoVO();
 		List<SubMenuContent> subMenuContents = new ArrayList<SubMenuContent>();
 		Query query = null;
@@ -329,7 +331,11 @@ public class BlogInfoDAO {
 				subMenuContent.setConetent_id(document.getString("conetent_id"));
 				subMenuContent.setContent_header(document.getString("content_header"));
 				subMenuContent.setContentHeaderTag(document.getString("contentheaderTag"));
-				subMenuContent.setContent(document.getString("content"));
+				if(isEditable) {
+					subMenuContent.setContent(document.getString("content"));
+				}else {
+					subMenuContent.setContent(replaceImageContent(document.getString("content")));
+				}
 				subMenuContent.setPostedBy(document.getString("postedBy"));
 				subMenuContent.setMenu_ref(document.getString("menu_ref"));
 				subMenuContent.setSubmenu_ref(document.getString("submenu_ref"));

@@ -229,6 +229,7 @@
                                     <input type="hidden" value="${blogInfo.content_id}" name="content_id">
                                     <input type="hidden" value="${blogInfo.subMenuId}" name="subMenuId">
                                     <input type="hidden" value="${blogInfo.menuId}" name="menuId">
+                                    <input type="hidden" value="false" name="isBlog">
                                     <br> Image:
                                     <input type="file" name="image" id="image">
                                     <br>
@@ -295,7 +296,7 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <c:if test="${logedIn and !(blogInfo.menuId eq 'miscellaneous')}">
-                                    <a href="${pageContext.request.contextPath}/editInfo?menuid=${blogInfo.menuId}&subMenuid=${blogInfo.subMenuId}">Edit</a>
+                                    <a href="${pageContext.request.contextPath}/editInfo?menuid=${blogInfo.menuId}&subMenuid=${blogInfo.subMenuId}&isBlog=false">Edit</a>
                                 </c:if>
                             </c:if>
                             

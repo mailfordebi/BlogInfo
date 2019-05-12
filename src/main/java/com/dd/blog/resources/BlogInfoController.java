@@ -61,7 +61,7 @@ public class BlogInfoController {
 	public ModelAndView logoutblog() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("logedIn", "false");
-		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null);
+		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null,false);
 		modelAndView.addObject("blogInfo", blogInfoVO);
 		modelAndView.setViewName("index");
 		return modelAndView;
@@ -75,7 +75,7 @@ public class BlogInfoController {
 			String subMenuId = blogInfoDAO.getFirstSubMeny("design_pattern");
 			if("blog".equals(page)) {
 				modelAndView = new ModelAndView();
-				BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null);
+				BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null,false);
 				modelAndView.addObject("blogInfo", blogInfoVO);
 				modelAndView.addObject("loginId", "qazxswedcvfr");
 				modelAndView.setViewName("index");
@@ -109,7 +109,7 @@ public class BlogInfoController {
 	@RequestMapping("/myblogindex")
 	public ModelAndView myblogindex() {
 		ModelAndView modelAndView = new ModelAndView();
-		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null);
+		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null,false);
 		modelAndView.addObject("blogInfo", blogInfoVO);
 		modelAndView.setViewName("index");
 		return modelAndView;
@@ -125,11 +125,12 @@ public class BlogInfoController {
 	@RequestMapping("/blogPost")
 	public ModelAndView blogPost(@RequestParam("blogId") String blogId, @RequestParam("loginId") String loginId) {
 		ModelAndView modelAndView = new ModelAndView();
-		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(blogId);
+		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(blogId,false);
 		modelAndView.addObject("blogInfo", blogInfoVO);
 		if("qazxswedcvfr".equals(loginId)) {
-			modelAndView.addObject("editMode", true);
+			modelAndView.addObject("logedIn", true);
 		}
+		modelAndView.addObject("editMode", false);
 		modelAndView.setViewName("post");
 		return modelAndView;
 	}
@@ -244,15 +245,24 @@ public class BlogInfoController {
 	}
 
 	@RequestMapping("/submenu")
-	public ModelAndView factoryPattern(@RequestParam("menuid") String menuId,
+	public ModelAndView submenu(@RequestParam("menuid") String menuId,
 			@RequestParam("submenuid") String subMenuId) {
 		ModelAndView modelAndView = getModelAndView(menuId, subMenuId, false);
 		return modelAndView;
 	}
 
 	@RequestMapping("/editInfo")
-	public ModelAndView editInfo(@RequestParam("menuid") String menuId, @RequestParam("subMenuid") String subMenuId) {
-		ModelAndView modelAndView = getModelAndView(menuId, subMenuId, true);
+	public ModelAndView editInfo(@RequestParam("menuid") String menuId, @RequestParam("subMenuid") String subMenuId, @RequestParam("isBlog") boolean isBlog) {
+		ModelAndView modelAndView= null;
+		if(isBlog) {
+			modelAndView = new ModelAndView();
+			BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(menuId,true);
+			modelAndView.addObject("blogInfo", blogInfoVO);
+			modelAndView.addObject("editMode", true);
+			modelAndView.setViewName("post");
+		}else {
+			modelAndView = getModelAndView(menuId, subMenuId, true);
+		}
 		modelAndView.addObject("editMode", true);
 		return modelAndView;
 	}
@@ -260,7 +270,7 @@ public class BlogInfoController {
 	@RequestMapping(value = "/saveContent", method = RequestMethod.POST)
 	public ModelAndView saveContent(@ModelAttribute("updateContent") String content,
 			@ModelAttribute("content_id") String content_id, @ModelAttribute("subMenuId") String subMenuId,
-			@ModelAttribute("menuId") String menuId, @RequestParam("image") MultipartFile file) throws Exception {
+			@ModelAttribute("menuId") String menuId, @RequestParam("image") MultipartFile file, @RequestParam("isBlog") boolean isBlog) throws Exception {
 
 		if (!file.isEmpty()) {
 			byte[] imageContent = file.getBytes();
@@ -276,8 +286,17 @@ public class BlogInfoController {
 		subMenuContents.add(subMenuContent);
 		blogInfoVO.setSubMenuContents(subMenuContents);
 		if (blogInfoDAO.save(blogInfoVO)) {
-			ModelAndView modelAndView = getModelAndView(menuId, subMenuId, false);
-			modelAndView.addObject("editMode", false);
+			ModelAndView modelAndView=null;
+			if(isBlog) {
+				modelAndView = new ModelAndView();
+				BlogInfoVO updatedBlogInfoVO = blogInfoDAO.getBlogInfo(content_id,false);
+				modelAndView.addObject("blogInfo", updatedBlogInfoVO);
+				modelAndView.addObject("editMode", false);
+				modelAndView.setViewName("post");
+			}else {
+				modelAndView = getModelAndView(menuId, subMenuId, false);
+				modelAndView.addObject("editMode", false);
+			}
 			return modelAndView;
 		} else {
 			throw new Exception("Unable to save");
