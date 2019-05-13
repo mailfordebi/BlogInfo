@@ -19,6 +19,10 @@ public class BlogInfoVO {
 	private String nextSubMenuName;
 	private String prevMenuId;
 	private String nextMenuId;
+	
+	private boolean oldPost;
+	private boolean newPost;
+	
 
 	public String getContent_id() {
 		return content_id;
@@ -138,6 +142,22 @@ public class BlogInfoVO {
 
 	public void setThemeimage(String themeimage) {
 		this.themeimage = themeimage;
+	}
+
+	public boolean isOldPost() {
+		return oldPost;
+	}
+
+	public void setOldPost(boolean oldPost) {
+		this.oldPost = oldPost;
+	}
+
+	public boolean isNewPost() {
+		return newPost;
+	}
+
+	public void setNewPost(boolean newPost) {
+		this.newPost = newPost;
 	}
 
 }

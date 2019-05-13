@@ -20,8 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@SessionAttributes("logedIn")
+@SessionAttributes({ "logedIn", "page" })
 public class BlogInfoController {
+	int page = 0;
 
 	@Autowired
 	private BlogInfoDAO blogInfoDAO;
@@ -110,28 +111,60 @@ public class BlogInfoController {
 	public ModelAndView myblogindex() {
 		ModelAndView modelAndView = new ModelAndView();
 		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null, false);
-		// blogInfoVO=getPostWithNoOfRecord(blogInfoVO, 3);
+		page = 1;
+		blogInfoVO = getPostWithNoOfRecord(blogInfoVO, 0, page);
+		modelAndView.addObject("blogInfo", blogInfoVO);
+		modelAndView.addObject("page", page);
+		modelAndView.setViewName("index");
+		return modelAndView;
+	}
+
+	@RequestMapping("/newpost")
+	public ModelAndView handleNewPost() {
+		ModelAndView modelAndView = new ModelAndView();
+		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null, false);
+		int index = page;
+		page--;
+		modelAndView.addObject("page", page);
+		blogInfoVO = getPostWithNoOfRecord(blogInfoVO, page-1, index-1);
+		modelAndView.addObject("blogInfo", blogInfoVO);
+		// modelAndView.addObject("oldPost", true);
+		modelAndView.setViewName("index");
+		return modelAndView;
+	}
+
+	@RequestMapping("/olderpost")
+	public ModelAndView handleOlderPost() {
+		ModelAndView modelAndView = new ModelAndView();
+		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null, false);
+		int index = page;
+		page++;
+		modelAndView.addObject("page", page);
+		blogInfoVO = getPostWithNoOfRecord(blogInfoVO, index, page);
 		modelAndView.addObject("blogInfo", blogInfoVO);
 		modelAndView.setViewName("index");
 		return modelAndView;
 	}
 
-	/*
-	 * @RequestMapping("/olderpost") public ModelAndView handleOlderPost() {
-	 * ModelAndView modelAndView = new ModelAndView(); BlogInfoVO blogInfoVO =
-	 * blogInfoDAO.getBlogInfo(null,false);
-	 * blogInfoVO=getPostWithNoOfRecord(blogInfoVO, 5);
-	 * modelAndView.addObject("blogInfo", blogInfoVO);
-	 * modelAndView.setViewName("index"); return modelAndView; }
-	 */
-
-	private BlogInfoVO getPostWithNoOfRecord(BlogInfoVO blogInfoVO, int pageNo) {
+	private BlogInfoVO getPostWithNoOfRecord(BlogInfoVO blogInfoVO, int index, int pageNo) {
 		List<SubMenuContent> subMenuContents = blogInfoVO.getSubMenuContents();
 		List<SubMenuContent> subMenuContents2 = new ArrayList<SubMenuContent>();
-		for (int i = 0; i < pageNo; i++) {
+		index = index * 2;
+		pageNo = pageNo * 2;
+		if (pageNo > subMenuContents.size()) {
+			pageNo = subMenuContents.size();
+		}
+		for (int i = index; i < pageNo; i++) {
 			subMenuContents2.add(subMenuContents.get(i));
 		}
 		blogInfoVO.setSubMenuContents(subMenuContents2);
+
+		if (index != 0) {
+			blogInfoVO.setNewPost(true);
+		}
+		if (pageNo < subMenuContents.size()) {
+			blogInfoVO.setOldPost(true);
+		}
 		return blogInfoVO;
 	}
 

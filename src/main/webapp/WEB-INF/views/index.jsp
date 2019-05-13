@@ -68,10 +68,14 @@
 				</c:forEach>
 				<!-- Pager -->
 				<div class="clearfix">
+				<c:if test="${blogInfo.newPost}">
 					<a class="btn btn-primary float-left" href="${pageContext.request.contextPath}/newpost">&larr; New Posts
 						</a>
+				</c:if>
+				<c:if test="${blogInfo.oldPost}">
 					<a class="btn btn-primary float-right" href="${pageContext.request.contextPath}/olderpost">Older Posts
 						&rarr;</a>	
+				</c:if>
 				</div>
 			</div>
 		</div>
