@@ -28,7 +28,7 @@
   <%@include file="header.jsp" %>
 
   <!-- Page Header -->
-  <header class="masthead" style="background-image: url('img/test.jpg')">
+  <header class="masthead" style="background-image: url('img/about-bg.jpg')">
     <div class="overlay"></div>
     <div class="container">
       <div class="row">
@@ -46,9 +46,15 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe nostrum ullam eveniet pariatur voluptates odit, fuga atque ea nobis sit soluta odio, adipisci quas excepturi maxime quae totam ducimus consectetur?</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius praesentium recusandae illo eaque architecto error, repellendus iusto reprehenderit, doloribus, minus sunt. Numquam at quae voluptatum in officia voluptas voluptatibus, minus!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut consequuntur magnam, excepturi aliquid ex itaque esse est vero natus quae optio aperiam soluta voluptatibus corporis atque iste neque sit tempora!</p>
+        <p><h2>
+        I am a web developer and java programmer from Hyderabad, India.
+		</h2></p>
+        <p>
+        I enjoy taking complex problems and turning them into simple. I also love the logic and structure of coding and always strive to write elegant and efficient codes whether it be frontend or backend.
+		</p>
+        <p>
+        When i am not coding, you will find me in the kitchen or on playing ludo.
+        </p>
       </div>
     </div>
   </div>

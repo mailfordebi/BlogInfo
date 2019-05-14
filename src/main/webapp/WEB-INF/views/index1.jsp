@@ -65,7 +65,7 @@
                 <div class="bg-light border-right" id="sidebar-wrapper">
                     <div class="sidebar-heading">
                         <h2>
-					<a href="${pageContext.request.contextPath}/home"><img src="img/logo.JPG" id="logo" height="28px" />
+					<a href="${pageContext.request.contextPath}/home"><img src="img/logo.jpg" id="logo" style="height:28px; width:177px" />
 					</a>
 				</h2>
 
