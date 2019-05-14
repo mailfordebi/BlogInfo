@@ -20,9 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@SessionAttributes({ "logedIn", "page" })
+@SessionAttributes({ "logedIn", "pageNo" })
 public class BlogInfoController {
-	int page = 0;
+	int pageNo = 0;
+	boolean logedIn=false;
 
 	@Autowired
 	private BlogInfoDAO blogInfoDAO;
@@ -54,6 +55,7 @@ public class BlogInfoController {
 		ModelAndView modelAndView = null;
 		String subMenuId = blogInfoDAO.getFirstSubMeny("design_pattern");
 		modelAndView = getModelAndView("design_pattern", subMenuId, false);
+		logedIn=false;
 		modelAndView.addObject("logedIn", "false");
 		return modelAndView;
 	}
@@ -61,8 +63,11 @@ public class BlogInfoController {
 	@RequestMapping("/logoutblog")
 	public ModelAndView logoutblog() {
 		ModelAndView modelAndView = new ModelAndView();
+		logedIn=false;
 		modelAndView.addObject("logedIn", "false");
 		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null, false);
+		pageNo = 1;
+		blogInfoVO = getPostWithNoOfRecord(blogInfoVO, 0, pageNo);
 		modelAndView.addObject("blogInfo", blogInfoVO);
 		modelAndView.setViewName("index");
 		return modelAndView;
@@ -70,23 +75,27 @@ public class BlogInfoController {
 
 	@RequestMapping("/loginSubMit")
 	public ModelAndView loginSubMit(@ModelAttribute("username") String username,
-			@ModelAttribute("password") String password, @ModelAttribute("page") String page) {
+			@ModelAttribute("password") String password, @ModelAttribute("page") String pg) {
 		ModelAndView modelAndView = null;
 		if (blogInfoDAO.validate(username, password)) {
 			String subMenuId = blogInfoDAO.getFirstSubMeny("design_pattern");
-			if ("blog".equals(page)) {
+			if ("blog".equals(pg)) {
 				modelAndView = new ModelAndView();
 				BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null, false);
+				pageNo = 1;
+				blogInfoVO = getPostWithNoOfRecord(blogInfoVO, 0, pageNo);
 				modelAndView.addObject("blogInfo", blogInfoVO);
 				modelAndView.addObject("loginId", "qazxswedcvfr");
 				modelAndView.setViewName("index");
 			} else {
 				modelAndView = getModelAndView("design_pattern", subMenuId, false);
 			}
+			logedIn=true;
 			modelAndView.addObject("logedIn", "true");
 		} else {
 			modelAndView = new ModelAndView();
 			modelAndView.setViewName("login");
+			logedIn=false;
 			modelAndView.addObject("logedIn", "false");
 			modelAndView.addObject("error", "User name and Password incorrect");
 		}
@@ -95,9 +104,9 @@ public class BlogInfoController {
 
 	@RequestMapping("/settings")
 	public ModelAndView settings(HttpServletRequest request) {
-		String logedIn = (String) request.getSession().getAttribute("logedIn");
+		String logedIn1 = (String) request.getSession().getAttribute("logedIn");
 		ModelAndView modelAndView = null;
-		if ("true".equalsIgnoreCase(logedIn)) {
+		if ("true".equalsIgnoreCase(logedIn1)) {
 			modelAndView = getModelAndView("", "", false);
 			modelAndView.addObject("settings", "true");
 		} else {
@@ -111,10 +120,10 @@ public class BlogInfoController {
 	public ModelAndView myblogindex() {
 		ModelAndView modelAndView = new ModelAndView();
 		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null, false);
-		page = 1;
-		blogInfoVO = getPostWithNoOfRecord(blogInfoVO, 0, page);
+		pageNo = 1;
+		blogInfoVO = getPostWithNoOfRecord(blogInfoVO, 0, pageNo);
 		modelAndView.addObject("blogInfo", blogInfoVO);
-		modelAndView.addObject("page", page);
+		modelAndView.addObject("page", pageNo);
 		modelAndView.setViewName("index");
 		return modelAndView;
 	}
@@ -123,10 +132,10 @@ public class BlogInfoController {
 	public ModelAndView handleNewPost() {
 		ModelAndView modelAndView = new ModelAndView();
 		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null, false);
-		int index = page;
-		page--;
-		modelAndView.addObject("page", page);
-		blogInfoVO = getPostWithNoOfRecord(blogInfoVO, page-1, index-1);
+		int index = pageNo;
+		pageNo--;
+		modelAndView.addObject("page", pageNo);
+		blogInfoVO = getPostWithNoOfRecord(blogInfoVO, pageNo-1, index-1);
 		modelAndView.addObject("blogInfo", blogInfoVO);
 		// modelAndView.addObject("oldPost", true);
 		modelAndView.setViewName("index");
@@ -137,10 +146,10 @@ public class BlogInfoController {
 	public ModelAndView handleOlderPost() {
 		ModelAndView modelAndView = new ModelAndView();
 		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null, false);
-		int index = page;
-		page++;
-		modelAndView.addObject("page", page);
-		blogInfoVO = getPostWithNoOfRecord(blogInfoVO, index, page);
+		int index = pageNo;
+		pageNo++;
+		modelAndView.addObject("page", pageNo);
+		blogInfoVO = getPostWithNoOfRecord(blogInfoVO, index, pageNo);
 		modelAndView.addObject("blogInfo", blogInfoVO);
 		modelAndView.setViewName("index");
 		return modelAndView;
@@ -168,10 +177,11 @@ public class BlogInfoController {
 		return blogInfoVO;
 	}
 
-	@RequestMapping("/aboutme")
+	@RequestMapping("/about")
 	public ModelAndView about() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("about");
+		modelAndView.addObject("logedIn", logedIn);
 		return modelAndView;
 	}
 
@@ -181,6 +191,7 @@ public class BlogInfoController {
 		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(blogId, false);
 		modelAndView.addObject("blogInfo", blogInfoVO);
 		if ("qazxswedcvfr".equals(loginId)) {
+			logedIn=true;
 			modelAndView.addObject("logedIn", true);
 		}
 		modelAndView.addObject("editMode", false);
@@ -192,6 +203,7 @@ public class BlogInfoController {
 	public ModelAndView contact() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("contact");
+		modelAndView.addObject("logedIn", logedIn);
 		return modelAndView;
 	}
 

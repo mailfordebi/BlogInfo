@@ -237,7 +237,7 @@
                                 </form>
                             </c:if>
                             <c:if test="${!editMode && !settings}">
-                                <c:choose>
+                                <%-- <c:choose>
                                     <c:when test="${blogInfo.menuId eq 'miscellaneous'}">
                                         <c:forEach var="con" items="${blogInfo.subMenuContents}">
                                             <h2>${con.content_header}</h2>
@@ -255,7 +255,7 @@
                                             </c:if>
                                         </c:forEach>
                                     </c:when>
-                                    <c:otherwise>
+                                    <c:otherwise> --%>
                                         <c:forEach var="con" items="${blogInfo.subMenuContents}">
                                             ${con.content}
                                         </c:forEach>
@@ -293,8 +293,8 @@
     										</ul>
 										</div>
 										</c:if>
-                                    </c:otherwise>
-                                </c:choose>
+                                    <%-- </c:otherwise>
+                                </c:choose> --%>
                                 <c:if test="${logedIn and !(blogInfo.menuId eq 'miscellaneous')}">
                                     <a href="${pageContext.request.contextPath}/editInfo?menuid=${blogInfo.menuId}&subMenuid=${blogInfo.subMenuId}&isBlog=false">Edit</a>
                                 </c:if>
@@ -352,7 +352,7 @@
                     }
                 }
 
-                function myFunction(dots, more, myBtn) {
+                /* function myFunction(dots, more, myBtn) {
                     var dots = document.getElementById(dots);
                     var moreText = document.getElementById(more);
                     var btnText = document.getElementById(myBtn);
@@ -366,7 +366,7 @@
                         btnText.innerHTML = "Read less";
                         moreText.style.display = "inline";
                     }
-                }
+                } */
                 
             </script>
 

@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>	
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Out Of Memory - Solution for your error</title>
 <!-- Bootstrap core CSS -->
 <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -41,9 +43,9 @@
 						href="${pageContext.request.contextPath}/myblogindex">Home</a></li>
 					<li class="nav-item"><a class="nav-link"
 						href="${pageContext.request.contextPath}/about">About</a></li>
-					<li class="nav-item"><a class="nav-link"
+					<%-- <li class="nav-item"><a class="nav-link"
 						href="${pageContext.request.contextPath}/blogPost">Sample Post</a>
-					</li>
+					</li> --%>
 					<li class="nav-item"><a class="nav-link"
 						href="${pageContext.request.contextPath}/contact">Contact</a></li>
 					<c:if test="${!logedIn}">	
