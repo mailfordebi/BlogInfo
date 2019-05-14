@@ -1,5 +1,10 @@
 package com.dd.blog.resources;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -85,9 +90,11 @@ public class BlogInfoDAO {
 				basicDBObject.put("conetent_id", subMenuContents.get(0).getConetent_id());
 				basicDBObject.put("content", subMenuContents.get(0).getContent());
 				basicDBObject.put("content_header", subMenuContents.get(0).getContent_header());
+				basicDBObject.put("contentheaderTag", subMenuContents.get(0).getContentHeaderTag());
 				basicDBObject.put("created_date", subMenuContents.get(0).getCreated_date());
 				basicDBObject.put("submenu_ref", subMenuContents.get(0).getSubmenu_ref());
 				basicDBObject.put("menu_ref", subMenuContents.get(0).getMenu_ref());
+				basicDBObject.put("postedBy", subMenuContents.get(0).getPostedBy());
 				mongoOperations.save(basicDBObject, "submenucontent");
 			}
 			return true;
@@ -114,7 +121,7 @@ public class BlogInfoDAO {
 		}
 	}
 
-	public boolean saveImage(byte[] imageContent, String imageName) {
+	public boolean saveImage(byte[] imageContent, String imageName, String content_Id, boolean isThemeImage) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("imageName").is(imageName));
 		List<Document> docs = mongoOperations.find(query, Document.class, "images");
@@ -128,6 +135,8 @@ public class BlogInfoDAO {
 				BasicDBObject basicDBObject = new BasicDBObject();
 				basicDBObject.put("imageName", imageName);
 				basicDBObject.put("imagecontent", imageContent);
+				basicDBObject.put("content_id", content_Id);
+				basicDBObject.put("isThemeImage", isThemeImage);
 				mongoOperations.save(basicDBObject, "images");
 			} catch (Exception e) {
 				System.out.println(e);
@@ -149,21 +158,18 @@ public class BlogInfoDAO {
 				query.addCriteria(Criteria.where("conetent_id").is(subMenuContents.get(0).getConetent_id()));
 				Document doc = mongoOperations.findOne(query, Document.class, "submenucontent");
 				if (doc != null) {
+					/*
+					 * for (String key : doc.keySet()) { if ((!"_id".equalsIgnoreCase(key)) &&
+					 * (!"created_date".equalsIgnoreCase(key)) && "content".equalsIgnoreCase(key)) {
+					 * if (!StringUtils.isEmpty(subMenuContents.get(0).getContent())) {
+					 * doc.put("content", subMenuContents.get(0).getContent().trim()); } } }
+					 */
 					for (String key : doc.keySet()) {
-						/*
-						 * if ((!"_id".equalsIgnoreCase(key)) && (!"_id".equalsIgnoreCase(key)) &&
-						 * subMenuContents.get(0).getConetent_id().equalsIgnoreCase(doc.getString(key)))
-						 * { doc.put("content", subMenuContents.get(0).getContent()); }
-						 */
-						if ((!"_id".equalsIgnoreCase(key)) && (!"created_date".equalsIgnoreCase(key))
-								&& "content".equalsIgnoreCase(key)) {
-							if (!StringUtils.isEmpty(subMenuContents.get(0).getContent())) {
-								doc.put("content", subMenuContents.get(0).getContent().trim());
-							}
+						if ("content".equalsIgnoreCase(key) && !StringUtils.isEmpty(subMenuContents.get(0).getContent())) {
+							basicDBObject.put(key, subMenuContents.get(0).getContent().trim());
+						}else {
+							basicDBObject.put(key, doc.get(key));
 						}
-					}
-					for (String key : doc.keySet()) {
-						basicDBObject.put(key, doc.get(key));
 					}
 					mongoOperations.save(basicDBObject, "submenucontent");
 				} else {
@@ -276,5 +282,71 @@ public class BlogInfoDAO {
 			subMenuId = d.getString("submenu_id");
 		}
 		return subMenuId;
+	}
+
+	public BlogInfoVO getBlogInfo(String contentId, boolean isEditable) {
+		BlogInfoVO blogInfoVO = new BlogInfoVO();
+		List<SubMenuContent> subMenuContents = new ArrayList<SubMenuContent>();
+		Query query = null;
+		boolean isThemeFound = false;
+		if (contentId != null) {
+			query = new Query();
+			query.addCriteria(Criteria.where("content_id").is(contentId));
+			List<Document> documents = mongoOperations.find(query, Document.class, "images");
+			if (documents != null && !documents.isEmpty()) {
+				for (Document document : documents) {
+					if (document.get("isThemeImage")!=null && document.getBoolean("isThemeImage")) {
+						Binary imageData = document.get("imagecontent", Binary.class);
+						byte[] imageByteData = imageData.getData();
+						String base64Image = Base64.getEncoder().encodeToString(imageByteData);
+						blogInfoVO.setThemeimage(base64Image);
+						isThemeFound = true;
+						break;
+					}
+				}
+			}
+		}
+		if (!isThemeFound) {
+			File fi = new File("home-bg.jpg");
+			byte[] fileContent;
+			try {
+				fileContent = Files.readAllBytes(fi.toPath());
+				blogInfoVO.setThemeimage(Base64.getEncoder().encodeToString(fileContent));
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.out.println(e.getMessage());
+			}
+
+		}
+		query = new Query();
+		if (contentId != null) {
+			query.addCriteria(Criteria.where("conetent_id").is(contentId));
+		}
+		query.addCriteria(Criteria.where("menu_ref").is("miscellaneous"));
+		List<Document> docs = mongoOperations.find(query, Document.class, "submenucontent");
+
+		if (docs != null && !docs.isEmpty()) {
+			for (Document document : docs) {
+				SubMenuContent subMenuContent = new SubMenuContent();
+				subMenuContent.setConetent_id(document.getString("conetent_id"));
+				subMenuContent.setContent_header(document.getString("content_header"));
+				subMenuContent.setContentHeaderTag(document.getString("contentheaderTag"));
+				if(isEditable) {
+					subMenuContent.setContent(document.getString("content"));
+				}else {
+					subMenuContent.setContent(replaceImageContent(document.getString("content")));
+				}
+				subMenuContent.setPostedBy(document.getString("postedBy"));
+				subMenuContent.setMenu_ref(document.getString("menu_ref"));
+				subMenuContent.setSubmenu_ref(document.getString("submenu_ref"));
+				SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy");
+				String strDate = formatter.format(document.getDate("created_date"));
+				subMenuContent.setDate(strDate);
+				subMenuContents.add(subMenuContent);
+			}
+		}
+		blogInfoVO.setSubMenuContents(subMenuContents);
+
+		return blogInfoVO;
 	}
 }

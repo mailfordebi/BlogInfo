@@ -20,47 +20,82 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@SessionAttributes("logedIn")
+@SessionAttributes({ "logedIn", "pageNo" })
 public class BlogInfoController {
+	int pageNo = 0;
+	boolean logedIn=false;
 
 	@Autowired
 	private BlogInfoDAO blogInfoDAO;
 
 	@RequestMapping("/index")
 	public ModelAndView index() {
-		return getModelAndView("miscellaneous", null, false);
+		String subMenuId = blogInfoDAO.getFirstSubMeny("design_pattern");
+		ModelAndView modelAndView = getModelAndView("design_pattern", subMenuId, false);
+		return modelAndView;
 	}
 
 	@RequestMapping("/home")
 	public ModelAndView home() {
-		return getModelAndView("miscellaneous", null, false);
+		String subMenuId = blogInfoDAO.getFirstSubMeny("design_pattern");
+		ModelAndView modelAndView = getModelAndView("design_pattern", subMenuId, false);
+		return modelAndView;
 	}
 
 	@RequestMapping("/login")
-	public ModelAndView login() {
+	public ModelAndView login(@ModelAttribute("page") String page) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("login");
+		modelAndView.addObject("page", page);
 		return modelAndView;
 	}
 
 	@RequestMapping("/logout")
 	public ModelAndView logout() {
 		ModelAndView modelAndView = null;
-		modelAndView = getModelAndView("miscellaneous", null, false);
+		String subMenuId = blogInfoDAO.getFirstSubMeny("design_pattern");
+		modelAndView = getModelAndView("design_pattern", subMenuId, false);
+		logedIn=false;
 		modelAndView.addObject("logedIn", "false");
+		return modelAndView;
+	}
+
+	@RequestMapping("/logoutblog")
+	public ModelAndView logoutblog() {
+		ModelAndView modelAndView = new ModelAndView();
+		logedIn=false;
+		modelAndView.addObject("logedIn", "false");
+		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null, false);
+		pageNo = 1;
+		blogInfoVO = getPostWithNoOfRecord(blogInfoVO, 0, pageNo);
+		modelAndView.addObject("blogInfo", blogInfoVO);
+		modelAndView.setViewName("index");
 		return modelAndView;
 	}
 
 	@RequestMapping("/loginSubMit")
 	public ModelAndView loginSubMit(@ModelAttribute("username") String username,
-			@ModelAttribute("password") String password) {
+			@ModelAttribute("password") String password, @ModelAttribute("page") String pg) {
 		ModelAndView modelAndView = null;
 		if (blogInfoDAO.validate(username, password)) {
-			modelAndView = getModelAndView("miscellaneous", null, false);
+			String subMenuId = blogInfoDAO.getFirstSubMeny("design_pattern");
+			if ("blog".equals(pg)) {
+				modelAndView = new ModelAndView();
+				BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null, false);
+				pageNo = 1;
+				blogInfoVO = getPostWithNoOfRecord(blogInfoVO, 0, pageNo);
+				modelAndView.addObject("blogInfo", blogInfoVO);
+				modelAndView.addObject("loginId", "qazxswedcvfr");
+				modelAndView.setViewName("index");
+			} else {
+				modelAndView = getModelAndView("design_pattern", subMenuId, false);
+			}
+			logedIn=true;
 			modelAndView.addObject("logedIn", "true");
 		} else {
 			modelAndView = new ModelAndView();
 			modelAndView.setViewName("login");
+			logedIn=false;
 			modelAndView.addObject("logedIn", "false");
 			modelAndView.addObject("error", "User name and Password incorrect");
 		}
@@ -69,9 +104,9 @@ public class BlogInfoController {
 
 	@RequestMapping("/settings")
 	public ModelAndView settings(HttpServletRequest request) {
-		String logedIn = (String) request.getSession().getAttribute("logedIn");
+		String logedIn1 = (String) request.getSession().getAttribute("logedIn");
 		ModelAndView modelAndView = null;
-		if ("true".equalsIgnoreCase(logedIn)) {
+		if ("true".equalsIgnoreCase(logedIn1)) {
 			modelAndView = getModelAndView("", "", false);
 			modelAndView.addObject("settings", "true");
 		} else {
@@ -81,13 +116,106 @@ public class BlogInfoController {
 		return modelAndView;
 	}
 
+	@RequestMapping("/myblogindex")
+	public ModelAndView myblogindex() {
+		ModelAndView modelAndView = new ModelAndView();
+		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null, false);
+		pageNo = 1;
+		blogInfoVO = getPostWithNoOfRecord(blogInfoVO, 0, pageNo);
+		modelAndView.addObject("blogInfo", blogInfoVO);
+		modelAndView.addObject("page", pageNo);
+		modelAndView.setViewName("index");
+		return modelAndView;
+	}
+
+	@RequestMapping("/newpost")
+	public ModelAndView handleNewPost() {
+		ModelAndView modelAndView = new ModelAndView();
+		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null, false);
+		int index = pageNo;
+		pageNo--;
+		modelAndView.addObject("page", pageNo);
+		blogInfoVO = getPostWithNoOfRecord(blogInfoVO, pageNo-1, index-1);
+		modelAndView.addObject("blogInfo", blogInfoVO);
+		// modelAndView.addObject("oldPost", true);
+		modelAndView.setViewName("index");
+		return modelAndView;
+	}
+
+	@RequestMapping("/olderpost")
+	public ModelAndView handleOlderPost() {
+		ModelAndView modelAndView = new ModelAndView();
+		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null, false);
+		int index = pageNo;
+		pageNo++;
+		modelAndView.addObject("page", pageNo);
+		blogInfoVO = getPostWithNoOfRecord(blogInfoVO, index, pageNo);
+		modelAndView.addObject("blogInfo", blogInfoVO);
+		modelAndView.setViewName("index");
+		return modelAndView;
+	}
+
+	private BlogInfoVO getPostWithNoOfRecord(BlogInfoVO blogInfoVO, int index, int pageNo) {
+		List<SubMenuContent> subMenuContents = blogInfoVO.getSubMenuContents();
+		List<SubMenuContent> subMenuContents2 = new ArrayList<SubMenuContent>();
+		index = index * 2;
+		pageNo = pageNo * 2;
+		if (pageNo > subMenuContents.size()) {
+			pageNo = subMenuContents.size();
+		}
+		for (int i = index; i < pageNo; i++) {
+			subMenuContents2.add(subMenuContents.get(i));
+		}
+		blogInfoVO.setSubMenuContents(subMenuContents2);
+
+		if (index != 0) {
+			blogInfoVO.setNewPost(true);
+		}
+		if (pageNo < subMenuContents.size()) {
+			blogInfoVO.setOldPost(true);
+		}
+		return blogInfoVO;
+	}
+
+	@RequestMapping("/about")
+	public ModelAndView about() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("about");
+		modelAndView.addObject("logedIn", logedIn);
+		return modelAndView;
+	}
+
+	@RequestMapping("/blogPost")
+	public ModelAndView blogPost(@RequestParam("blogId") String blogId, @RequestParam("loginId") String loginId) {
+		ModelAndView modelAndView = new ModelAndView();
+		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(blogId, false);
+		modelAndView.addObject("blogInfo", blogInfoVO);
+		if ("qazxswedcvfr".equals(loginId)) {
+			logedIn=true;
+			modelAndView.addObject("logedIn", true);
+		}
+		modelAndView.addObject("editMode", false);
+		modelAndView.setViewName("post");
+		return modelAndView;
+	}
+
+	@RequestMapping("/contact")
+	public ModelAndView contact() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("contact");
+		modelAndView.addObject("logedIn", logedIn);
+		return modelAndView;
+	}
+
 	@RequestMapping("/addmenu")
 	public ModelAndView addMenu(@ModelAttribute("selectType") String selectType,
 			@ModelAttribute("menuid") String menuId, @ModelAttribute("menuName") String menuName,
 			@ModelAttribute("submenuid") String subMenuId, @ModelAttribute("submenuName") String subMenuName,
 			@ModelAttribute("menuselect") String menuRef, @ModelAttribute("sortOrder") String sortOrder,
-			@ModelAttribute("submenuselect") String subMenuRef, @ModelAttribute("contentHeader") String contentHeader,
+			@ModelAttribute("contentHeaderTag") String contentHeaderTag,
+			@ModelAttribute("submenuselect") String blogType, @ModelAttribute("contentHeader") String contentHeader,
 			@ModelAttribute("contentBody") String contentBody, @ModelAttribute("contentid") String contentid,
+			@RequestParam("themeImage") MultipartFile file, @ModelAttribute("postedBy") String postedBy,
 			@ModelAttribute("menuHidden") String menuHidden, @ModelAttribute("menuRefToHide") String menuRefToHide,
 			@ModelAttribute("subMenuHidden") String subMenuHidden) throws Exception {
 
@@ -118,14 +246,21 @@ public class BlogInfoController {
 			isToInsert = true;
 		}
 		if ("Misc".equalsIgnoreCase(selectType)) {
+			if (!file.isEmpty()) {
+				byte[] imageContent = file.getBytes();
+				String imageName = file.getOriginalFilename();
+				blogInfoDAO.saveImage(imageContent, imageName, contentid, true);
+			}
 			List<SubMenuContent> subMenuContents = new ArrayList<SubMenuContent>();
 			SubMenuContent subMenuContent = new SubMenuContent();
 			subMenuContent.setContent_header(contentHeader);
+			subMenuContent.setContentHeaderTag(contentHeaderTag);
 			subMenuContent.setContent(contentBody);
-			subMenuContent.setSubmenu_ref(subMenuRef);
+			subMenuContent.setSubmenu_ref(blogType);
 			subMenuContent.setMenu_ref("miscellaneous");
 			subMenuContent.setConetent_id(contentid);
 			subMenuContent.setCreated_date(new Date());
+			subMenuContent.setPostedBy(postedBy);
 			subMenuContents.add(subMenuContent);
 			blogInfoVO.setSubMenuContents(subMenuContents);
 			isToInsert = true;
@@ -143,7 +278,7 @@ public class BlogInfoController {
 		if ("Hide Sub Menu".equalsIgnoreCase(selectType)) {
 			isToUpdate = true;
 			SubMenu subMenu = new SubMenu();
-			subMenu.setSubmenu_id(subMenuRef);
+			// subMenu.setSubmenu_id(subMenuRef);
 			if ("true".equalsIgnoreCase(subMenuHidden)) {
 				subMenu.setHidden(true);
 			}
@@ -174,22 +309,25 @@ public class BlogInfoController {
 		return modelAndView;
 	}
 
-	/*
-	 * @RequestMapping("/dashboard") public ModelAndView
-	 * dashboard(@RequestParam("menuid") String menuId) { ModelAndView modelAndView
-	 * = getModelAndView(menuId, "dashboard", false); return modelAndView; }
-	 */
-
 	@RequestMapping("/submenu")
-	public ModelAndView factoryPattern(@RequestParam("menuid") String menuId,
-			@RequestParam("submenuid") String subMenuId) {
+	public ModelAndView submenu(@RequestParam("menuid") String menuId, @RequestParam("submenuid") String subMenuId) {
 		ModelAndView modelAndView = getModelAndView(menuId, subMenuId, false);
 		return modelAndView;
 	}
 
 	@RequestMapping("/editInfo")
-	public ModelAndView editInfo(@RequestParam("menuid") String menuId, @RequestParam("subMenuid") String subMenuId) {
-		ModelAndView modelAndView = getModelAndView(menuId, subMenuId, true);
+	public ModelAndView editInfo(@RequestParam("menuid") String menuId, @RequestParam("subMenuid") String subMenuId,
+			@RequestParam("isBlog") boolean isBlog) {
+		ModelAndView modelAndView = null;
+		if (isBlog) {
+			modelAndView = new ModelAndView();
+			BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(menuId, true);
+			modelAndView.addObject("blogInfo", blogInfoVO);
+			modelAndView.addObject("editMode", true);
+			modelAndView.setViewName("post");
+		} else {
+			modelAndView = getModelAndView(menuId, subMenuId, true);
+		}
 		modelAndView.addObject("editMode", true);
 		return modelAndView;
 	}
@@ -197,12 +335,13 @@ public class BlogInfoController {
 	@RequestMapping(value = "/saveContent", method = RequestMethod.POST)
 	public ModelAndView saveContent(@ModelAttribute("updateContent") String content,
 			@ModelAttribute("content_id") String content_id, @ModelAttribute("subMenuId") String subMenuId,
-			@ModelAttribute("menuId") String menuId, @RequestParam("image") MultipartFile file) throws Exception {
+			@ModelAttribute("menuId") String menuId, @RequestParam("image") MultipartFile file,
+			@RequestParam("isBlog") boolean isBlog) throws Exception {
 
 		if (!file.isEmpty()) {
 			byte[] imageContent = file.getBytes();
 			String imageName = file.getOriginalFilename();
-			blogInfoDAO.saveImage(imageContent, imageName);
+			blogInfoDAO.saveImage(imageContent, imageName, content_id, false);
 		}
 
 		BlogInfoVO blogInfoVO = new BlogInfoVO();
@@ -213,8 +352,17 @@ public class BlogInfoController {
 		subMenuContents.add(subMenuContent);
 		blogInfoVO.setSubMenuContents(subMenuContents);
 		if (blogInfoDAO.save(blogInfoVO)) {
-			ModelAndView modelAndView = getModelAndView(menuId, subMenuId, false);
-			modelAndView.addObject("editMode", false);
+			ModelAndView modelAndView = null;
+			if (isBlog) {
+				modelAndView = new ModelAndView();
+				BlogInfoVO updatedBlogInfoVO = blogInfoDAO.getBlogInfo(content_id, false);
+				modelAndView.addObject("blogInfo", updatedBlogInfoVO);
+				modelAndView.addObject("editMode", false);
+				modelAndView.setViewName("post");
+			} else {
+				modelAndView = getModelAndView(menuId, subMenuId, false);
+				modelAndView.addObject("editMode", false);
+			}
 			return modelAndView;
 		} else {
 			throw new Exception("Unable to save");
@@ -259,19 +407,12 @@ public class BlogInfoController {
 				}
 			}
 			for (Document document : contents) {
-				/*
-				 * if (submenuId != null && submenuId.equalsIgnoreCase("dashboard") && menuId !=
-				 * null && menuId.equalsIgnoreCase(document.getString("menu_ref"))) { // Set for
-				 * dashboard page.. blogInfoVO.setSubMenuId("dashboard");
-				 * blogInfoVO.setMenuId(document.getString("menu_ref")); break; }
-				 */
 				if (menuId != null && menuId.equalsIgnoreCase(document.getString("menu_ref"))
 						&& "miscellaneous".equals(menuId)) {
 					if (submenuId == null || submenuId.equalsIgnoreCase(document.getString("submenu_ref"))) {
 						SubMenuContent content = new SubMenuContent();
 						content.setConetent_id((String) document.get("conetent_id"));
 						content.setContent_header(document.getString("content_header"));
-						// content.setCreated_date(document.getString("created_date"));
 						String cont = (String) document.get("content");
 						if (!isEditMode) {
 							cont = blogInfoDAO.replaceImageContent(cont);
