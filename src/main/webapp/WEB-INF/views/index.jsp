@@ -36,7 +36,7 @@
 	<%@include file="header.jsp"%>
 
 	<!-- Page Header -->
-	<header class="masthead" style="background-image: url('data:image/jpeg;base64,${blogInfo.themeimage}')">
+	<header class="masthead" style="background-image: url('img/oom.jpg')">
 		<div class="overlay"></div>
 		<div class="container">
 			<div class="row">
