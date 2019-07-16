@@ -61,6 +61,7 @@
 							<h3 class="post-subtitle">${con.contentHeaderTag}</h3>
 						</a>
 							<p class="post-meta">
+							<a href="${pageContext.request.contextPath}/myblogindex">${con.submenu_ref} </a>
 								Posted by <a href="${pageContext.request.contextPath}/aboutme">${con.postedBy} </a>${con.date}
 							</p>
 					</div>

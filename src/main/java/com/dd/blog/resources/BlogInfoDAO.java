@@ -2,6 +2,7 @@ package com.dd.blog.resources;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -165,9 +166,10 @@ public class BlogInfoDAO {
 					 * doc.put("content", subMenuContents.get(0).getContent().trim()); } } }
 					 */
 					for (String key : doc.keySet()) {
-						if ("content".equalsIgnoreCase(key) && !StringUtils.isEmpty(subMenuContents.get(0).getContent())) {
+						if ("content".equalsIgnoreCase(key)
+								&& !StringUtils.isEmpty(subMenuContents.get(0).getContent())) {
 							basicDBObject.put(key, subMenuContents.get(0).getContent().trim());
-						}else {
+						} else {
 							basicDBObject.put(key, doc.get(key));
 						}
 					}
@@ -295,7 +297,7 @@ public class BlogInfoDAO {
 			List<Document> documents = mongoOperations.find(query, Document.class, "images");
 			if (documents != null && !documents.isEmpty()) {
 				for (Document document : documents) {
-					if (document.get("isThemeImage")!=null && document.getBoolean("isThemeImage")) {
+					if (document.get("isThemeImage") != null && document.getBoolean("isThemeImage")) {
 						Binary imageData = document.get("imagecontent", Binary.class);
 						byte[] imageByteData = imageData.getData();
 						String base64Image = Base64.getEncoder().encodeToString(imageByteData);
@@ -307,7 +309,7 @@ public class BlogInfoDAO {
 			}
 		}
 		if (!isThemeFound) {
-			File fi = new File("home-bg.jpg");
+			File fi = new File(getClass().getClassLoader().getResource("oom.jpg").getFile());
 			byte[] fileContent;
 			try {
 				fileContent = Files.readAllBytes(fi.toPath());
@@ -331,9 +333,9 @@ public class BlogInfoDAO {
 				subMenuContent.setConetent_id(document.getString("conetent_id"));
 				subMenuContent.setContent_header(document.getString("content_header"));
 				subMenuContent.setContentHeaderTag(document.getString("contentheaderTag"));
-				if(isEditable) {
+				if (isEditable) {
 					subMenuContent.setContent(document.getString("content"));
-				}else {
+				} else {
 					subMenuContent.setContent(replaceImageContent(document.getString("content")));
 				}
 				subMenuContent.setPostedBy(document.getString("postedBy"));

@@ -156,12 +156,20 @@
 
                               <span id="misccontaintspan" style="display: none;"> 
 							   <label for="submenuRef"><b>Blog Type:</b></label> 
+							   <!-- This is for blog tabs which is hard coded in blog page. 
+							   So no need to make it dynamic here. -->
 							   <select
 								name="submenuselect" id="submenuselect" style="background: #f1f1f1;">
 									<option selected="selected">Select</option>
-									<c:forEach var="submenu" items="${blogInfo.subMenus}">
+									<%-- <c:forEach var="submenu" items="${blogInfo.subMenus}">
 										<option value="${submenu.submenu_id}">${submenu.submenu_name}</option>
-									</c:forEach>
+									</c:forEach> --%>
+									<option value="Technology">Technology</option>
+									<option value="Science">Science</option>
+									<option value="Security">Security</option>
+									<option value="How-To">How-To</option>
+									<option value="Top-List">Top-List</option>
+									<option value="Gadgets">Gadgets</option>
 							   </select><br>
 							   <label
 								for="contentid"><b>Blog Id:</b></label> <input type="text"
