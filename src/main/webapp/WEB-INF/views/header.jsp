@@ -6,6 +6,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<link rel="icon" href="url('img/title.gif')" type="image/gif" sizes="16x16">
 <title>Out Of Memory - Solution for your error</title>
 <!-- Bootstrap core CSS -->
 <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -27,7 +28,7 @@
 	<!-- Navigation -->
 	<nav class="navbar navbar-expand-lg navbar-light fixed-top"
 		id="mainNav">
-		<div class="container">
+		<div class="container container-class">
 			<a class="navbar-brand"
 				href="${pageContext.request.contextPath}/myblogindex">Out Of Memory
 			</a>
@@ -39,15 +40,27 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
+					<%-- <li class="nav-item"><a class="nav-link"
+						href="${pageContext.request.contextPath}/myblogindex">HOME</a></li> --%>
 					<li class="nav-item"><a class="nav-link"
-						href="${pageContext.request.contextPath}/myblogindex">Home</a></li>
+						href="${pageContext.request.contextPath}/myblogindex">TECHNOLOGY</a></li>
 					<li class="nav-item"><a class="nav-link"
-						href="${pageContext.request.contextPath}/about">About</a></li>
+						href="${pageContext.request.contextPath}/myblogindex">SCIENCE</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="${pageContext.request.contextPath}/myblogindex">SECURITY</a></li>	
+					<li class="nav-item"><a class="nav-link"
+						href="${pageContext.request.contextPath}/myblogindex">TOP LIST</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="${pageContext.request.contextPath}/myblogindex">HOW-TO</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="${pageContext.request.contextPath}/myblogindex">GADGETS</a></li>
+					<%-- <li class="nav-item"><a class="nav-link"
+						href="${pageContext.request.contextPath}/about">About</a></li> --%>
 					<%-- <li class="nav-item"><a class="nav-link"
 						href="${pageContext.request.contextPath}/blogPost">Sample Post</a>
 					</li> --%>
 					<li class="nav-item"><a class="nav-link"
-						href="${pageContext.request.contextPath}/contact">Contact</a></li>
+						href="${pageContext.request.contextPath}/contact">CONTACT</a></li>
 					<c:if test="${!logedIn}">	
 						<li class="nav-item"><a class="nav-link"
 							href="${pageContext.request.contextPath}/login?page=blog">Login</a></li>

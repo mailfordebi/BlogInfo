@@ -2,6 +2,7 @@ package com.dd.blog.resources;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -165,9 +166,10 @@ public class BlogInfoDAO {
 					 * doc.put("content", subMenuContents.get(0).getContent().trim()); } } }
 					 */
 					for (String key : doc.keySet()) {
-						if ("content".equalsIgnoreCase(key) && !StringUtils.isEmpty(subMenuContents.get(0).getContent())) {
+						if ("content".equalsIgnoreCase(key)
+								&& !StringUtils.isEmpty(subMenuContents.get(0).getContent())) {
 							basicDBObject.put(key, subMenuContents.get(0).getContent().trim());
-						}else {
+						} else {
 							basicDBObject.put(key, doc.get(key));
 						}
 					}
@@ -289,25 +291,31 @@ public class BlogInfoDAO {
 		List<SubMenuContent> subMenuContents = new ArrayList<SubMenuContent>();
 		Query query = null;
 		boolean isThemeFound = false;
-		if (contentId != null) {
-			query = new Query();
-			query.addCriteria(Criteria.where("content_id").is(contentId));
-			List<Document> documents = mongoOperations.find(query, Document.class, "images");
-			if (documents != null && !documents.isEmpty()) {
-				for (Document document : documents) {
-					if (document.get("isThemeImage")!=null && document.getBoolean("isThemeImage")) {
-						Binary imageData = document.get("imagecontent", Binary.class);
-						byte[] imageByteData = imageData.getData();
-						String base64Image = Base64.getEncoder().encodeToString(imageByteData);
+		Map<String, String> individualThemeImageMap = new HashMap<String, String>();
+		query = new Query();
+		query.addCriteria(Criteria.where("isThemeImage").is(true));
+		List<Document> documents = mongoOperations.find(query, Document.class, "images");
+		// if (contentId != null) {
+		if (documents != null && !documents.isEmpty()) {
+			for (Document document : documents) {
+				//if (document.get("isThemeImage") != null && document.getBoolean("isThemeImage")) {
+					Binary imageData = document.get("imagecontent", Binary.class);
+					byte[] imageByteData = imageData.getData();
+					String base64Image = Base64.getEncoder().encodeToString(imageByteData);
+					if (document.getString("content_id").equals(contentId)) {
 						blogInfoVO.setThemeimage(base64Image);
 						isThemeFound = true;
 						break;
 					}
-				}
+					if (contentId == null) {
+						individualThemeImageMap.put(document.getString("content_id"), base64Image);
+					}
+				//}
 			}
 		}
+		// }
 		if (!isThemeFound) {
-			File fi = new File("home-bg.jpg");
+			File fi = new File(getClass().getClassLoader().getResource("oom.jpg").getFile());
 			byte[] fileContent;
 			try {
 				fileContent = Files.readAllBytes(fi.toPath());
@@ -323,6 +331,7 @@ public class BlogInfoDAO {
 			query.addCriteria(Criteria.where("conetent_id").is(contentId));
 		}
 		query.addCriteria(Criteria.where("menu_ref").is("miscellaneous"));
+		query.with(new Sort(Sort.Direction.DESC, "created_date"));
 		List<Document> docs = mongoOperations.find(query, Document.class, "submenucontent");
 
 		if (docs != null && !docs.isEmpty()) {
@@ -331,9 +340,9 @@ public class BlogInfoDAO {
 				subMenuContent.setConetent_id(document.getString("conetent_id"));
 				subMenuContent.setContent_header(document.getString("content_header"));
 				subMenuContent.setContentHeaderTag(document.getString("contentheaderTag"));
-				if(isEditable) {
+				if (isEditable) {
 					subMenuContent.setContent(document.getString("content"));
-				}else {
+				} else {
 					subMenuContent.setContent(replaceImageContent(document.getString("content")));
 				}
 				subMenuContent.setPostedBy(document.getString("postedBy"));
@@ -342,6 +351,7 @@ public class BlogInfoDAO {
 				SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy");
 				String strDate = formatter.format(document.getDate("created_date"));
 				subMenuContent.setDate(strDate);
+				subMenuContent.setIndivisualThemeimage(individualThemeImageMap.get(document.getString("conetent_id")));
 				subMenuContents.add(subMenuContent);
 			}
 		}
