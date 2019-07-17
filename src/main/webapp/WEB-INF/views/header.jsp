@@ -6,8 +6,8 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<link rel="icon" href="url('img/title.gif')" type="image/gif" sizes="16x16">
 <title>Out Of Memory - Solution for your error</title>
+<link rel="icon" href="https://www.geeksforgeeks.org/wp-content/uploads/gfg_200X200-100x100.png" sizes="32x32">
 <!-- Bootstrap core CSS -->
 <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
