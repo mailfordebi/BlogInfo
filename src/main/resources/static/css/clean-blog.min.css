@@ -209,7 +209,7 @@ header.masthead .page-heading, header.masthead .site-heading {
 
 header.masthead .page-heading h1, header.masthead .site-heading h1 {
 	font-size: 50px;
-	margin-top: 0
+	margin-top: -70px
 }
 
 header.masthead .page-heading .subheading, header.masthead .site-heading .subheading
@@ -245,6 +245,10 @@ header.masthead .post-heading .subheading {
 	font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif
 }
 
+header.masthead .post-heading .heading {
+	margin-top: -100px;
+}
+
 header.masthead .post-heading .meta {
 	font-size: 20px;
 	font-weight: 300;
@@ -262,6 +266,9 @@ header.masthead .post-heading .meta a {
 	}
 	header.masthead .post-heading .subheading {
 		font-size: 30px
+	}
+	header.masthead .post-heading .heading {
+		margin-top: -130px;
 	}
 }
 

@@ -23,7 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 @SessionAttributes({ "logedIn", "pageNo" })
 public class BlogInfoController {
 	int pageNo = 0;
-	boolean logedIn=false;
+	boolean logedIn = false;
 
 	@Autowired
 	private BlogInfoDAO blogInfoDAO;
@@ -55,7 +55,7 @@ public class BlogInfoController {
 		ModelAndView modelAndView = null;
 		String subMenuId = blogInfoDAO.getFirstSubMeny("design_pattern");
 		modelAndView = getModelAndView("design_pattern", subMenuId, false);
-		logedIn=false;
+		logedIn = false;
 		modelAndView.addObject("logedIn", "false");
 		return modelAndView;
 	}
@@ -63,7 +63,7 @@ public class BlogInfoController {
 	@RequestMapping("/logoutblog")
 	public ModelAndView logoutblog() {
 		ModelAndView modelAndView = new ModelAndView();
-		logedIn=false;
+		logedIn = false;
 		modelAndView.addObject("logedIn", "false");
 		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(null, false);
 		pageNo = 1;
@@ -90,12 +90,12 @@ public class BlogInfoController {
 			} else {
 				modelAndView = getModelAndView("design_pattern", subMenuId, false);
 			}
-			logedIn=true;
+			logedIn = true;
 			modelAndView.addObject("logedIn", "true");
 		} else {
 			modelAndView = new ModelAndView();
 			modelAndView.setViewName("login");
-			logedIn=false;
+			logedIn = false;
 			modelAndView.addObject("logedIn", "false");
 			modelAndView.addObject("error", "User name and Password incorrect");
 		}
@@ -135,7 +135,7 @@ public class BlogInfoController {
 		int index = pageNo;
 		pageNo--;
 		modelAndView.addObject("page", pageNo);
-		blogInfoVO = getPostWithNoOfRecord(blogInfoVO, pageNo-1, index-1);
+		blogInfoVO = getPostWithNoOfRecord(blogInfoVO, pageNo - 1, index - 1);
 		modelAndView.addObject("blogInfo", blogInfoVO);
 		// modelAndView.addObject("oldPost", true);
 		modelAndView.setViewName("index");
@@ -158,8 +158,11 @@ public class BlogInfoController {
 	private BlogInfoVO getPostWithNoOfRecord(BlogInfoVO blogInfoVO, int index, int pageNo) {
 		List<SubMenuContent> subMenuContents = blogInfoVO.getSubMenuContents();
 		List<SubMenuContent> subMenuContents2 = new ArrayList<SubMenuContent>();
-		index = index * 2;
-		pageNo = pageNo * 2;
+		
+		// Need to change as per the requirement...
+		int noOfRecordsPerPage = 2;
+		index = index * noOfRecordsPerPage;
+		pageNo = pageNo * noOfRecordsPerPage;
 		if (pageNo > subMenuContents.size()) {
 			pageNo = subMenuContents.size();
 		}
@@ -191,7 +194,7 @@ public class BlogInfoController {
 		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(blogId, false);
 		modelAndView.addObject("blogInfo", blogInfoVO);
 		if ("qazxswedcvfr".equals(loginId)) {
-			logedIn=true;
+			logedIn = true;
 			modelAndView.addObject("logedIn", true);
 		}
 		modelAndView.addObject("editMode", false);

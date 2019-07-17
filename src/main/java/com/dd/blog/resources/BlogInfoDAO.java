@@ -325,6 +325,7 @@ public class BlogInfoDAO {
 			query.addCriteria(Criteria.where("conetent_id").is(contentId));
 		}
 		query.addCriteria(Criteria.where("menu_ref").is("miscellaneous"));
+		query.with(new Sort(Sort.Direction.DESC, "created_date"));
 		List<Document> docs = mongoOperations.find(query, Document.class, "submenucontent");
 
 		if (docs != null && !docs.isEmpty()) {

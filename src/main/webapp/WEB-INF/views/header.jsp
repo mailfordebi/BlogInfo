@@ -6,6 +6,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<link rel="icon" href="url('img/title.gif')" type="image/gif" sizes="16x16">
 <title>Out Of Memory - Solution for your error</title>
 <!-- Bootstrap core CSS -->
 <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
