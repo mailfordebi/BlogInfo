@@ -272,6 +272,10 @@ header.masthead .post-heading .meta a {
 	}
 }
 
+.post-preview {
+	height: 170px;
+}
+
 .post-preview>a {
 	color: #212529
 }
@@ -281,14 +285,31 @@ header.masthead .post-heading .meta a {
 	color: #0085a1
 }
 
-.post-preview>a>.post-title {
-	font-size: 30px;
-	margin-top: 30px;
+.post-preview .right-column>a>.post-title {
+	font-size: 20px;
+	margin-top: 0px !important;
 	margin-bottom: 10px
+}
+
+.post-preview .left-column {
+	float: left;
+	width: 30%;
+	padding-right: 10px;
+	padding-top: 5px;
+	/* padding: 10px; */
+	/* height: 300px; */
+}
+
+.post-preview .right-column {
+	float: left;
+	width: 70%;
+	/* padding: 10px; */
+	/* height: 300px; */
 }
 
 .post-preview>a>.post-subtitle {
 	font-weight: 300;
+	font-size: 18px;
 	margin: 0 0 10px
 }
 
@@ -310,8 +331,12 @@ header.masthead .post-heading .meta a {
 }
 
 @media only screen and (min-width:768px) {
-	.post-preview>a>.post-title {
-		font-size: 36px
+	.post-preview .right-column>a>.post-title {
+		font-size: 20px;
+		margin-top: 0px !important;
+	}
+	.post-preview .right-column {
+		margin-top: 0px;
 	}
 }
 

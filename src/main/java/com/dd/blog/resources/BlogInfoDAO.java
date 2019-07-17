@@ -291,23 +291,29 @@ public class BlogInfoDAO {
 		List<SubMenuContent> subMenuContents = new ArrayList<SubMenuContent>();
 		Query query = null;
 		boolean isThemeFound = false;
-		if (contentId != null) {
-			query = new Query();
-			query.addCriteria(Criteria.where("content_id").is(contentId));
-			List<Document> documents = mongoOperations.find(query, Document.class, "images");
-			if (documents != null && !documents.isEmpty()) {
-				for (Document document : documents) {
-					if (document.get("isThemeImage") != null && document.getBoolean("isThemeImage")) {
-						Binary imageData = document.get("imagecontent", Binary.class);
-						byte[] imageByteData = imageData.getData();
-						String base64Image = Base64.getEncoder().encodeToString(imageByteData);
+		Map<String, String> individualThemeImageMap = new HashMap<String, String>();
+		query = new Query();
+		query.addCriteria(Criteria.where("isThemeImage").is(true));
+		List<Document> documents = mongoOperations.find(query, Document.class, "images");
+		// if (contentId != null) {
+		if (documents != null && !documents.isEmpty()) {
+			for (Document document : documents) {
+				//if (document.get("isThemeImage") != null && document.getBoolean("isThemeImage")) {
+					Binary imageData = document.get("imagecontent", Binary.class);
+					byte[] imageByteData = imageData.getData();
+					String base64Image = Base64.getEncoder().encodeToString(imageByteData);
+					if (document.getString("content_id").equals(contentId)) {
 						blogInfoVO.setThemeimage(base64Image);
 						isThemeFound = true;
 						break;
 					}
-				}
+					if (contentId == null) {
+						individualThemeImageMap.put(document.getString("content_id"), base64Image);
+					}
+				//}
 			}
 		}
+		// }
 		if (!isThemeFound) {
 			File fi = new File(getClass().getClassLoader().getResource("oom.jpg").getFile());
 			byte[] fileContent;
@@ -345,6 +351,7 @@ public class BlogInfoDAO {
 				SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy");
 				String strDate = formatter.format(document.getDate("created_date"));
 				subMenuContent.setDate(strDate);
+				subMenuContent.setIndivisualThemeimage(individualThemeImageMap.get(document.getString("conetent_id")));
 				subMenuContents.add(subMenuContent);
 			}
 		}

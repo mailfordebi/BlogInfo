@@ -37,9 +37,10 @@
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="post-heading">
             <h1 class="heading">${blogInfo.subMenuContents[0].content_header}</h1>
-            <h2 class="subheading">${blogInfo.subMenuContents[0].contentHeaderTag}</h2>
+            <%-- <h2 class="subheading">${blogInfo.subMenuContents[0].contentHeaderTag}</h2> --%>
             <span class="meta">Posted by
-              <a href="${pageContext.request.contextPath}/aboutme">${blogInfo.subMenuContents[0].postedBy} </a>
+              <%-- <a href="${pageContext.request.contextPath}/aboutme">${blogInfo.subMenuContents[0].postedBy} </a> --%>
+              <a href="https://www.linkedin.com/in/debiprasadpradhan/" target="_blank">${blogInfo.subMenuContents[0].postedBy} </a>
               on ${blogInfo.subMenuContents[0].date}</span>
           </div>
         </div>
@@ -49,7 +50,7 @@
 
   <!-- Post Content -->
   <article>
-    <div class="container">
+    <div class="container" style="margin-top: -60px">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
          <c:if test="${!editMode}">

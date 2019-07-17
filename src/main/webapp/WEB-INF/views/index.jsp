@@ -51,19 +51,31 @@
 	</header>
 
 	<!-- Main Content -->
-	<div class="container">
+	<div class="container" style="margin-top: -30px">
 		<div class="row">
 			<div class="col-lg-8 col-md-10 mx-auto">
 				<c:forEach var="con" items="${blogInfo.subMenuContents}">
 					<div class="post-preview">
+					  <div class="left-column">
+					  	<img src="data:image/jpeg;base64,${con.indivisualThemeimage}" alt="oom" style="width:100%">
+					  </div> 
+					   <div class="right-column">
 						<a href="${pageContext.request.contextPath}/blogPost?blogId=${con.conetent_id}&loginId=${loginId}">
-							<h2 class="post-title">${con.content_header}</h2>
-							<h3 class="post-subtitle">${con.contentHeaderTag}</h3>
+							<h3 class="post-title">${con.content_header}</h3>
 						</a>
-							<p class="post-meta">
-							<a href="${pageContext.request.contextPath}/myblogindex" style="background-color: black; color:wheat">${con.submenu_ref}</a>
-								Posted by <a href="${pageContext.request.contextPath}/aboutme">${con.postedBy} </a>${con.date}
-							</p>
+						  <div style="font-size: 13px;">
+						  <div style="color: grey; font-style: italic;">
+						  <a href="${pageContext.request.contextPath}/myblogindex" style="background-color: black; color:wheat">${con.submenu_ref}</a>
+								 &nbspPosted by 
+							<%-- <a href="${pageContext.request.contextPath}/aboutme">${con.postedBy}</a> --%>
+							<a href="https://www.linkedin.com/in/debiprasadpradhan/" target="_blank">${con.postedBy}</a>
+							 &nbsp- ${con.date}
+							</div>
+							<div style="font-style: oblique;font-weight: bold;">
+							${con.contentHeaderTag}
+							</div>
+							</div>
+					  </div>	
 					</div>
 					<hr>
 				</c:forEach>

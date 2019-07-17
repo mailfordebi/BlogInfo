@@ -14,6 +14,7 @@ public class SubMenuContent {
 	private Date created_date;
 	private String postedBy;
 	private String date;
+	private String indivisualThemeimage;
 	
 
 	public String getConetent_id() {
@@ -102,6 +103,14 @@ public class SubMenuContent {
 
 	public void setDate(String date) {
 		this.date = date;
+	}
+
+	public String getIndivisualThemeimage() {
+		return indivisualThemeimage;
+	}
+
+	public void setIndivisualThemeimage(String indivisualThemeimage) {
+		this.indivisualThemeimage = indivisualThemeimage;
 	}
 
 }
