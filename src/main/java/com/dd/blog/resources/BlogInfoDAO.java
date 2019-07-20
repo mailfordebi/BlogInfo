@@ -304,6 +304,9 @@ public class BlogInfoDAO {
 
 		query = new Query();
 		query.addCriteria(Criteria.where("isThemeImage").is(true));
+		if (contentId != null) {
+			query.addCriteria(Criteria.where("content_id").is(contentId));
+		}
 		List<Document> documents = mongoOperations.find(query, Document.class, "images");
 		if (documents != null && !documents.isEmpty()) {
 			for (Document document : documents) {
@@ -324,7 +327,7 @@ public class BlogInfoDAO {
 				}
 			}
 		}
-		if (!isThemeFound) {
+		if (StringUtils.isEmpty(blogInfoVO.getThemeimage())) {
 			blogInfoVO.setThemeimage(fileContent);
 		}
 		query = new Query();

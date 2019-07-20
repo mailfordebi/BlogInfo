@@ -11,7 +11,7 @@
             <meta name="author" content="">
 
             <title>Out Of Memory: Solution for your error</title>
-			<link rel="icon" href="img/titlecon.jpg" sizes="32x32">
+			<link rel="icon" href="img/titleicon.png" sizes="32x32">
             <!-- Bootstrap core CSS -->
             <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> 
 
