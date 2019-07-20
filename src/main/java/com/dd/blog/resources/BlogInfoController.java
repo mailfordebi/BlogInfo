@@ -160,7 +160,7 @@ public class BlogInfoController {
 		List<SubMenuContent> subMenuContents2 = new ArrayList<SubMenuContent>();
 		
 		// Need to change as per the requirement...
-		int noOfRecordsPerPage = 2;
+		int noOfRecordsPerPage = 3;
 		index = index * noOfRecordsPerPage;
 		pageNo = pageNo * noOfRecordsPerPage;
 		if (pageNo > subMenuContents.size()) {

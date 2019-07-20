@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Out Of Memory: Solution for your error</title>
-<link rel="icon" href="img/icon.png" sizes="32x32">
+<link rel="icon" href="img/titlecon.jpg" sizes="32x32">
 <style>
 /* Basics */
 html, body {

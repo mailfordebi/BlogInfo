@@ -292,39 +292,40 @@ public class BlogInfoDAO {
 		Query query = null;
 		boolean isThemeFound = false;
 		Map<String, String> individualThemeImageMap = new HashMap<String, String>();
+
+		File fi = new File(getClass().getClassLoader().getResource("oom.jpg").getFile());
+		String fileContent = "";
+		try {
+			fileContent = Base64.getEncoder().encodeToString(Files.readAllBytes(fi.toPath()));
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+
 		query = new Query();
 		query.addCriteria(Criteria.where("isThemeImage").is(true));
 		List<Document> documents = mongoOperations.find(query, Document.class, "images");
-		// if (contentId != null) {
 		if (documents != null && !documents.isEmpty()) {
 			for (Document document : documents) {
-				//if (document.get("isThemeImage") != null && document.getBoolean("isThemeImage")) {
-					Binary imageData = document.get("imagecontent", Binary.class);
-					byte[] imageByteData = imageData.getData();
-					String base64Image = Base64.getEncoder().encodeToString(imageByteData);
-					if (document.getString("content_id").equals(contentId)) {
-						blogInfoVO.setThemeimage(base64Image);
-						isThemeFound = true;
-						break;
-					}
-					if (contentId == null) {
+				Binary imageData = document.get("imagecontent", Binary.class);
+				byte[] imageByteData = imageData.getData();
+				String base64Image = Base64.getEncoder().encodeToString(imageByteData);
+				if (document.getString("content_id").equals(contentId)) {
+					blogInfoVO.setThemeimage(base64Image);
+					isThemeFound = true;
+					break;
+				}
+				if (contentId == null) {
+					if (!StringUtils.isEmpty(base64Image)) {
 						individualThemeImageMap.put(document.getString("content_id"), base64Image);
+					} else {
+						individualThemeImageMap.put(document.getString("content_id"), fileContent);
 					}
-				//}
+				}
 			}
 		}
-		// }
 		if (!isThemeFound) {
-			File fi = new File(getClass().getClassLoader().getResource("oom.jpg").getFile());
-			byte[] fileContent;
-			try {
-				fileContent = Files.readAllBytes(fi.toPath());
-				blogInfoVO.setThemeimage(Base64.getEncoder().encodeToString(fileContent));
-			} catch (IOException e) {
-				e.printStackTrace();
-				System.out.println(e.getMessage());
-			}
-
+			blogInfoVO.setThemeimage(fileContent);
 		}
 		query = new Query();
 		if (contentId != null) {
