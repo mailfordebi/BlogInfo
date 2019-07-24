@@ -1,5 +1,8 @@
 package com.dd.blog.resources;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +30,27 @@ public class BlogInfoController {
 
 	@Autowired
 	private BlogInfoDAO blogInfoDAO;
-
+	
+	@RequestMapping("/test")
+	public ModelAndView test() throws IOException {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("test");
+		BufferedReader b=new BufferedReader(new FileReader("test.txt"));
+		String str="";
+		String l=b.readLine();
+		StringBuilder sb=new StringBuilder();
+		while(l!=null) {
+			sb.append(l).append("\n");
+			l=b.readLine();
+		}
+		str=sb.toString();
+		//str="hello";
+		BlogInfoVO blogInfoVO = new BlogInfoVO();
+		blogInfoVO.setMenuId(str);
+		modelAndView.addObject(blogInfoVO);
+		return modelAndView;
+	}
+	
 	@RequestMapping("/index")
 	public ModelAndView index() {
 		String subMenuId = blogInfoDAO.getFirstSubMeny("design_pattern");
