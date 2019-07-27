@@ -1,17 +1,24 @@
 package com.dd.blog.resources;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,27 +37,32 @@ public class BlogInfoController {
 
 	@Autowired
 	private BlogInfoDAO blogInfoDAO;
-	
-	@RequestMapping("/test")
-	public ModelAndView test() throws IOException {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("test");
-		BufferedReader b=new BufferedReader(new FileReader("test.txt"));
-		String str="";
-		String l=b.readLine();
-		StringBuilder sb=new StringBuilder();
-		while(l!=null) {
-			sb.append(l).append("\n");
-			l=b.readLine();
+
+	//@RequestMapping(name = "/greeting", method = RequestMethod.GET)
+	@RequestMapping("/greeting")
+	public ResponseEntity<String> greeting()
+			throws IOException {
+		File fi = new File(getClass().getClassLoader().getResource("test.txt").getFile());
+		InputStream is = new FileInputStream(fi);
+		BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+		String line = buf.readLine();
+		StringBuilder sb = new StringBuilder();
+		while (line != null) {
+			sb.append(line).append("\n");
+			line = buf.readLine();
 		}
-		str=sb.toString();
-		//str="hello";
-		BlogInfoVO blogInfoVO = new BlogInfoVO();
-		blogInfoVO.setMenuId(str);
-		modelAndView.addObject(blogInfoVO);
-		return modelAndView;
+		String fileAsString = sb.toString();
+		buf.close();
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("content-type", "text/javascript;charset=UTF-8");
+		return ResponseEntity.ok().headers(responseHeaders).body(fileAsString);
 	}
-	
+
+	@RequestMapping("/edit")
+	public String edit() {
+		return "edit";
+	}
+
 	@RequestMapping("/index")
 	public ModelAndView index() {
 		String subMenuId = blogInfoDAO.getFirstSubMeny("design_pattern");
@@ -181,7 +193,7 @@ public class BlogInfoController {
 	private BlogInfoVO getPostWithNoOfRecord(BlogInfoVO blogInfoVO, int index, int pageNo) {
 		List<SubMenuContent> subMenuContents = blogInfoVO.getSubMenuContents();
 		List<SubMenuContent> subMenuContents2 = new ArrayList<SubMenuContent>();
-		
+
 		// Need to change as per the requirement...
 		int noOfRecordsPerPage = 3;
 		index = index * noOfRecordsPerPage;
@@ -323,6 +335,119 @@ public class BlogInfoController {
 
 	}
 
+	@RequestMapping("/addBlog")
+	public ModelAndView addBlog(@ModelAttribute("techType") String techType,
+			@ModelAttribute("blogHeader") String blogHeader,
+			@ModelAttribute("headerTag") String headerTag,
+			@RequestParam("themeImage") MultipartFile themeImage,
+			@ModelAttribute("postedBy") String postedBy,
+			@ModelAttribute("contentBody") String contentBody,
+			@RequestParam("file1") MultipartFile file1,
+			@RequestParam("file2") MultipartFile file2,
+			@RequestParam("file3") MultipartFile file3,
+			@RequestParam("file4") MultipartFile file4,
+			@RequestParam("file5") MultipartFile file5,
+			@RequestParam("file6") MultipartFile file6,
+			@RequestParam("file7") MultipartFile file7,
+			@RequestParam("file8") MultipartFile file8,
+			@RequestParam("file9") MultipartFile file9,
+			@RequestParam("file10") MultipartFile file10,
+			@RequestParam("file11") MultipartFile file11) throws Exception {
+		String content_id="";
+		String pattern = "EEEEE_MMMMM_yyyy_MM_dd_HH_mm_ss_SSS";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		String date = simpleDateFormat.format(new Date());
+		if(!StringUtils.isEmpty(blogHeader)) {
+			StringTokenizer st=new StringTokenizer(blogHeader);
+			while(st.hasMoreTokens()) {
+				content_id=content_id+st.nextToken()+"_";
+			}
+			content_id=content_id+date;
+		}else {
+			content_id="out_of_memory_"+date;
+		}
+		
+		if (!themeImage.isEmpty()) {
+			byte[] imageContent = themeImage.getBytes();
+			String imageName = themeImage.getOriginalFilename();
+			blogInfoDAO.saveImage(imageContent, imageName, content_id, true);
+		}
+		if (!file1.isEmpty()) {
+			byte[] imageContent = file1.getBytes();
+			String imageName = file1.getOriginalFilename();
+			blogInfoDAO.saveImage(imageContent, imageName, content_id, false);
+		}
+		if (!file2.isEmpty()) {
+			byte[] imageContent = file2.getBytes();
+			String imageName = file2.getOriginalFilename();
+			blogInfoDAO.saveImage(imageContent, imageName, content_id, false);
+		}
+		if (!file3.isEmpty()) {
+			byte[] imageContent = file3.getBytes();
+			String imageName = file3.getOriginalFilename();
+			blogInfoDAO.saveImage(imageContent, imageName, content_id, false);
+		}
+		if (!file4.isEmpty()) {
+			byte[] imageContent = file4.getBytes();
+			String imageName = file4.getOriginalFilename();
+			blogInfoDAO.saveImage(imageContent, imageName, content_id, false);
+		}
+		if (!file5.isEmpty()) {
+			byte[] imageContent = file5.getBytes();
+			String imageName = file5.getOriginalFilename();
+			blogInfoDAO.saveImage(imageContent, imageName, content_id, false);
+		}
+		if (!file6.isEmpty()) {
+			byte[] imageContent = file6.getBytes();
+			String imageName = file6.getOriginalFilename();
+			blogInfoDAO.saveImage(imageContent, imageName, content_id, false);
+		}
+		if (!file7.isEmpty()) {
+			byte[] imageContent = file7.getBytes();
+			String imageName = file7.getOriginalFilename();
+			blogInfoDAO.saveImage(imageContent, imageName, content_id, false);
+		}
+		if (!file8.isEmpty()) {
+			byte[] imageContent = file8.getBytes();
+			String imageName = file8.getOriginalFilename();
+			blogInfoDAO.saveImage(imageContent, imageName, content_id, false);
+		}
+		if (!file9.isEmpty()) {
+			byte[] imageContent = file9.getBytes();
+			String imageName = file9.getOriginalFilename();
+			blogInfoDAO.saveImage(imageContent, imageName, content_id, false);
+		}
+		if (!file10.isEmpty()) {
+			byte[] imageContent = file10.getBytes();
+			String imageName = file10.getOriginalFilename();
+			blogInfoDAO.saveImage(imageContent, imageName, content_id, false);
+		}
+		if (!file11.isEmpty()) {
+			byte[] imageContent = file11.getBytes();
+			String imageName = file11.getOriginalFilename();
+			blogInfoDAO.saveImage(imageContent, imageName, content_id, false);
+		}
+		
+		BlogInfoVO blogInfoVO = new BlogInfoVO();
+		List<SubMenuContent> subMenuContents = new ArrayList<SubMenuContent>();
+		SubMenuContent subMenuContent = new SubMenuContent();
+		subMenuContent.setContent_header(blogHeader);
+		subMenuContent.setContentHeaderTag(headerTag);
+		subMenuContent.setContent(contentBody);
+		subMenuContent.setSubmenu_ref(techType);
+		subMenuContent.setMenu_ref("miscellaneous");
+		subMenuContent.setConetent_id(content_id);
+		subMenuContent.setCreated_date(new Date());
+		subMenuContent.setPostedBy(postedBy);
+		subMenuContents.add(subMenuContent);
+		blogInfoVO.setSubMenuContents(subMenuContents);
+		if (blogInfoDAO.insert(blogInfoVO, "Misc")) {
+			return myblogindex();
+		} else {
+			throw new Exception("Unable to save");
+		}
+	}
+	
 	@RequestMapping("/menu")
 	public ModelAndView menu(@RequestParam("menuid") String menuId) {
 		ModelAndView modelAndView = null;
