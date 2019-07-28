@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,8 +38,7 @@ public class BlogInfoController {
 	private BlogInfoDAO blogInfoDAO;
 
 	@RequestMapping("/richText")
-	public ResponseEntity<String> richText()
-			throws IOException {
+	public ResponseEntity<String> richText() throws IOException {
 		File fi = new File(getClass().getClassLoader().getResource("test.txt").getFile());
 		InputStream is = new FileInputStream(fi);
 		BufferedReader buf = new BufferedReader(new InputStreamReader(is));
@@ -194,7 +192,7 @@ public class BlogInfoController {
 		List<SubMenuContent> subMenuContents2 = new ArrayList<SubMenuContent>();
 
 		// Need to change as per the requirement...
-		int noOfRecordsPerPage = 3;
+		int noOfRecordsPerPage = 5;
 		index = index * noOfRecordsPerPage;
 		pageNo = pageNo * noOfRecordsPerPage;
 		if (pageNo > subMenuContents.size()) {
@@ -336,39 +334,25 @@ public class BlogInfoController {
 
 	@RequestMapping("/addBlog")
 	public ModelAndView addBlog(@ModelAttribute("techType") String techType,
-			@ModelAttribute("blogHeader") String blogHeader,
-			@ModelAttribute("headerTag") String headerTag,
-			@RequestParam("themeImage") MultipartFile themeImage,
-			@ModelAttribute("postedBy") String postedBy,
-			@ModelAttribute("contentBody") String contentBody,
-			@RequestParam("file1") MultipartFile file1,
-			@RequestParam("file2") MultipartFile file2,
-			@RequestParam("file3") MultipartFile file3,
-			@RequestParam("file4") MultipartFile file4,
-			@RequestParam("file5") MultipartFile file5,
-			@RequestParam("file6") MultipartFile file6,
-			@RequestParam("file7") MultipartFile file7,
-			@RequestParam("file8") MultipartFile file8,
-			@RequestParam("file9") MultipartFile file9,
-			@RequestParam("file10") MultipartFile file10,
-			@RequestParam("file11") MultipartFile file11) throws Exception {
-		String content_id="";
-		String pattern = "EEEEE_MMMMM_yyyy_MM_dd_HH_mm_ss_SSS";
+			@ModelAttribute("blogHeader") String blogHeader, @ModelAttribute("headerTag") String headerTag,
+			@RequestParam("themeImage") MultipartFile themeImage, @ModelAttribute("postedBy") String postedBy,
+			@ModelAttribute("contentBody") String contentBody, @RequestParam("file1") MultipartFile file1,
+			@RequestParam("file2") MultipartFile file2, @RequestParam("file3") MultipartFile file3,
+			@RequestParam("file4") MultipartFile file4, @RequestParam("file5") MultipartFile file5,
+			@RequestParam("file6") MultipartFile file6, @RequestParam("file7") MultipartFile file7,
+			@RequestParam("file8") MultipartFile file8, @RequestParam("file9") MultipartFile file9,
+			@RequestParam("file10") MultipartFile file10, @RequestParam("file11") MultipartFile file11)
+			throws Exception {
+		String content_id = "";
+		String pattern = "EEEEE_MMMMM_yyyy_MM_dd_HH_mm_ssMs_SSS";
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-		String date = simpleDateFormat.format(new Date());
-		if(!StringUtils.isEmpty(blogHeader)) {
-			StringTokenizer st=new StringTokenizer(blogHeader);
-			while(st.hasMoreTokens()) {
-				content_id=content_id+st.nextToken()+"_";
-			}
-			content_id=content_id+date;
-		}else {
-			content_id="out_of_memory_"+date;
-		}
-		
+		content_id = simpleDateFormat.format(new Date());
+
 		if (!themeImage.isEmpty()) {
-			byte[] imageContent = themeImage.getBytes();
 			String imageName = themeImage.getOriginalFilename();
+			BlogInfoUtil util = new BlogInfoUtil();
+			byte[] imageContent = util.imageResize(themeImage.getBytes(), imageName);
+			// byte[] imageContent = themeImage.getBytes();
 			blogInfoDAO.saveImage(imageContent, imageName, content_id, true);
 		}
 		if (!file1.isEmpty()) {
@@ -426,7 +410,7 @@ public class BlogInfoController {
 			String imageName = file11.getOriginalFilename();
 			blogInfoDAO.saveImage(imageContent, imageName, content_id, false);
 		}
-		
+
 		BlogInfoVO blogInfoVO = new BlogInfoVO();
 		List<SubMenuContent> subMenuContents = new ArrayList<SubMenuContent>();
 		SubMenuContent subMenuContent = new SubMenuContent();
@@ -446,7 +430,7 @@ public class BlogInfoController {
 			throw new Exception("Unable to save");
 		}
 	}
-	
+
 	@RequestMapping("/menu")
 	public ModelAndView menu(@RequestParam("menuid") String menuId) {
 		ModelAndView modelAndView = null;
