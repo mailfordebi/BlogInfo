@@ -23,7 +23,7 @@
 		}
 		var o = "";
 		//return o += i("plugin", e), o += i("theme", n), o += i("language", t), o && (u.core ? o += "&core=false" : u.core = !0, o = "https://html5-editor.net/tinymce/tinymce.gzip.php?js=true" + o), o
-		return "http://localhost:8086/BlogInfo/greeting";
+		return "http://localhost:8086/BlogInfo/richText";
 	}
 
 	function t(n) {

@@ -56,9 +56,6 @@
 						href="${pageContext.request.contextPath}/myblogindex">GADGETS</a></li>
 					<%-- <li class="nav-item"><a class="nav-link"
 						href="${pageContext.request.contextPath}/about">About</a></li> --%>
-					<%-- <li class="nav-item"><a class="nav-link"
-						href="${pageContext.request.contextPath}/blogPost">Sample Post</a>
-					</li> --%>
 					<li class="nav-item"><a class="nav-link"
 						href="${pageContext.request.contextPath}/contact">CONTACT</a></li>
 					<c:if test="${!logedIn}">	
@@ -66,6 +63,9 @@
 							href="${pageContext.request.contextPath}/login?page=blog">Login</a></li>
 					</c:if>
 					<c:if test="${logedIn}">
+						<li class="nav-item"><a class="nav-link"
+							href="${pageContext.request.contextPath}/editBlog" target="_blank">New Post</a>
+						</li>
 						<li class="nav-item"><a class="nav-link"
 							href="${pageContext.request.contextPath}/logoutblog">Logout</a></li>
 					</c:if>	

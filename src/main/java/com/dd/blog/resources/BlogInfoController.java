@@ -38,9 +38,8 @@ public class BlogInfoController {
 	@Autowired
 	private BlogInfoDAO blogInfoDAO;
 
-	//@RequestMapping(name = "/greeting", method = RequestMethod.GET)
-	@RequestMapping("/greeting")
-	public ResponseEntity<String> greeting()
+	@RequestMapping("/richText")
+	public ResponseEntity<String> richText()
 			throws IOException {
 		File fi = new File(getClass().getClassLoader().getResource("test.txt").getFile());
 		InputStream is = new FileInputStream(fi);
@@ -58,8 +57,8 @@ public class BlogInfoController {
 		return ResponseEntity.ok().headers(responseHeaders).body(fileAsString);
 	}
 
-	@RequestMapping("/edit")
-	public String edit() {
+	@RequestMapping("/editBlog")
+	public String editBlog() {
 		return "edit";
 	}
 

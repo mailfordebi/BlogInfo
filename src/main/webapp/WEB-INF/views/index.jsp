@@ -82,12 +82,12 @@
 				<!-- Pager -->
 				<div class="clearfix">
 				<c:if test="${blogInfo.newPost}">
-					<a class="btn btn-primary float-left" href="${pageContext.request.contextPath}/newpost">&larr; New Posts
+					<a class="btn btn-primary float-left" style="border-radius: 25px;padding: 7px 7px;" href="${pageContext.request.contextPath}/newpost">&lt; New Posts
 						</a>
 				</c:if>
 				<c:if test="${blogInfo.oldPost}">
-					<a class="btn btn-primary float-right" href="${pageContext.request.contextPath}/olderpost">Older Posts
-						&rarr;</a>	
+					<a class="btn btn-primary float-right" style="border-radius: 25px;padding: 7px 7px;" href="${pageContext.request.contextPath}/olderpost">Older Posts
+						&gt;</a>	
 				</c:if>
 				</div>
 			</div>
