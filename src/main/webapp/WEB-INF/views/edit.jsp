@@ -74,9 +74,9 @@
                   <option value="Gadgets">Gadgets</option>
                </select>
                <label for="blogHeader">Header:</label>
-               <input type="text" id="blogHeader" name="blogHeader" placeholder="Header..">
+               <input type="text" id="blogHeader" name="blogHeader" placeholder="Header.." maxlength="70">
                <label for="headerTag">Header Tag:</label>
-               <input type="text" id="headerTag" name="headerTag" placeholder="Header Tag..">
+               <input type="text" id="headerTag" name="headerTag" placeholder="Header Tag.." maxlength="150">
                <label for="themeImage">Theme Image:</label>
                <input type="file" name="themeImage" accept="image/*" />
                <br>
