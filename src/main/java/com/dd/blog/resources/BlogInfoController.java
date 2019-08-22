@@ -220,6 +220,23 @@ public class BlogInfoController {
 		return modelAndView;
 	}
 
+	@RequestMapping(value = "/postComment", method = RequestMethod.POST)
+	public ModelAndView postComment(@RequestParam("comment") String comment, @RequestParam("name") String name,
+			@RequestParam("email") String email, @RequestParam("website") String website,
+			@RequestParam("blogId") String blogId) {
+
+		if (!blogInfoDAO.saveComment(comment, name, email, website, blogId)) { //
+			// TODO Handling Exception....
+		}
+
+		ModelAndView modelAndView = new ModelAndView();
+		BlogInfoVO blogInfoVO = blogInfoDAO.getBlogInfo(blogId, false);
+		modelAndView.addObject("blogInfo", blogInfoVO);
+		modelAndView.setViewName("post");
+		return modelAndView;
+
+	}
+
 	@RequestMapping("/blogPost")
 	public ModelAndView blogPost(@RequestParam("blogId") String blogId, @RequestParam("loginId") String loginId) {
 		ModelAndView modelAndView = new ModelAndView();

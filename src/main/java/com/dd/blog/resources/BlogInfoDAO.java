@@ -2,7 +2,6 @@ package com.dd.blog.resources;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -149,6 +148,11 @@ public class BlogInfoDAO {
 		}
 	}
 
+	public boolean saveComment(String comment, String name, String email, String website, String blogId) {
+		return true;
+
+	}
+
 	public boolean save(BlogInfoVO blogInfoVO) {
 
 		List<SubMenuContent> subMenuContents = blogInfoVO.getSubMenuContents();
@@ -290,7 +294,7 @@ public class BlogInfoDAO {
 		BlogInfoVO blogInfoVO = new BlogInfoVO();
 		List<SubMenuContent> subMenuContents = new ArrayList<SubMenuContent>();
 		Query query = null;
-		boolean isThemeFound = false;
+		// boolean isThemeFound = false;
 		Map<String, String> individualThemeImageMap = new HashMap<String, String>();
 
 		File fi = new File(getClass().getClassLoader().getResource("oom.jpg").getFile());
@@ -315,7 +319,7 @@ public class BlogInfoDAO {
 				String base64Image = Base64.getEncoder().encodeToString(imageByteData);
 				if (document.getString("content_id").equals(contentId)) {
 					blogInfoVO.setThemeimage(base64Image);
-					isThemeFound = true;
+					// isThemeFound = true;
 					break;
 				}
 				if (contentId == null) {
@@ -334,10 +338,11 @@ public class BlogInfoDAO {
 		if (contentId != null) {
 			query.addCriteria(Criteria.where("conetent_id").is(contentId));
 		}
+		// TODO Need to apply query.limit()
 		query.addCriteria(Criteria.where("menu_ref").is("miscellaneous"));
 		query.with(new Sort(Sort.Direction.DESC, "created_date"));
 		List<Document> docs = mongoOperations.find(query, Document.class, "submenucontent");
-
+		String submenu_ref = "";
 		if (docs != null && !docs.isEmpty()) {
 			for (Document document : docs) {
 				SubMenuContent subMenuContent = new SubMenuContent();
@@ -352,11 +357,37 @@ public class BlogInfoDAO {
 				subMenuContent.setPostedBy(document.getString("postedBy"));
 				subMenuContent.setMenu_ref(document.getString("menu_ref"));
 				subMenuContent.setSubmenu_ref(document.getString("submenu_ref"));
+				submenu_ref = document.getString("submenu_ref");
 				SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy");
 				String strDate = formatter.format(document.getDate("created_date"));
 				subMenuContent.setDate(strDate);
 				subMenuContent.setIndivisualThemeimage(individualThemeImageMap.get(document.getString("conetent_id")));
 				subMenuContents.add(subMenuContent);
+			}
+		}
+
+		if (!StringUtils.isEmpty(contentId)) {
+			query = new Query();
+			query.addCriteria(Criteria.where("submenu_ref").is(submenu_ref));
+			query.addCriteria(Criteria.where("menu_ref").is("miscellaneous"));
+			query.with(new Sort(Sort.Direction.DESC, "created_date"));
+			query.limit(5);
+			List<Document> relatedDocs = mongoOperations.find(query, Document.class, "submenucontent");
+			if (relatedDocs != null && !relatedDocs.isEmpty()) {
+				for (Document document : relatedDocs) {
+					blogInfoVO.setRelatedBlogs(document.getString("conetent_id"), document.getString("content_header"));
+				}
+			}
+
+			query = new Query();
+			query.addCriteria(Criteria.where("menu_ref").is("miscellaneous"));
+			query.with(new Sort(Sort.Direction.DESC, "created_date"));
+			query.limit(5);
+			List<Document> latestDocs = mongoOperations.find(query, Document.class, "submenucontent");
+			if (latestDocs != null && !latestDocs.isEmpty()) {
+				for (Document document : latestDocs) {
+					blogInfoVO.setLatestBlogs(document.getString("conetent_id"), document.getString("content_header"));
+				}
 			}
 		}
 		blogInfoVO.setSubMenuContents(subMenuContents);

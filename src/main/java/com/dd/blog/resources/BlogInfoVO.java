@@ -1,6 +1,8 @@
 package com.dd.blog.resources;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BlogInfoVO {
 	private List<Menu> menuList;
@@ -19,10 +21,16 @@ public class BlogInfoVO {
 	private String nextSubMenuName;
 	private String prevMenuId;
 	private String nextMenuId;
-	
+
 	private boolean oldPost;
 	private boolean newPost;
-	
+	Map<String, String> relatedBlogs = null;
+	Map<String, String> latestBlogs = null;
+
+	public BlogInfoVO() {
+		relatedBlogs = new HashMap<String, String>();
+		latestBlogs = new HashMap<String, String>();
+	}
 
 	public String getContent_id() {
 		return content_id;
@@ -158,6 +166,22 @@ public class BlogInfoVO {
 
 	public void setNewPost(boolean newPost) {
 		this.newPost = newPost;
+	}
+
+	public Map<String, String> getRelatedBlogs() {
+		return relatedBlogs;
+	}
+
+	public Map<String, String> getLatestBlogs() {
+		return latestBlogs;
+	}
+
+	public void setLatestBlogs(String key, String value) {
+		this.latestBlogs.put(key, value);
+	}
+
+	public void setRelatedBlogs(String key, String value) {
+		this.relatedBlogs.put(key, value);
 	}
 
 }
