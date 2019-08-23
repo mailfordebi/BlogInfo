@@ -70,13 +70,15 @@
                                     <div style="margin-top: 70px;">
                                     <h2 style="font-size: 21px; padding-bottom: 10px;">Comments</h2>
                                     <c:forEach var="com" items="${blogInfo.comments}">
-                                   		 <div style="border: 1px solid #e5e4e4;font-family: roboto regular;padding: 3px 21px 0;">
-											<span>
+                                   		 <div style="border: 1px solid #e5e4e4;font-family: roboto regular;padding: 3px 21px 0;margin-bottom: 20px;">
+											<span style="font-size: 15px;">
 											<strong>
 											${com.name} 
 											</strong>
-											${com.date}
-											</span> 
+											</span>
+											 <span style="float: right;font-size: 15px;color: grey;">
+												${com.date}
+											 </span>
 											<br>
 											<p style="font-size: 18px;text-align: left;color: #707070;line-height: 1.7em;">${com.comment}</p>
 										</div>
