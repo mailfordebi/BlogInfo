@@ -48,10 +48,10 @@
                             <div class="col-lg-8 col-md-10 mx-auto">
                                 <c:if test="${!editMode}">
                                     <p>${blogInfo.subMenuContents[0].content}</p>
-                                    <div style="width: 710px; border: 0.5px solid #313131; padding: 10px 10px;">
+                                    <div style="border: 0.5px solid #313131; padding: 10px 10px;">
                                         <h2 style="font-size: 20px; padding-bottom: 10px; text-transform: uppercase;">Related
 								News</h2>
-                                        <ul style="list-style: none;">
+                                        <ul style="list-style: none;padding-right: 30px;">
                                             <c:forEach items="${blogInfo.relatedBlogs}" var="entry">
                                                 <li><a href="#" style="background: lightgrey; text-decoration: none; padding: 10px; margin-bottom: 5px; display: block; font-size: 16px; border-left: 3px solid #ed1c24;">${entry.value}</a>
                                                 </li>
@@ -59,7 +59,7 @@
                                         </ul>
                                         <h2 style="font-size: 20px; padding-bottom: 10px; text-transform: uppercase;">Latest
 								News</h2>
-                                        <ul style="list-style: none;">
+                                        <ul style="list-style: none;padding-right: 30px;">
                                             <c:forEach items="${blogInfo.latestBlogs}" var="entry">
                                                 <li><a href="#" style="background: lightgrey; text-decoration: none; padding: 10px; margin-bottom: 5px; display: block; font-size: 16px; border-left: 3px solid #ed1c24;">${entry.value}</a>
                                                 </li>
@@ -71,7 +71,8 @@
                                     <h2 style="font-size: 21px; padding-bottom: 10px;">Comments</h2>
                                     <c:forEach var="com" items="${blogInfo.comments}">
                                    		 <div style="border: 1px solid #e5e4e4;font-family: roboto regular;padding: 3px 21px 0;margin-bottom: 20px;">
-											<span style="font-size: 15px;">
+											<img src="img/comment_icon.png" style="height: 35px;width: 35px;">
+											<span style="font-size: 15px;margin-left: 5px;font-family: sans-serif;">
 											<strong>
 											${com.name} 
 											</strong>
