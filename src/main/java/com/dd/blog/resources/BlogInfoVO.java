@@ -1,5 +1,6 @@
 package com.dd.blog.resources;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +27,12 @@ public class BlogInfoVO {
 	private boolean newPost;
 	Map<String, String> relatedBlogs = null;
 	Map<String, String> latestBlogs = null;
+	private List<Comment> comments;
 
 	public BlogInfoVO() {
 		relatedBlogs = new HashMap<String, String>();
 		latestBlogs = new HashMap<String, String>();
+		comments = new ArrayList<Comment>();
 	}
 
 	public String getContent_id() {
@@ -182,6 +185,14 @@ public class BlogInfoVO {
 
 	public void setRelatedBlogs(String key, String value) {
 		this.relatedBlogs.put(key, value);
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(Comment comment) {
+		this.comments.add(comment);
 	}
 
 }

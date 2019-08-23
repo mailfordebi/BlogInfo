@@ -67,6 +67,22 @@
                                         </ul>
                                     </div>
                                     
+                                    <div style="margin-top: 70px;">
+                                    <h2 style="font-size: 21px; padding-bottom: 10px;">Comments</h2>
+                                    <c:forEach var="com" items="${blogInfo.comments}">
+                                   		 <div style="border: 1px solid #e5e4e4;font-family: roboto regular;padding: 3px 21px 0;">
+											<span>
+											<strong>
+											${com.name} 
+											</strong>
+											${com.date}
+											</span> 
+											<br>
+											<p style="font-size: 18px;text-align: left;color: #707070;line-height: 1.7em;">${com.comment}</p>
+										</div>
+									</c:forEach>
+                                    </div>
+                                    
                                     <div>
                                         <button type="button" data-toggle="modal" data-target="#myModal" style="margin-top: 40px; float: right; margin-right: 30px; background: black; font-size: 18px; color: white; cursor: pointer;">
                                             Post Comment</button>

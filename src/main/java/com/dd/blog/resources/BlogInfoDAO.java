@@ -3,9 +3,10 @@ package com.dd.blog.resources;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -149,7 +150,20 @@ public class BlogInfoDAO {
 	}
 
 	public boolean saveComment(String comment, String name, String email, String website, String blogId) {
-		return true;
+		BasicDBObject basicDBObject = new BasicDBObject();
+		basicDBObject.put("blogId", blogId);
+		basicDBObject.put("comment", comment);
+		basicDBObject.put("name", name);
+		basicDBObject.put("email", email);
+		basicDBObject.put("website", website);
+		Date date = Calendar.getInstance().getTime();
+		basicDBObject.put("date", date);
+		try {
+			mongoOperations.save(basicDBObject, "comment");
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
 
 	}
 
@@ -358,9 +372,7 @@ public class BlogInfoDAO {
 				subMenuContent.setMenu_ref(document.getString("menu_ref"));
 				subMenuContent.setSubmenu_ref(document.getString("submenu_ref"));
 				submenu_ref = document.getString("submenu_ref");
-				SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy");
-				String strDate = formatter.format(document.getDate("created_date"));
-				subMenuContent.setDate(strDate);
+				subMenuContent.setDate(Util.getStringDate(document.getDate("created_date")));
 				subMenuContent.setIndivisualThemeimage(individualThemeImageMap.get(document.getString("conetent_id")));
 				subMenuContents.add(subMenuContent);
 			}
@@ -389,9 +401,31 @@ public class BlogInfoDAO {
 					blogInfoVO.setLatestBlogs(document.getString("conetent_id"), document.getString("content_header"));
 				}
 			}
+
+			query = new Query();
+			query.addCriteria(Criteria.where("blogId").is(contentId));
+			query.with(new Sort(Sort.Direction.DESC, "date"));
+			query.limit(5);
+			List<Document> commentDocs = mongoOperations.find(query, Document.class, "comment");
+			if (commentDocs != null && !commentDocs.isEmpty()) {
+				for (Document document : commentDocs) {
+					Comment comment = new Comment();
+					comment.setComment(document.getString("comment"));
+					comment.setName(document.getString("name"));
+					comment.setEmail(document.getString("email"));
+					comment.setWebsite(document.getString("website"));
+					comment.setDate(Util.getStringDate(document.getDate("date")));
+					blogInfoVO.setComments(comment);
+				}
+			}
+
 		}
 		blogInfoVO.setSubMenuContents(subMenuContents);
 
 		return blogInfoVO;
+	}
+
+	public static void main(String[] args) {
+		System.out.println(new Date());
 	}
 }
