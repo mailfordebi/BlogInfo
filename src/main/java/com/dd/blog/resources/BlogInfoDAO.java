@@ -387,25 +387,45 @@ public class BlogInfoDAO {
 			List<Document> relatedDocs = mongoOperations.find(query, Document.class, "submenucontent");
 			if (relatedDocs != null && !relatedDocs.isEmpty()) {
 				for (Document document : relatedDocs) {
-					blogInfoVO.setRelatedBlogs(document.getString("conetent_id"), document.getString("content_header"));
+					if (!contentId.equals(document.getString("conetent_id"))) {
+						SubMenuContent related = new SubMenuContent();
+						related.setConetent_id(document.getString("conetent_id"));
+						related.setContent_header(document.getString("content_header"));
+						//TODO for image in related blog
+						/*
+						 * related.setContentHeaderTag(document.getString("contentheaderTag"));
+						 * related.setIndivisualThemeimage(individualThemeImageMap.get(contentId));
+						 */
+						blogInfoVO.setRelatedBlogs(related);
+					}
 				}
 			}
 
 			query = new Query();
 			query.addCriteria(Criteria.where("menu_ref").is("miscellaneous"));
 			query.with(new Sort(Sort.Direction.DESC, "created_date"));
-			query.limit(5);
+			query.limit(6);
 			List<Document> latestDocs = mongoOperations.find(query, Document.class, "submenucontent");
 			if (latestDocs != null && !latestDocs.isEmpty()) {
 				for (Document document : latestDocs) {
-					blogInfoVO.setLatestBlogs(document.getString("conetent_id"), document.getString("content_header"));
+					if (!contentId.equals(document.getString("conetent_id"))) {
+						SubMenuContent latest = new SubMenuContent();
+						latest.setConetent_id(document.getString("conetent_id"));
+						latest.setContent_header(document.getString("content_header"));
+						//TODO for image in latest blog
+						/*
+						 * latest.setContentHeaderTag(document.getString("contentheaderTag"));
+						 * latest.setIndivisualThemeimage(individualThemeImageMap.get(contentId));
+						 */
+						blogInfoVO.setLatestBlogs(latest);
+					}
 				}
 			}
 
 			query = new Query();
 			query.addCriteria(Criteria.where("blogId").is(contentId));
 			query.with(new Sort(Sort.Direction.DESC, "date"));
-			query.limit(5);
+			query.limit(6);
 			List<Document> commentDocs = mongoOperations.find(query, Document.class, "comment");
 			if (commentDocs != null && !commentDocs.isEmpty()) {
 				for (Document document : commentDocs) {

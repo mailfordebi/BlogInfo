@@ -1,9 +1,7 @@
 package com.dd.blog.resources;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class BlogInfoVO {
 	private List<Menu> menuList;
@@ -25,13 +23,13 @@ public class BlogInfoVO {
 
 	private boolean oldPost;
 	private boolean newPost;
-	Map<String, String> relatedBlogs = null;
-	Map<String, String> latestBlogs = null;
+	List<SubMenuContent> relatedBlogs = null;
+	List<SubMenuContent> latestBlogs = null;
 	private List<Comment> comments;
 
 	public BlogInfoVO() {
-		relatedBlogs = new HashMap<String, String>();
-		latestBlogs = new HashMap<String, String>();
+		relatedBlogs = new ArrayList<SubMenuContent>();
+		latestBlogs = new ArrayList<SubMenuContent>();
 		comments = new ArrayList<Comment>();
 	}
 
@@ -171,20 +169,20 @@ public class BlogInfoVO {
 		this.newPost = newPost;
 	}
 
-	public Map<String, String> getRelatedBlogs() {
+	public List<SubMenuContent> getRelatedBlogs() {
 		return relatedBlogs;
 	}
 
-	public Map<String, String> getLatestBlogs() {
+	public List<SubMenuContent> getLatestBlogs() {
 		return latestBlogs;
 	}
 
-	public void setLatestBlogs(String key, String value) {
-		this.latestBlogs.put(key, value);
+	public void setLatestBlogs(SubMenuContent latestBlog) {
+		this.latestBlogs.add(latestBlog);
 	}
 
-	public void setRelatedBlogs(String key, String value) {
-		this.relatedBlogs.put(key, value);
+	public void setRelatedBlogs(SubMenuContent relatedBlog) {
+		this.relatedBlogs.add(relatedBlog);
 	}
 
 	public List<Comment> getComments() {

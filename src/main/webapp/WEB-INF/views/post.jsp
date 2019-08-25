@@ -52,40 +52,62 @@
                                         <h2 style="font-size: 20px; padding-bottom: 10px; text-transform: uppercase;">Related
 								News</h2>
                                         <ul style="list-style: none;padding-right: 30px;">
-                                            <c:forEach items="${blogInfo.relatedBlogs}" var="entry">
-                                                <li><a href="#" style="background: lightgrey; text-decoration: none; padding: 10px; margin-bottom: 5px; display: block; font-size: 16px; border-left: 3px solid #ed1c24;">${entry.value}</a>
+                                            <c:forEach items="${blogInfo.relatedBlogs}" var="related">
+                                                <li>
+                                                <strong>
+                                                <a href="${pageContext.request.contextPath}/blogPost?blogId=${related.conetent_id}&loginId=${loginId}" style="background: lightgrey; text-decoration: none; padding: 10px; margin-bottom: 5px; display: block; font-size: 15px; border-left: 3px solid #ed1c24;">${related.content_header}</a>
+                                                </strong>
                                                 </li>
+                                                <%-- <li>
+                                                    <div>
+                                                       <img src="data:image/jpeg;base64,${related.indivisualThemeimage}" alt="oom" style="width:100%">
+                                                       <a href="${pageContext.request.contextPath}/blogPost?blogId=${related.conetent_id}&loginId=${loginId}">
+                                                            <h4>${related.content_header}</h4>
+                                                       </a>
+                                                    </div>
+                                                    </li> --%>
                                             </c:forEach>
                                         </ul>
                                         <h2 style="font-size: 20px; padding-bottom: 10px; text-transform: uppercase;">Latest
 								News</h2>
                                         <ul style="list-style: none;padding-right: 30px;">
-                                            <c:forEach items="${blogInfo.latestBlogs}" var="entry">
-                                                <li><a href="#" style="background: lightgrey; text-decoration: none; padding: 10px; margin-bottom: 5px; display: block; font-size: 16px; border-left: 3px solid #ed1c24;">${entry.value}</a>
+                                            <c:forEach items="${blogInfo.latestBlogs}" var="latest">
+                                                <li>
+                                                <strong>
+                                                <a href="${pageContext.request.contextPath}/blogPost?blogId=${latest.conetent_id}&loginId=${loginId}" style="background: lightgrey; text-decoration: none; padding: 10px; margin-bottom: 5px; display: block; font-size: 15px; border-left: 3px solid #ed1c24;">${latest.content_header}</a>
+                                                </strong>
                                                 </li>
+                                                	<%-- <li>
+                                                    <div>
+                                                       <img src="data:image/jpeg;base64,${latest.indivisualThemeimage}" alt="oom" style="width:100%">
+                                                       <a href="${pageContext.request.contextPath}/blogPost?blogId=${related.conetent_id}&loginId=${loginId}">
+                                                            <h4>${latest.content_header}</h4>
+                                                       </a>
+                                                    </div>
+                                                    </li> --%>
                                             </c:forEach>
                                         </ul>
                                     </div>
-                                    
+
                                     <div style="margin-top: 70px;">
-                                    <h2 style="font-size: 21px; padding-bottom: 10px;">Comments</h2>
-                                    <c:forEach var="com" items="${blogInfo.comments}">
-                                   		 <div style="border: 1px solid #e5e4e4;font-family: roboto regular;padding: 3px 21px 0;margin-bottom: 20px;">
-											<img src="img/comment_icon.png" style="height: 35px;width: 35px;">
-											<span style="font-size: 15px;margin-left: 5px;font-family: sans-serif;">
+                                        <h2 style="font-size: 21px; padding-bottom: 10px;">Comments</h2>
+                                        <c:forEach var="com" items="${blogInfo.comments}">
+                                            <div style="border: 1px solid #e5e4e4;font-family: roboto regular;padding: 3px 21px 0;margin-bottom: 20px;">
+                                                <img src="img/comment_icon.png" style="height: 35px;width: 35px;">
+                                                <span style="font-size: 15px;margin-left: 5px;font-family: sans-serif;">
 											<strong>
 											${com.name} 
 											</strong>
 											</span>
-											 <span style="float: right;font-size: 15px;color: grey;">
+                                                <span style="float: right;font-size: 15px;color: grey;">
 												${com.date}
 											 </span>
-											<br>
-											<p style="font-size: 18px;text-align: left;color: #707070;line-height: 1.7em;">${com.comment}</p>
-										</div>
-									</c:forEach>
+                                                <br>
+                                                <p style="font-size: 18px;text-align: left;color: #707070;line-height: 1.7em;">${com.comment}</p>
+                                            </div>
+                                        </c:forEach>
                                     </div>
-                                    
+
                                     <div>
                                         <button type="button" data-toggle="modal" data-target="#myModal" style="margin-top: 40px; float: right; margin-right: 30px; background: black; font-size: 18px; color: white; cursor: pointer;">
                                             Post Comment</button>
@@ -95,31 +117,31 @@
                                                     <div style="padding: 0rem 1rem; border-bottom: 1px solid #e9ecef;">
                                                         <h4 class="modal-title">Add Comment</h4>
                                                     </div>
-                                                    
+
                                                     <form action="postComment" method="post" id="postComment" enctype="multipart/form-data" onsubmit="return formValidate()">
-                                                    <div class="modal-body">
-                                                    	 <div class="form-group">
-                                                             <textarea class="form-control" rows="5" id="comment" name="comment" placeholder="Comment:*"></textarea>
-                                                             <div id="commentMsg" style="font-size: 14px;color: red;"></div>
+                                                        <div class="modal-body">
+                                                            <div class="form-group">
+                                                                <textarea class="form-control" rows="5" id="comment" name="comment" placeholder="Comment:*"></textarea>
+                                                                <div id="commentMsg" style="font-size: 14px;color: red;"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control" id="name" name="name" placeholder="Name:*">
+                                                                <div id="nameMsg" style="font-size: 14px;color: red;"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control" id="email" name="email" placeholder="Email:*">
+                                                                <div id="emailMsg" style="font-size: 14px;color: red;"></div>
+                                                                <div id="emailValidationMsg" style="font-size: 14px;color: red;"></div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control" id="website" name="website" placeholder="Website:">
+                                                                <input type="hidden" id="blogId" name="blogId" value="${blogInfo.subMenuContents[0].conetent_id}">
+                                                            </div>
                                                         </div>
-                                                    	<div class="form-group">
-                                                        	 <input type="text" class="form-control" id="name" name="name" placeholder="Name:*">
-                                                        	 <div id="nameMsg" style="font-size: 14px;color: red;"></div>
-                                                    	</div>
-                                                    	<div class="form-group">
-                                                             <input type="text" class="form-control" id="email" name="email" placeholder="Email:*">
-                                                             <div id="emailMsg" style="font-size: 14px;color: red;"></div>
-                                                             <div id="emailValidationMsg" style="font-size: 14px;color: red;"></div>
+                                                        <div style="display: flex; justify-content: flex-end; border-top: 1px solid #e9ecef;">
+                                                            <button type="submit" style="cursor: pointer; margin: 3px; font-size: 17px; background: lightgrey;" form="postComment" value="Post">Post</button>
+                                                            <button type="button" data-dismiss="modal" style="cursor: pointer; margin: 3px; font-size: 17px; background: lightgrey;">Cancel</button>
                                                         </div>
-                                                        <div class="form-group">
-                                                             <input type="text" class="form-control" id="website" name="website" placeholder="Website:">
-                                                             <input type="hidden" id="blogId" name="blogId" value="${blogInfo.subMenuContents[0].conetent_id}">
-                                                        </div>
-                                                    </div>
-                                                    <div style="display: flex; justify-content: flex-end; border-top: 1px solid #e9ecef;">
-                                                         <button type="submit" style="cursor: pointer; margin: 3px; font-size: 17px; background: lightgrey;" form="postComment" value="Post">Post</button>
-                                                         <button type="button" data-dismiss="modal" style="cursor: pointer; margin: 3px; font-size: 17px; background: lightgrey;">Cancel</button>
-                                                     </div>
                                                     </form>
                                                 </div>
                                             </div>
@@ -160,7 +182,7 @@
                     <script>
                         function formValidate() {
                             var comment, name, email, text;
-                            var isValidate=true;
+                            var isValidate = true;
 
                             comment = document.getElementById("comment").value;
                             name = document.getElementById("name").value;
@@ -169,19 +191,19 @@
                                 text = "Comment can not be empty.";
                                 document.getElementById("commentMsg").innerHTML = text;
                                 document.getElementById("commentMsg").style.display = "block";
-                                isValidate=false;
+                                isValidate = false;
                             } else {
                                 document.getElementById("commentMsg").style.display = "none";
-                                isValidate=true;
+                                isValidate = true;
                             }
                             if (name.length == 0) {
                                 text = "Name can not be empty.";
                                 document.getElementById("nameMsg").innerHTML = text;
                                 document.getElementById("nameMsg").style.display = "block";
-                                isValidate=false;
+                                isValidate = false;
                             } else {
                                 document.getElementById("nameMsg").style.display = "none";
-                                isValidate=true;
+                                isValidate = true;
                             }
 
                             var mailformat = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
@@ -189,20 +211,20 @@
                                 text = "Email can not be empty.";
                                 document.getElementById("emailMsg").innerHTML = text;
                                 document.getElementById("emailMsg").style.display = "block";
-                                isValidate=false;
+                                isValidate = false;
                             } else {
                                 document.getElementById("emailMsg").style.display = "none";
                                 if (mailformat.test(email) == false) {
                                     text = "Please enter valid email";
                                     document.getElementById("emailValidationMsg").innerHTML = text;
                                     document.getElementById("emailValidationMsg").style.display = "block";
-                                    isValidate=false;
+                                    isValidate = false;
                                 } else {
                                     document.getElementById("emailValidationMsg").style.display = "none";
-                                    isValidate=true;
+                                    isValidate = true;
                                 }
                             }
-                           return isValidate;
+                            return isValidate;
                         }
                     </script>
         </body>
