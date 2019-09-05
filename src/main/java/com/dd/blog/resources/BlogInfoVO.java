@@ -1,5 +1,6 @@
 package com.dd.blog.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BlogInfoVO {
@@ -19,10 +20,18 @@ public class BlogInfoVO {
 	private String nextSubMenuName;
 	private String prevMenuId;
 	private String nextMenuId;
-	
+
 	private boolean oldPost;
 	private boolean newPost;
-	
+	List<SubMenuContent> relatedBlogs = null;
+	List<SubMenuContent> latestBlogs = null;
+	private List<Comment> comments;
+
+	public BlogInfoVO() {
+		relatedBlogs = new ArrayList<SubMenuContent>();
+		latestBlogs = new ArrayList<SubMenuContent>();
+		comments = new ArrayList<Comment>();
+	}
 
 	public String getContent_id() {
 		return content_id;
@@ -158,6 +167,30 @@ public class BlogInfoVO {
 
 	public void setNewPost(boolean newPost) {
 		this.newPost = newPost;
+	}
+
+	public List<SubMenuContent> getRelatedBlogs() {
+		return relatedBlogs;
+	}
+
+	public List<SubMenuContent> getLatestBlogs() {
+		return latestBlogs;
+	}
+
+	public void setLatestBlogs(SubMenuContent latestBlog) {
+		this.latestBlogs.add(latestBlog);
+	}
+
+	public void setRelatedBlogs(SubMenuContent relatedBlog) {
+		this.relatedBlogs.add(relatedBlog);
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(Comment comment) {
+		this.comments.add(comment);
 	}
 
 }

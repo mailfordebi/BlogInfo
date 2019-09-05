@@ -2,11 +2,11 @@ package com.dd.blog.resources;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,6 +147,24 @@ public class BlogInfoDAO {
 		} else {
 			return false;
 		}
+	}
+
+	public boolean saveComment(String comment, String name, String email, String website, String blogId) {
+		BasicDBObject basicDBObject = new BasicDBObject();
+		basicDBObject.put("blogId", blogId);
+		basicDBObject.put("comment", comment);
+		basicDBObject.put("name", name);
+		basicDBObject.put("email", email);
+		basicDBObject.put("website", website);
+		Date date = Calendar.getInstance().getTime();
+		basicDBObject.put("date", date);
+		try {
+			mongoOperations.save(basicDBObject, "comment");
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
+
 	}
 
 	public boolean save(BlogInfoVO blogInfoVO) {
@@ -290,50 +308,55 @@ public class BlogInfoDAO {
 		BlogInfoVO blogInfoVO = new BlogInfoVO();
 		List<SubMenuContent> subMenuContents = new ArrayList<SubMenuContent>();
 		Query query = null;
-		boolean isThemeFound = false;
+		// boolean isThemeFound = false;
 		Map<String, String> individualThemeImageMap = new HashMap<String, String>();
+
+		File fi = new File(getClass().getClassLoader().getResource("oom.jpg").getFile());
+		String fileContent = "";
+		try {
+			fileContent = Base64.getEncoder().encodeToString(Files.readAllBytes(fi.toPath()));
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+
 		query = new Query();
 		query.addCriteria(Criteria.where("isThemeImage").is(true));
+		if (contentId != null) {
+			query.addCriteria(Criteria.where("content_id").is(contentId));
+		}
 		List<Document> documents = mongoOperations.find(query, Document.class, "images");
-		// if (contentId != null) {
 		if (documents != null && !documents.isEmpty()) {
 			for (Document document : documents) {
-				//if (document.get("isThemeImage") != null && document.getBoolean("isThemeImage")) {
-					Binary imageData = document.get("imagecontent", Binary.class);
-					byte[] imageByteData = imageData.getData();
-					String base64Image = Base64.getEncoder().encodeToString(imageByteData);
-					if (document.getString("content_id").equals(contentId)) {
-						blogInfoVO.setThemeimage(base64Image);
-						isThemeFound = true;
-						break;
-					}
-					if (contentId == null) {
+				Binary imageData = document.get("imagecontent", Binary.class);
+				byte[] imageByteData = imageData.getData();
+				String base64Image = Base64.getEncoder().encodeToString(imageByteData);
+				if (document.getString("content_id").equals(contentId)) {
+					blogInfoVO.setThemeimage(base64Image);
+					// isThemeFound = true;
+					break;
+				}
+				if (contentId == null) {
+					if (!StringUtils.isEmpty(base64Image)) {
 						individualThemeImageMap.put(document.getString("content_id"), base64Image);
+					} else {
+						individualThemeImageMap.put(document.getString("content_id"), fileContent);
 					}
-				//}
+				}
 			}
 		}
-		// }
-		if (!isThemeFound) {
-			File fi = new File(getClass().getClassLoader().getResource("oom.jpg").getFile());
-			byte[] fileContent;
-			try {
-				fileContent = Files.readAllBytes(fi.toPath());
-				blogInfoVO.setThemeimage(Base64.getEncoder().encodeToString(fileContent));
-			} catch (IOException e) {
-				e.printStackTrace();
-				System.out.println(e.getMessage());
-			}
-
+		if (StringUtils.isEmpty(blogInfoVO.getThemeimage())) {
+			blogInfoVO.setThemeimage(fileContent);
 		}
 		query = new Query();
 		if (contentId != null) {
 			query.addCriteria(Criteria.where("conetent_id").is(contentId));
 		}
+		// TODO Need to apply query.limit()
 		query.addCriteria(Criteria.where("menu_ref").is("miscellaneous"));
 		query.with(new Sort(Sort.Direction.DESC, "created_date"));
 		List<Document> docs = mongoOperations.find(query, Document.class, "submenucontent");
-
+		String submenu_ref = "";
 		if (docs != null && !docs.isEmpty()) {
 			for (Document document : docs) {
 				SubMenuContent subMenuContent = new SubMenuContent();
@@ -348,15 +371,81 @@ public class BlogInfoDAO {
 				subMenuContent.setPostedBy(document.getString("postedBy"));
 				subMenuContent.setMenu_ref(document.getString("menu_ref"));
 				subMenuContent.setSubmenu_ref(document.getString("submenu_ref"));
-				SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy");
-				String strDate = formatter.format(document.getDate("created_date"));
-				subMenuContent.setDate(strDate);
+				submenu_ref = document.getString("submenu_ref");
+				subMenuContent.setDate(Util.getStringDate(document.getDate("created_date")));
 				subMenuContent.setIndivisualThemeimage(individualThemeImageMap.get(document.getString("conetent_id")));
 				subMenuContents.add(subMenuContent);
 			}
 		}
+
+		if (!StringUtils.isEmpty(contentId)) {
+			query = new Query();
+			query.addCriteria(Criteria.where("submenu_ref").is(submenu_ref));
+			query.addCriteria(Criteria.where("menu_ref").is("miscellaneous"));
+			query.with(new Sort(Sort.Direction.DESC, "created_date"));
+			query.limit(5);
+			List<Document> relatedDocs = mongoOperations.find(query, Document.class, "submenucontent");
+			if (relatedDocs != null && !relatedDocs.isEmpty()) {
+				for (Document document : relatedDocs) {
+					if (!contentId.equals(document.getString("conetent_id"))) {
+						SubMenuContent related = new SubMenuContent();
+						related.setConetent_id(document.getString("conetent_id"));
+						related.setContent_header(document.getString("content_header"));
+						//TODO for image in related blog
+						/*
+						 * related.setContentHeaderTag(document.getString("contentheaderTag"));
+						 * related.setIndivisualThemeimage(individualThemeImageMap.get(contentId));
+						 */
+						blogInfoVO.setRelatedBlogs(related);
+					}
+				}
+			}
+
+			query = new Query();
+			query.addCriteria(Criteria.where("menu_ref").is("miscellaneous"));
+			query.with(new Sort(Sort.Direction.DESC, "created_date"));
+			query.limit(6);
+			List<Document> latestDocs = mongoOperations.find(query, Document.class, "submenucontent");
+			if (latestDocs != null && !latestDocs.isEmpty()) {
+				for (Document document : latestDocs) {
+					if (!contentId.equals(document.getString("conetent_id"))) {
+						SubMenuContent latest = new SubMenuContent();
+						latest.setConetent_id(document.getString("conetent_id"));
+						latest.setContent_header(document.getString("content_header"));
+						//TODO for image in latest blog
+						/*
+						 * latest.setContentHeaderTag(document.getString("contentheaderTag"));
+						 * latest.setIndivisualThemeimage(individualThemeImageMap.get(contentId));
+						 */
+						blogInfoVO.setLatestBlogs(latest);
+					}
+				}
+			}
+
+			query = new Query();
+			query.addCriteria(Criteria.where("blogId").is(contentId));
+			query.with(new Sort(Sort.Direction.DESC, "date"));
+			query.limit(6);
+			List<Document> commentDocs = mongoOperations.find(query, Document.class, "comment");
+			if (commentDocs != null && !commentDocs.isEmpty()) {
+				for (Document document : commentDocs) {
+					Comment comment = new Comment();
+					comment.setComment(document.getString("comment"));
+					comment.setName(document.getString("name"));
+					comment.setEmail(document.getString("email"));
+					comment.setWebsite(document.getString("website"));
+					comment.setDate(Util.getStringDate(document.getDate("date")));
+					blogInfoVO.setComments(comment);
+				}
+			}
+
+		}
 		blogInfoVO.setSubMenuContents(subMenuContents);
 
 		return blogInfoVO;
+	}
+
+	public static void main(String[] args) {
+		System.out.println(new Date());
 	}
 }

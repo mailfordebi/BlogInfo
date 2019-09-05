@@ -273,7 +273,7 @@ header.masthead .post-heading .meta a {
 }
 
 .post-preview {
-	height: 170px;
+	height: 210px;
 }
 
 .post-preview>a {
@@ -330,7 +330,10 @@ header.masthead .post-heading .meta a {
 	color: #0085a1
 }
 
-@media only screen and (min-width:768px) {
+@media only screen and (min-width:600px) {
+	.post-preview {
+		height: 150px;
+	}
 	.post-preview .right-column>a>.post-title {
 		font-size: 20px;
 		margin-top: 0px !important;
@@ -401,7 +404,7 @@ form .form-group:first-child .floating-label-form-group {
 }
 
 footer {
-	padding: 50px 0 65px
+	padding: 0px 0 15px;
 }
 
 footer .list-inline {
