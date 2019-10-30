@@ -29,7 +29,7 @@
 		id="mainNav">
 		<div class="container container-class">
 			<a class="navbar-brand"
-				href="${pageContext.request.contextPath}/myblogindex">Out Of Memory
+				href="${pageContext.request.contextPath}/">Out Of Memory
 			</a>
 			<button class="navbar-toggler navbar-toggler-right" type="button"
 				data-toggle="collapse" data-target="#navbarResponsive"
@@ -39,31 +39,17 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
-					<%-- <li class="nav-item"><a class="nav-link"
-						href="${pageContext.request.contextPath}/myblogindex">HOME</a></li> --%>
+				<c:forEach var="entry" items="${blogInfo.subMenu}">
 					<li class="nav-item"><a class="nav-link"
-						href="${pageContext.request.contextPath}/myblogindex">TECHNOLOGY</a></li>
-					<li class="nav-item"><a class="nav-link"
-						href="${pageContext.request.contextPath}/myblogindex">SCIENCE</a></li>
-					<li class="nav-item"><a class="nav-link"
-						href="${pageContext.request.contextPath}/myblogindex">SECURITY</a></li>	
-					<li class="nav-item"><a class="nav-link"
-						href="${pageContext.request.contextPath}/myblogindex">TOP LIST</a></li>
-					<li class="nav-item"><a class="nav-link"
-						href="${pageContext.request.contextPath}/myblogindex">HOW-TO</a></li>
-					<li class="nav-item"><a class="nav-link"
-						href="${pageContext.request.contextPath}/myblogindex">GADGETS</a></li>
-					<%-- <li class="nav-item"><a class="nav-link"
-						href="${pageContext.request.contextPath}/about">About</a></li> --%>
-					<li class="nav-item"><a class="nav-link"
-						href="${pageContext.request.contextPath}/contact">CONTACT</a></li>
+						href="${pageContext.request.contextPath}/myblogindex?submenuRef=${entry.key}">${entry.value}</a></li> 
+				</c:forEach>
 					<c:if test="${!logedIn}">	
 						<li class="nav-item"><a class="nav-link"
 							href="${pageContext.request.contextPath}/login?page=blog">Login</a></li>
 					</c:if>
 					<c:if test="${logedIn}">
 						<li class="nav-item"><a class="nav-link"
-							href="${pageContext.request.contextPath}/editBlog" target="_blank">New Post</a>
+							href="${pageContext.request.contextPath}/newBlog" target="_blank">New Post</a>
 						</li>
 						<li class="nav-item"><a class="nav-link"
 							href="${pageContext.request.contextPath}/logoutblog">Logout</a></li>
@@ -72,5 +58,10 @@
 			</div>
 		</div>
 	</nav>
+	<script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/clean-blog.min.js"></script>
 </body>
 </html>

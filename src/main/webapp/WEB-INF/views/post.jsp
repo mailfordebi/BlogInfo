@@ -43,19 +43,19 @@
                 </header>
                 <!-- Post Content -->
                 <article>
-                    <div class="container" style="margin-top: -40px">
+                    <div class="container post-content">
                         <div class="row">
                             <div class="col-lg-8 col-md-10 mx-auto">
                                 <c:if test="${!editMode}">
                                     <p>${blogInfo.subMenuContents[0].content}</p>
-                                    <div style="border: 0.5px solid #313131; padding: 10px 10px;">
-                                        <h2 style="font-size: 20px; padding-bottom: 10px; text-transform: uppercase;">Related
+                                    <div class="post-content1">
+                                        <h2 class="post-content2">Related
 								News</h2>
-                                        <ul style="list-style: none;padding-right: 30px;">
+                                        <ul class="post-content3">
                                             <c:forEach items="${blogInfo.relatedBlogs}" var="related">
                                                 <li>
                                                 <strong>
-                                                <a href="${pageContext.request.contextPath}/blogPost?blogId=${related.conetent_id}&loginId=${loginId}" style="background: lightgrey; text-decoration: none; padding: 10px; margin-bottom: 5px; display: block; font-size: 15px; border-left: 3px solid #ed1c24;">${related.content_header}</a>
+                                                <a href="${pageContext.request.contextPath}/blogPost?blogId=${related.conetent_id}&loginId=${loginId}" class="post-content4">${related.content_header}</a>
                                                 </strong>
                                                 </li>
                                                 <%-- <li>
@@ -68,13 +68,13 @@
                                                     </li> --%>
                                             </c:forEach>
                                         </ul>
-                                        <h2 style="font-size: 20px; padding-bottom: 10px; text-transform: uppercase;">Latest
+                                        <h2 class="post-content5">Latest
 								News</h2>
-                                        <ul style="list-style: none;padding-right: 30px;">
+                                        <ul class="post-content6">
                                             <c:forEach items="${blogInfo.latestBlogs}" var="latest">
                                                 <li>
                                                 <strong>
-                                                <a href="${pageContext.request.contextPath}/blogPost?blogId=${latest.conetent_id}&loginId=${loginId}" style="background: lightgrey; text-decoration: none; padding: 10px; margin-bottom: 5px; display: block; font-size: 15px; border-left: 3px solid #ed1c24;">${latest.content_header}</a>
+                                                <a href="${pageContext.request.contextPath}/blogPost?blogId=${latest.conetent_id}&loginId=${loginId}" class="post-content7">${latest.content_header}</a>
                                                 </strong>
                                                 </li>
                                                 	<%-- <li>
@@ -89,32 +89,32 @@
                                         </ul>
                                     </div>
 
-                                    <div style="margin-top: 70px;">
-                                        <h2 style="font-size: 21px; padding-bottom: 10px;">Comments</h2>
+                                    <div class="post-content8">
+                                        <h2 class="post-content9">Comments</h2>
                                         <c:forEach var="com" items="${blogInfo.comments}">
-                                            <div style="border: 1px solid #e5e4e4;font-family: roboto regular;padding: 3px 21px 0;margin-bottom: 20px;">
-                                                <img src="img/comment_icon.png" style="height: 35px;width: 35px;">
-                                                <span style="font-size: 15px;margin-left: 5px;font-family: sans-serif;">
+                                            <div class="post-content10">
+                                                <img src="img/comment_icon.png" class="post-content11">
+                                                <span class="post-content12">
 											<strong>
 											${com.name} 
 											</strong>
 											</span>
-                                                <span style="float: right;font-size: 15px;color: grey;">
+                                                <span class="post-content13">
 												${com.date}
 											 </span>
                                                 <br>
-                                                <p style="font-size: 18px;text-align: left;color: #707070;line-height: 1.7em;">${com.comment}</p>
+                                                <p class="post-content14">${com.comment}</p>
                                             </div>
                                         </c:forEach>
                                     </div>
 
                                     <div>
-                                        <button type="button" data-toggle="modal" data-target="#myModal" style="margin-top: 40px; float: right; margin-right: 30px; background: black; font-size: 18px; color: white; cursor: pointer;">
+                                        <button type="button" data-toggle="modal" data-target="#myModal" class="post-content15">
                                             Post Comment</button>
                                         <div class="modal fade" id="myModal" role="dialog">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
-                                                    <div style="padding: 0rem 1rem; border-bottom: 1px solid #e9ecef;">
+                                                    <div class="post-content16">
                                                         <h4 class="modal-title">Add Comment</h4>
                                                     </div>
 
@@ -122,25 +122,25 @@
                                                         <div class="modal-body">
                                                             <div class="form-group">
                                                                 <textarea class="form-control" rows="5" id="comment" name="comment" placeholder="Comment:*"></textarea>
-                                                                <div id="commentMsg" style="font-size: 14px;color: red;"></div>
+                                                                <div id="commentMsg" class="post-content17"></div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <input type="text" class="form-control" id="name" name="name" placeholder="Name:*">
-                                                                <div id="nameMsg" style="font-size: 14px;color: red;"></div>
+                                                                <div id="nameMsg" class="post-content18"></div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <input type="text" class="form-control" id="email" name="email" placeholder="Email:*">
-                                                                <div id="emailMsg" style="font-size: 14px;color: red;"></div>
-                                                                <div id="emailValidationMsg" style="font-size: 14px;color: red;"></div>
+                                                                <div id="emailMsg" class="post-content19"></div>
+                                                                <div id="emailValidationMsg" class="post-content20"></div>
                                                             </div>
                                                             <div class="form-group">
                                                                 <input type="text" class="form-control" id="website" name="website" placeholder="Website:">
                                                                 <input type="hidden" id="blogId" name="blogId" value="${blogInfo.subMenuContents[0].conetent_id}">
                                                             </div>
                                                         </div>
-                                                        <div style="display: flex; justify-content: flex-end; border-top: 1px solid #e9ecef;">
-                                                            <button type="submit" style="cursor: pointer; margin: 3px; font-size: 17px; background: lightgrey;" form="postComment" value="Post">Post</button>
-                                                            <button type="button" data-dismiss="modal" style="cursor: pointer; margin: 3px; font-size: 17px; background: lightgrey;">Cancel</button>
+                                                        <div class="post-content21">
+                                                            <button type="submit" class="post-content22" form="postComment" value="Post">Post</button>
+                                                            <button type="button" data-dismiss="modal" class="post-content23">Cancel</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -148,22 +148,24 @@
                                         </div>
                                     </div>
                                     <c:if test="${logedIn}">
-                                        <a href="${pageContext.request.contextPath}/editInfo?menuid=${blogInfo.subMenuContents[0].conetent_id}&subMenuid=null&isBlog=true">Edit</a>
+                                        <a href="${pageContext.request.contextPath}/editInfo?contentId=${blogInfo.subMenuContents[0].conetent_id}&isBlog=true">Edit</a>
                                     </c:if>
                                 </c:if>
                                 <c:if test="${editMode}">
                                     <form action="saveContent" method="post" id="saveContent" enctype="multipart/form-data">
-                                        <textarea rows="30" cols="122" name="updateContent" style="margin-left: -50px; width: 120%;">
+                                   	  <div>
+                                   	  	<h3>Edit Content</h3>
+                                        <textarea rows="30" cols="122" name="updateContent" class="post-content24" id="blogContent">
                                             ${blogInfo.subMenuContents[0].content}
                                         </textarea>
                                         <input type="hidden" value="${blogInfo.subMenuContents[0].conetent_id}" name="content_id">
-                                        <input type="hidden" value="null" name="subMenuId">
-                                        <input type="hidden" value="null" name="menuId">
                                         <input type="hidden" value="true" name="isBlog">
                                         <br> Image:
                                         <input type="file" name="image" id="image">
-                                        <br>
+                                        <br><br>
                                         <button type="submit" form="saveContent" value="Save">Save</button>
+                                        <button type="button" value="Format" onclick="formatXML()">Format</button>
+                                      </div>
                                     </form>
                                 </c:if>
                             </div>
@@ -225,6 +227,30 @@
                                 }
                             }
                             return isValidate;
+                        }
+                        
+                        function formatXML() {
+                        	debugger;
+                        	  var div = document.createElement('div');
+                        	  div.innerHTML = document.getElementById("blogContent").value.trim();
+                        	  document.getElementById("blogContent").value=format(div, 0).innerHTML;
+                        }
+                        
+                        function format(node, level) {
+                            var indentBefore = new Array(level++ + 1).join('  '),
+                                indentAfter  = new Array(level - 1).join('  '),
+                                textNode;
+
+                            for (var i = 0; i < node.children.length; i++) {
+                                textNode = document.createTextNode(indentBefore);
+                                node.insertBefore(textNode, node.children[i]);
+                                format(node.children[i], level);
+                                if (node.lastElementChild == node.children[i]) {
+                                    textNode = document.createTextNode(indentAfter);
+                                    node.appendChild(textNode);
+                                }
+                            }
+                            return node;
                         }
                     </script>
         </body>

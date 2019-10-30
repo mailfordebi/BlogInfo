@@ -66,12 +66,10 @@
                <br>
                <label for="techType">Blog Type:</label>
                <select id="techType" name="techType">
-                  <option value="Technology">Technology</option>
-                  <option value="Science">Science</option>
-                  <option value="Security">Security</option>
-                  <option value="How-To">How-To</option>
-                  <option value="Top-List">Top-List</option>
-                  <option value="Gadgets">Gadgets</option>
+                  <option value="Quantum_Computing">Quantum Computing</option>
+                  <option value="Miscellaneous">Miscellaneous</option>
+                  <option value="Problem_Solving">Problem Solving</option>
+                  <option value="Quantum_Computing">Science&Technology</option>
                </select>
                <label for="blogHeader">Header:</label>
                <input type="text" id="blogHeader" name="blogHeader" placeholder="Header.." maxlength="70">
@@ -87,7 +85,7 @@
                <br>
                <textarea id="contentBody" name="contentBody" style="height: 500px;width: 700px;"></textarea>
                <br>
-               <label for="contentBody">Images:</label>
+               <label for="contentBody">Body Images:</label>
                <br>
                <input type="file" id="file1" name="file1" multiple>
                <br>

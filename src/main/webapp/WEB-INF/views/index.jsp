@@ -51,28 +51,31 @@
 	</header>
 
 	<!-- Main Content -->
-	<div class="container" style="margin-top: -30px">
+	<div class="container main-content">
 		<div class="row">
 			<div class="col-lg-8 col-md-10 mx-auto">
 				<c:forEach var="con" items="${blogInfo.subMenuContents}">
 					<div class="post-preview">
 					  <div class="left-column">
-					  	<img src="data:image/jpeg;base64,${con.indivisualThemeimage}" alt="oom" style="width:100%">
+					 	<a href="${pageContext.request.contextPath}/blogPost?blogId=${con.conetent_id}&loginId=${loginId}" style="text-decoration:none">
+					  		<img src="data:image/jpeg;base64,${con.indivisualThemeimage}" alt="oom" class="themeimage">
+					  	</a>
 					  </div> 
 					   <div class="right-column">
-						<a href="${pageContext.request.contextPath}/blogPost?blogId=${con.conetent_id}&loginId=${loginId}">
+						<a href="${pageContext.request.contextPath}/blogPost?blogId=${con.conetent_id}&loginId=${loginId}" style="text-decoration:none">
 							<h3 class="post-title">${con.content_header}</h3>
 						</a>
-						  <div style="font-size: 13px;">
-						  <div style="color: grey; font-style: italic;">
-						  <a href="${pageContext.request.contextPath}/myblogindex" style="background-color: black; color:wheat">${con.submenu_ref}</a>
+						  <div class="header-subtag">
+						  <div class="posted-by">
+						  <a href="${pageContext.request.contextPath}/myblogindex?submenuRef=${con.submenu_ref}" class="posted-by-href" style="text-decoration:none">${con.subMenuName}</a>
 								 &nbspPosted by 
-							<%-- <a href="${pageContext.request.contextPath}/aboutme">${con.postedBy}</a> --%>
-							<a href="https://www.linkedin.com/in/debiprasadpradhan/" target="_blank">${con.postedBy}</a>
+							<a href="https://www.linkedin.com/in/debiprasadpradhan/" target="_blank" style="text-decoration:none">${con.postedBy}</a>
 							 &nbsp- ${con.date}
 							</div>
-							<div style="font-style: oblique;font-weight: bold;">
-							${con.contentHeaderTag}
+							<div class="header-tag-info">
+								<a href="${pageContext.request.contextPath}/blogPost?blogId=${con.conetent_id}&loginId=${loginId}" style="text-decoration:none">
+									${con.contentHeaderTag}
+								</a>
 							</div>
 							</div>
 					  </div>	
@@ -82,11 +85,11 @@
 				<!-- Pager -->
 				<div class="clearfix">
 				<c:if test="${blogInfo.newPost}">
-					<a class="btn btn-primary float-left" style="border-radius: 25px;padding: 7px 7px;" href="${pageContext.request.contextPath}/newpost">&lt; New Posts
+					<a class="btn btn-primary float-left new-old-post" href="${pageContext.request.contextPath}/newpost?submenuRef=${blogInfo.subMenuRef}">&lt; New Posts
 						</a>
 				</c:if>
 				<c:if test="${blogInfo.oldPost}">
-					<a class="btn btn-primary float-right" style="border-radius: 25px;padding: 7px 7px;" href="${pageContext.request.contextPath}/olderpost">Older Posts
+					<a class="btn btn-primary float-right new-old-post" href="${pageContext.request.contextPath}/olderpost?submenuRef=${blogInfo.subMenuRef}">Older Posts
 						&gt;</a>	
 				</c:if>
 				</div>

@@ -2,16 +2,13 @@ package com.dd.blog.resources;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class BlogInfoVO {
-	private List<Menu> menuList;
-	private List<SubMenu> subMenus;
 	private List<SubMenuContent> subMenuContents;
-	String subMenuId;
+	String subMenuRef;
 	String menuId;
 	String content_id;
-	private Menu menu;
-	private SubMenu subMenu;
 	private String themeimage;
 
 	private String prevSubMenuId;
@@ -26,6 +23,10 @@ public class BlogInfoVO {
 	List<SubMenuContent> relatedBlogs = null;
 	List<SubMenuContent> latestBlogs = null;
 	private List<Comment> comments;
+
+	private Map<String, String> subMenu;
+	
+	private byte[] imageContent;
 
 	public BlogInfoVO() {
 		relatedBlogs = new ArrayList<SubMenuContent>();
@@ -49,22 +50,6 @@ public class BlogInfoVO {
 		this.menuId = menuId;
 	}
 
-	public List<Menu> getMenuList() {
-		return menuList;
-	}
-
-	public void setMenuList(List<Menu> menuList) {
-		this.menuList = menuList;
-	}
-
-	public List<SubMenu> getSubMenus() {
-		return subMenus;
-	}
-
-	public void setSubMenus(List<SubMenu> subMenus) {
-		this.subMenus = subMenus;
-	}
-
 	public List<SubMenuContent> getSubMenuContents() {
 		return subMenuContents;
 	}
@@ -73,28 +58,12 @@ public class BlogInfoVO {
 		this.subMenuContents = subMenuContents;
 	}
 
-	public String getSubMenuId() {
-		return subMenuId;
+	public String getSubMenuRef() {
+		return subMenuRef;
 	}
 
-	public void setSubMenuId(String subMenuId) {
-		this.subMenuId = subMenuId;
-	}
-
-	public Menu getMenu() {
-		return menu;
-	}
-
-	public void setMenu(Menu menu) {
-		this.menu = menu;
-	}
-
-	public SubMenu getSubMenu() {
-		return subMenu;
-	}
-
-	public void setSubMenu(SubMenu subMenu) {
-		this.subMenu = subMenu;
+	public void setSubMenuRef(String subMenuRef) {
+		this.subMenuRef = subMenuRef;
 	}
 
 	public String getPrevSubMenuId() {
@@ -191,6 +160,22 @@ public class BlogInfoVO {
 
 	public void setComments(Comment comment) {
 		this.comments.add(comment);
+	}
+
+	public Map<String, String> getSubMenu() {
+		return subMenu;
+	}
+
+	public void setSubMenu(Map<String, String> subMenu) {
+		this.subMenu = subMenu;
+	}
+
+	public byte[] getImageContent() {
+		return imageContent;
+	}
+
+	public void setImageContent(byte[] imageContent) {
+		this.imageContent = imageContent;
 	}
 
 }

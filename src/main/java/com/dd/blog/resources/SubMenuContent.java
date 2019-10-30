@@ -8,6 +8,7 @@ public class SubMenuContent {
 	private String up_content;
 	private String down_content;
 	private String submenu_ref;
+	private String subMenuName;
 	private String menu_ref;
 	private String content_header;
 	private String contentHeaderTag;
@@ -15,7 +16,6 @@ public class SubMenuContent {
 	private String postedBy;
 	private String date;
 	private String indivisualThemeimage;
-	
 
 	public String getConetent_id() {
 		return conetent_id;
@@ -111,6 +111,14 @@ public class SubMenuContent {
 
 	public void setIndivisualThemeimage(String indivisualThemeimage) {
 		this.indivisualThemeimage = indivisualThemeimage;
+	}
+
+	public String getSubMenuName() {
+		return subMenuName;
+	}
+
+	public void setSubMenuName(String subMenuName) {
+		this.subMenuName = subMenuName;
 	}
 
 }
